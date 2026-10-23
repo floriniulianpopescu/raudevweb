@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Club News | RAU DEV &lt;/&gt; Software Engineering Club</title>
+  <meta name="description" content="Latest news, session recaps, weekly coding quests, and announcements from RAU DEV at Romanian-American University." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <!-- Mobile Top Header -->
+  <div class="mobile-topbar">
+    <a href="index.html" style="font-family:var(--font-display); font-weight:800; font-size:1.25rem; color:#fff;">
+      RAU <span style="color:var(--mint);">DEV</span> <span style="font-family:var(--font-mono); color:var(--mint);">&lt;/&gt;</span>
+    </a>
+    <button type="button" class="mobile-menu-btn" onclick="window.RauDevApp.toggleMobileSidebar()">
+      ☰ Menu
+    </button>
+  </div>
+
+  <div class="app-shell">
+    <!-- Left Sidebar Navigation -->
+    <aside class="sidebar-nav">
+      <div class="sidebar-top">
+        <a href="index.html" class="brand-logo" ondblclick="event.preventDefault(); window.RauDevApp.toggleAdminMode();">
+          <span class="brand-uni-tag">Romanian-American Univ.</span>
+          <div class="brand-title">
+            <span>RAU</span>
+            <span class="dev-mint">DEV</span>
+            <span class="code-symbol">&lt;/&gt;</span>
+          </div>
+          <span class="brand-subtitle">Software Engineering Club</span>
+        </a>
+
+        <div>
+          <div class="sidebar-section-label">Navigation</div>
+          <ul class="nav-links">
+            <li>
+              <a href="index.html" class="nav-link">
+                <span class="nav-icon">🏠</span>
+                <span>Overview</span>
+              </a>
+            </li>
+            <li>
+              <a href="scoreboard.html" class="nav-link">
+                <span class="nav-icon">🏆</span>
+                <span>Scoreboard</span>
+                <span id="nav-badge-members" class="nav-badge">9</span>
+              </a>
+            </li>
+            <li>
+              <a href="resources.html" class="nav-link">
+                <span class="nav-icon">📚</span>
+                <span>Resources</span>
+                <span id="nav-badge-resources" class="nav-badge">8</span>
+              </a>
+            </li>
+            <li>
+              <a href="news.html" class="nav-link active">
+                <span class="nav-icon">📰</span>
+                <span>Club News</span>
+                <span id="nav-badge-news" class="nav-badge">4</span>
+              </a>
+            </li>
+            <li>
+              <a href="team.html" class="nav-link">
+                <span class="nav-icon">👥</span>
+                <span>Meet the Team</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="sidebar-schedule-box">
+          <span class="sched-title">Weekly Session</span>
+          <div class="sched-main">Fridays, 11:00 – 14:00</div>
+          <div class="sched-sub">📍 Room 515 • RAU Bucharest</div>
+        </div>
+      </div>
+
+      <div class="sidebar-bottom">
+        <div class="sidebar-socials">
+          <a href="https://www.instagram.com/raudev.club/" target="_blank" rel="noopener" class="social-pill-link">
+            <span>📸</span>
+            <span>Instagram</span>
+          </a>
+          <a href="https://www.linkedin.com/company/rau-dev/" target="_blank" rel="noopener" class="social-pill-link">
+            <span>💼</span>
+            <span>LinkedIn</span>
+          </a>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="main-content">
+      <div class="admin-ribbon">
+        <div class="container admin-ribbon-inner">
+          <div class="admin-ribbon-title">
+            <span>⚡ MANAGEMENT ACTIVE</span>
+            <span style="color:var(--text-secondary); font-weight:400;" id="persistence-status">
+              Saving to browser storage
+            </span>
+          </div>
+          <div class="admin-ribbon-actions">
+            <button type="button" class="btn btn-sm btn-primary" onclick="window.RauDevApp.openNewNewsModal()">
+              + Publish Topic
+            </button>
+            <button type="button" class="btn btn-sm btn-secondary" onclick="window.RauDevApp.exportClubDataJson()">
+              ⬇ Export JSON
+            </button>
+            <button type="button" class="btn btn-sm btn-secondary" onclick="window.RauDevApp.toggleAdminMode()">
+              Exit
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <main class="page-section">
+        <div class="container">
+          <div class="section-header">
+            <div>
+              <span class="section-eyebrow">LATEST &amp; GREATEST</span>
+              <h1 class="section-title">Club News &amp; Topics</h1>
+              <p class="section-subtitle">
+                Session recaps, upcoming Friday quests, workshop announcements, and community highlights from Room 515.
+              </p>
+            </div>
+            <button type="button" class="btn btn-primary btn-sm admin-only" onclick="window.RauDevApp.openNewNewsModal()">
+              + Publish New Topic
+            </button>
+          </div>
+
+          <div class="filter-bar">
+            <div id="news-topic-pills" class="filter-pills"></div>
+            <div class="search-input-wrap" style="max-width: 320px;">
+              <span class="search-icon">🔍</span>
+              <input
+                type="text"
+                id="news-search"
+                class="form-control"
+                placeholder="Search news & topics..."
+              />
+            </div>
+          </div>
+
+          <div id="news-grid" class="news-grid"></div>
+        </div>
+      </main>
+
+      <footer class="site-footer">
+        <div class="container footer-inner">
+          <div>
+            <strong style="color:#fff; font-family:var(--font-display);">RAU <span style="color:var(--mint);">DEV</span> &lt;/&gt;</strong>
+            <span> • Romanian-American University • Bucharest</span>
+          </div>
+          <div style="display:flex; gap:14px; align-items:center;">
+            <span>Fridays 11:00 – 14:00 • Room 515</span>
+            <a href="https://www.instagram.com/raudev.club/" target="_blank" rel="noopener">Instagram ↗</a>
+            <a href="https://www.linkedin.com/company/rau-dev/" target="_blank" rel="noopener">LinkedIn ↗</a>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+  <!-- News Reader Modal -->
+  <div id="news-reader-modal" class="modal-backdrop">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div>
+          <span id="news-reader-topic" class="topic-tag">Topic</span>
+          <h3 id="news-reader-title" class="modal-title" style="margin-top:8px;">Article Title</h3>
+          <div id="news-reader-meta" style="font-size:0.8rem; color:var(--text-muted); margin-top:4px;"></div>
+        </div>
+        <button type="button" class="modal-close" onclick="document.getElementById('news-reader-modal').classList.remove('open')">×</button>
+      </div>
+      <div id="news-reader-body" class="modal-body"></div>
+    </div>
+  </div>
+
+  <!-- News Topic Editor Modal -->
+  <div id="news-editor-modal" class="modal-backdrop">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 id="news-editor-modal-title" class="modal-title">Publish New Club Topic / News</h3>
+        <button type="button" class="modal-close" onclick="document.getElementById('news-editor-modal').classList.remove('open')">×</button>
+      </div>
+      <div class="modal-body">
+        <form onsubmit="window.RauDevApp.submitNewsEditor(event)">
+          <input type="hidden" id="news-editor-id" />
+          <div class="form-grid" style="margin-bottom:14px;">
+            <div class="form-group">
+              <label for="news-editor-title">Headline / Title</label>
+              <input type="text" id="news-editor-title" class="form-control" placeholder="e.g. Session 02 Recap: Hash Maps & Mock Interviews" required />
+            </div>
+            <div class="form-group">
+              <label for="news-editor-topic">Topic Category</label>
+              <input type="text" id="news-editor-topic" class="form-control" list="topic-suggestions" placeholder="e.g. Session Recap, Weekly Quest, Hackathon" required />
+              <datalist id="topic-suggestions">
+                <option value="Session Recap"></option>
+                <option value="Weekly Quest"></option>
+                <option value="Announcement"></option>
+                <option value="Workshop"></option>
+                <option value="Hackathon"></option>
+                <option value="Community"></option>
+              </datalist>
+            </div>
+          </div>
+
+          <div class="form-grid" style="margin-bottom:14px;">
+            <div class="form-group">
+              <label for="news-editor-author">Author / Department</label>
+              <input type="text" id="news-editor-author" class="form-control" placeholder="e.g. Executive & Tech Team" required />
+            </div>
+            <div class="form-group">
+              <label for="news-editor-date">Publish Date</label>
+              <input type="date" id="news-editor-date" class="form-control" required />
+            </div>
+            <div class="form-group" style="justify-content:center;">
+              <label style="display:flex; align-items:center; gap:8px; cursor:pointer; color:#fff; margin-top:18px;">
+                <input type="checkbox" id="news-editor-pinned" />
+                <span>📌 Pin to top</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-bottom:14px;">
+            <label for="news-editor-summary">Short Card Summary</label>
+            <input type="text" id="news-editor-summary" class="form-control" placeholder="1–2 sentence preview..." required />
+          </div>
+
+          <div class="form-group" style="margin-bottom:16px;">
+            <label for="news-editor-content">Full Article Content</label>
+            <textarea id="news-editor-content" class="form-control" style="min-height:150px;" placeholder="Write the full club update here..." required></textarea>
+          </div>
+
+          <div style="display:flex; justify-content:flex-end; gap:10px;">
+            <button type="button" class="btn btn-secondary" onclick="document.getElementById('news-editor-modal').classList.remove('open')">Cancel</button>
+            <button type="submit" class="btn btn-primary">Publish Topic</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Discreet Password Modal -->
+  <div id="admin-pin-modal" class="modal-backdrop">
+    <div class="modal-dialog" style="max-width: 400px;">
+      <div class="modal-header">
+        <h3 class="modal-title">Authentication</h3>
+        <button type="button" class="modal-close" onclick="document.getElementById('admin-pin-modal').classList.remove('open')">×</button>
+      </div>
+      <div class="modal-body">
+        <form onsubmit="window.RauDevApp.submitAdminPin(event)">
+          <div class="form-group" style="margin-bottom:16px;">
+            <label for="admin-pin-input">Password</label>
+            <input type="password" id="admin-pin-input" class="form-control" placeholder="Enter server password" required />
+          </div>
+          <div style="display:flex; justify-content:flex-end; gap:10px;">
+            <button type="button" class="btn btn-secondary" onclick="document.getElementById('admin-pin-modal').classList.remove('open')">Cancel</button>
+            <button type="submit" class="btn btn-primary">Continue</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast-container" class="toast-container"></div>
+
+  <script src="js/default-data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

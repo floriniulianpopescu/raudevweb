@@ -11,8 +11,9 @@ window.RAU_DEV_DEFAULT_DATA = {
     "location": "Room 515, Romanian-American University",
     "eligibility": "All RAU students — Beginners and experienced developers are welcome!",
     "instagram": "@raudev.club",
-    "instagramUrl": "https://instagram.com/raudev.club",
-    "adminPin": "5150"
+    "instagramUrl": "https://www.instagram.com/raudev.club/",
+    "linkedin": "RAU DEV",
+    "linkedinUrl": "https://www.linkedin.com/company/rau-dev/"
   },
   "xpActions": [
     { "id": "attend_meetup", "label": "Attend a meetup", "xp": 10, "category": "Participation", "description": "Attend and actively participate in a Friday club session in Room 515." },
@@ -375,7 +376,7 @@ window.RAU_DEV_DEFAULT_DATA = {
       "author": "Tiberiu-Gabriel Podăreanu & Ana-Gabriela Giurescu",
       "pinned": true,
       "summary": "Learn how every meetup, coding challenge, code explanation, and peer debugging session earns XP toward badges, pins, certificates, and the legendary 3,500 XP reward.",
-      "content": "At RAU DEV, we want to reward consistency, curiosity, and teamwork—not just who solves a problem the fastest. That's why we built the **RAU DEV XP Economy**.\n\n### How You Earn XP:\n- **Attend a meetup:** `+10 XP`\n- **Attempt or complete an easy challenge:** `+10 XP`\n- **Complete a harder challenge:** `+25 XP`\n- **Explain your solution to the group:** `+10 XP`\n- **Help another member debug or understand a concept:** `+10 XP`\n- **Project contribution:** `+25 XP`\n- **Present a demo / Hackathon participation / Hackathon win:** `+30 XP`\n\n### Anti-Farming Rules:\n1. Points are awarded for **verified achievements**, not simply claiming them.\n2. We reward **learning, explanations, and teamwork**—not just raw speed.\n3. Repeatable actions have a reasonable per-session cap so activity stays genuine.\n\nCheck out the **Scoreboard** tab to inspect every member's detailed XP log and see what rewards await at **Code Explorer (100 XP)**, **Bug Hunter (250 XP)**, **Engineer (1,000 XP)**, and **Guild Legend (3,500 XP)**!"
+      "content": "At RAU DEV, we reward consistency, curiosity, and teamwork. That's why we built the **RAU DEV XP Economy**.\n\n### How You Earn XP:\n- **Attend a meetup:** `+10 XP`\n- **Attempt or complete an easy challenge:** `+10 XP`\n- **Complete a harder challenge:** `+25 XP`\n- **Explain your solution to the group:** `+10 XP`\n- **Help another member debug or understand a concept:** `+10 XP`\n- **Project contribution:** `+25 XP`\n- **Present a demo / Hackathon participation / Hackathon win:** `+30 XP`\n\nCheck out the **Scoreboard** page to inspect every member's detailed XP log and see what rewards await at **Code Explorer (100 XP)**, **Bug Hunter (250 XP)**, **Engineer (1,000 XP)**, and **Guild Legend (3,500 XP)**!"
     },
     {
       "id": "news-03",
@@ -395,7 +396,7 @@ window.RAU_DEV_DEFAULT_DATA = {
       "author": "Iulian Fecioru & Călin Mercone",
       "pinned": false,
       "summary": "No matter your experience level, if you're curious about software engineering, there's a place for you at RAU DEV. Scan the registration or WhatsApp QR code to jump in.",
-      "content": "One of the most common questions we hear around campus is: *\"Do I need to be an experienced programmer to join RAU DEV?\"*\n\nThe answer is **absolutely not**! Whether you wrote your first `print(\"Hello World\")` last week or you're already building full-stack apps, our Friday sessions have dedicated tracks for both beginners (**Beginner Tutoring with Tiberiu-Gabriel Podăreanu**) and intermediate/advanced builders (**Intermediate Tutoring with Iulian Popescu**).\n\n### How to Join:\n1. Drop by **Room 515** any **Friday at 11:00**.\n2. Scan the **Sign-Up Form QR Code** and **WhatsApp Community QR Code** in the **Join Club** section below.\n3. Follow us on Instagram at **[@raudev.club](https://instagram.com/raudev.club)** for weekly quest drops!"
+      "content": "One of the most common questions we hear around campus is: *\"Do I need to be an experienced programmer to join RAU DEV?\"*\n\nThe answer is **absolutely not**! Whether you wrote your first `print(\"Hello World\")` last week or you're already building full-stack apps, our Friday sessions have dedicated tracks for both beginners (**Beginner Tutoring with Tiberiu-Gabriel Podăreanu**) and intermediate/advanced builders (**Intermediate Tutoring with Iulian Popescu**).\n\n### How to Join:\n1. Drop by **Room 515** any **Friday at 11:00**.\n2. Scan the **Sign-Up Form QR Code** and **WhatsApp Community QR Code** on the Home page.\n3. Follow us on Instagram at **[@raudev.club](https://www.instagram.com/raudev.club/)** and on LinkedIn at **[RAU DEV](https://www.linkedin.com/company/rau-dev/)** for weekly quest drops!"
     }
   ],
   "team": [
