@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RAU DEV &lt;/&gt; — Software Engineering Club | Romanian-American University</title>
+  <meta name="description" content="RAU DEV is a student-led software engineering community at Romanian-American University in Bucharest. Build Skills. Share Knowledge. Engineer Together." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <!-- ========================================================================
+       Sticky Header & Navigation
+       ======================================================================== -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="#home" class="brand-logo">
+        <div class="brand-wordmark">
+          <div class="brand-title">
+            <span>RAU</span>
+            <span class="dev-mint">DEV</span>
+            <span class="code-symbol">&lt;/&gt;</span>
+          </div>
+          <span class="brand-subtitle">Software Engineering Club</span>
+        </div>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#home" class="nav-link">Overview</a></li>
+        <li><a href="#scoreboard" class="nav-link">Scoreboard &amp; XP</a></li>
+        <li><a href="#resources" class="nav-link">Resources</a></li>
+        <li><a href="#news" class="nav-link">Club News</a></li>
+        <li><a href="#team" class="nav-link">Team &amp; Join</a></li>
+      </ul>
+
+      <div class="header-actions">
+        <button type="button" id="admin-mode-btn" class="admin-toggle-btn" onclick="window.RauDevApp.toggleAdminMode()">
+          <span class="status-dot"></span>
+          <span>Admin Mode</span>
+        </button>
+        <a href="#join" class="btn btn-primary btn-sm">Join RAU DEV</a>
+      </div>
+    </div>
+
+    <!-- Admin Ribbon (Shown when Admin Mode is unlocked) -->
+    <div class="admin-ribbon">
+      <div class="container admin-ribbon-inner">
+        <div class="admin-ribbon-title">
+          <span>⚡ ADMIN MODE ACTIVE</span>
+          <span style="color:var(--text-secondary); font-weight:400;" id="persistence-status">
+            Saving to browser storage
+          </span>
+        </div>
+        <div class="admin-ribbon-actions">
+          <button type="button" class="btn btn-sm btn-outline-mint" onclick="window.RauDevApp.openBatchXpModal()">
+            + Batch Session XP Check-in
+          </button>
+          <button type="button" class="btn btn-sm btn-outline-mint" onclick="window.RauDevApp.openAddResourceModal()">
+            + Add Resource / Solution
+          </button>
+          <button type="button" class="btn btn-sm btn-outline-mint" onclick="window.RauDevApp.openNewNewsModal()">
+            + Post News Topic
+          </button>
+          <button type="button" class="btn btn-sm btn-secondary" onclick="window.RauDevApp.exportClubDataJson()">
+            ⬇ Export JSON
+          </button>
+          <label class="btn btn-sm btn-secondary" style="margin:0;">
+            ⬆ Import JSON
+            <input type="file" accept=".json" style="display:none;" onchange="window.RauDevApp.importClubDataJson(this)" />
+          </label>
+          <button type="button" class="btn btn-sm btn-danger" onclick="window.RauDevApp.resetToDefaultData()">
+            Reset Defaults
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- ======================================================================
+         1. Hero & Overview Section
+         ====================================================================== -->
+    <section id="home" class="hero-section">
+      <div class="container">
+        <div class="hero-grid">
+          <!-- Left Column: Brand & Mission -->
+          <div>
+            <div class="uni-eyebrow">
+              <span>ROMANIAN-AMERICAN UNIVERSITY • BUCHAREST</span>
+            </div>
+
+            <div class="hero-logo-lockup">
+              <h1 class="hero-logo-title">
+                RAU <span class="mint">DEV</span><span class="brackets">&lt;/&gt;</span>
+              </h1>
+              <div class="hero-logo-sub">Software Engineering Club</div>
+              <div class="mint-accent-bar"></div>
+            </div>
+
+            <h2 class="hero-headline">
+              Build Skills.<br />
+              Share Knowledge.<br />
+              <span class="highlight">Engineer Together.</span>
+            </h2>
+
+            <p class="hero-description">
+              RAU DEV is a student-led community for everyone interested in software engineering — from beginners writing their first function to experienced developers building production systems.
+            </p>
+
+            <div class="hero-cta-row">
+              <a href="#scoreboard" class="btn btn-primary">View XP Scoreboard</a>
+              <a href="#resources" class="btn btn-secondary">Download Solutions &amp; Lectures</a>
+              <a href="#news" class="btn btn-outline-mint">Latest Club News</a>
+            </div>
+          </div>
+
+          <!-- Right Column: Interactive Code Window from Poster & Slide 01 -->
+          <div>
+            <div class="code-window">
+              <div class="code-window-header">
+                <div class="window-dots">
+                  <span class="window-dot red"></span>
+                  <span class="window-dot yellow"></span>
+                  <span class="window-dot green"></span>
+                </div>
+                <div class="code-tabs">
+                  <button type="button" class="code-tab active" onclick="window.RauDevApp.switchHeroTab('python', this)">
+                    solve.py (Poster)
+                  </button>
+                  <button type="button" class="code-tab" onclick="window.RauDevApp.switchHeroTab('js', this)">
+                    session01.js (Deck)
+                  </button>
+                </div>
+              </div>
+              <div id="hero-code-body" class="code-window-body"></div>
+              <div class="code-window-footer">
+                <span class="handwritten-badge">✨ SAME STUDENTS. BIGGER OPPORTUNITIES.</span>
+                <span>Room 515 • +10 XP Presence</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Info Strip (When / Where / Who Can Join) -->
+        <div class="info-strip">
+          <div class="info-strip-card">
+            <div class="info-icon-box blue">📅</div>
+            <div>
+              <div class="info-label">WHEN?</div>
+              <div class="info-value">Fridays, 11:00 – 14:00</div>
+              <div class="info-sub">Weekly quests, workshops &amp; peer coding</div>
+            </div>
+          </div>
+
+          <div class="info-strip-card">
+            <div class="info-icon-box mint">📍</div>
+            <div>
+              <div class="info-label">WHERE?</div>
+              <div class="info-value">Room 515</div>
+              <div class="info-sub">Romanian-American University, Bucharest</div>
+            </div>
+          </div>
+
+          <div class="info-strip-card">
+            <div class="info-icon-box purple">👥</div>
+            <div>
+              <div class="info-label">WHO CAN JOIN?</div>
+              <div class="info-value">All RAU Students</div>
+              <div class="info-sub">Beginners &amp; experienced developers are welcome!</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5 Core Club Pillars (From Poster & Slide 8) -->
+        <div style="margin-top: 44px;">
+          <div class="section-header" style="margin-bottom: 22px;">
+            <div>
+              <span class="section-eyebrow">01 // WHAT WE DO</span>
+              <h3 class="section-title" style="font-size: 1.7rem;">Five Ways to Turn Curiosity Into Practice</h3>
+            </div>
+          </div>
+
+          <div class="pillars-grid">
+            <div class="pillar-card">
+              <div class="pillar-icon p-mint">&lt;/&gt;</div>
+              <h4 class="pillar-title">Coding Challenges</h4>
+              <p class="pillar-desc">Solve algorithmic problems, improve your problem-solving intuition, and explain your approach like an engineer.</p>
+            </div>
+
+            <div class="pillar-card">
+              <div class="pillar-icon p-blue">👥</div>
+              <h4 class="pillar-title">Mock Interviews</h4>
+              <p class="pillar-desc">Practice technical and behavioral interview questions with your peers in a supportive environment.</p>
+            </div>
+
+            <div class="pillar-card">
+              <div class="pillar-icon p-amber">⚙️</div>
+              <h4 class="pillar-title">Engineering Workshops</h4>
+              <p class="pillar-desc">Learn practical tools, Git workflows, testing, APIs, modern stacks, and software engineering best practices.</p>
+            </div>
+
+            <div class="pillar-card">
+              <div class="pillar-icon p-purple">🎙️</div>
+              <h4 class="pillar-title">Guest Speakers</h4>
+              <p class="pillar-desc">Meet industry professionals, hear honest career stories, and gain real-world engineering insights.</p>
+            </div>
+
+            <div class="pillar-card">
+              <div class="pillar-icon p-emerald">🤝</div>
+              <h4 class="pillar-title">Community &amp; Networking</h4>
+              <p class="pillar-desc">Connect with like-minded RAU students, find hackathon teammates, and collaborate on meaningful projects.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Friday Session Quest Format + Club Culture Principles -->
+        <div class="culture-quest-grid">
+          <!-- Left: Friday Quest Schedule (Slide 17) -->
+          <div class="panel-card">
+            <h3 class="panel-title">
+              <span style="color:var(--mint); font-family:var(--font-mono);">&lt;/&gt;</span>
+              Friday Session Quest Format (11:00 – 14:00)
+            </h3>
+            <p class="panel-sub">Every Friday session in Room 515 is structured like an interactive engineering quest:</p>
+
+            <div class="quest-timeline">
+              <div class="quest-step">
+                <div>
+                  <span class="quest-time">11:00</span>
+                  <span class="quest-duration">10 min</span>
+                </div>
+                <div>
+                  <div class="quest-name">Spawn Point</div>
+                  <div class="quest-desc">Welcome everyone, announce the weekly quest, show leaderboard updates, and let members choose their difficulty.</div>
+                  <span class="quest-reward">Reward: Participation XP (+10 XP)</span>
+                </div>
+              </div>
+
+              <div class="quest-step">
+                <div>
+                  <span class="quest-time">11:10</span>
+                  <span class="quest-duration">45 min</span>
+                </div>
+                <div>
+                  <div class="quest-name">Main Quest</div>
+                  <div class="quest-desc">Work through a LeetCode-style problem, debugging challenge, or small team exercise. Starter route &amp; optional harder route.</div>
+                  <span class="quest-reward">Reward: Challenge XP (+10 to +25 XP) &amp; skill badges</span>
+                </div>
+              </div>
+
+              <div class="quest-step">
+                <div>
+                  <span class="quest-time">11:55</span>
+                  <span class="quest-duration">10 min</span>
+                </div>
+                <div>
+                  <div class="quest-name">Save Point</div>
+                  <div class="quest-desc">Break, social time, coffee, and optional bonus brainteaser puzzle.</div>
+                </div>
+              </div>
+
+              <div class="quest-step">
+                <div>
+                  <span class="quest-time">12:05</span>
+                  <span class="quest-duration">45 min</span>
+                </div>
+                <div>
+                  <div class="quest-name">Skill Tree</div>
+                  <div class="quest-desc">Workshop, mock interviews, guest speaker, or project work. Members unlock skill-specific achievements.</div>
+                  <span class="quest-reward">Reward: Workshop XP (+15 XP)</span>
+                </div>
+              </div>
+
+              <div class="quest-step">
+                <div>
+                  <span class="quest-time">12:50</span>
+                  <span class="quest-duration">50 min</span>
+                </div>
+                <div>
+                  <div class="quest-name">Party Quest</div>
+                  <div class="quest-desc">Pair programming, peer review, mock interviews, or a collaborative mini-project. Rotate teams to meet everyone.</div>
+                  <span class="quest-reward">Reward: Peer Help (+10 XP) &amp; Project Contribution (+25 XP)</span>
+                </div>
+              </div>
+
+              <div class="quest-step">
+                <div>
+                  <span class="quest-time">13:40</span>
+                  <span class="quest-duration">20 min</span>
+                </div>
+                <div>
+                  <div class="quest-name">Victory Screen</div>
+                  <div class="quest-desc">Share solutions, award badges, celebrate progress, reveal the next quest, and collect quick feedback.</div>
+                  <span class="quest-reward">Reward: Solution Explanation (+10 XP)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Our Culture (Slide 9) + Anti-Farming Philosophy (Slide 18) -->
+          <div style="display:flex; flex-direction:column; gap:24px;">
+            <div class="panel-card">
+              <h3 class="panel-title">
+                <span style="color:var(--mint);">💡</span>
+                Our Culture &amp; Principles
+              </h3>
+              <p class="panel-sub">The kind of club we build depends on how we treat one another:</p>
+
+              <div class="culture-list">
+                <div class="culture-item">
+                  <h4>Curiosity over ego</h4>
+                  <p>Ask questions freely. Stay open to being wrong and learning in public.</p>
+                </div>
+                <div class="culture-item">
+                  <h4>Progress over perfection</h4>
+                  <p>Small steps count. Consistent practice beats waiting for perfect code.</p>
+                </div>
+                <div class="culture-item">
+                  <h4>Collaboration over competition</h4>
+                  <p>Share credit, review each other’s code, and help teammates succeed.</p>
+                </div>
+                <div class="culture-item">
+                  <h4>Respect at every level</h4>
+                  <p>Make room for different backgrounds, study years, and experience levels.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="panel-card" style="border-color: var(--border-mint);">
+              <h3 class="panel-title" style="font-size: 1.1rem;">
+                <span>🛡️</span> Three Rules to Prevent XP Farming
+              </h3>
+              <ul style="margin-top:10px; padding-left:18px; color:var(--text-secondary); font-size:0.86rem; display:flex; flex-direction:column; gap:8px;">
+                <li><strong style="color:#fff;">Verified Achievements:</strong> Points are awarded for verified contributions and solutions, not simply claiming them.</li>
+                <li><strong style="color:#fff;">Depth &amp; Teamwork:</strong> We reward learning, clear explanations, and peer help—not just the fastest solver.</li>
+                <li><strong style="color:#fff;">Balanced Caps:</strong> Repeatable actions (like peer-help XP) have a reasonable session cap so activity stays authentic.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         2. Scoreboard & Manual XP Update Section
+         ====================================================================== -->
+    <section id="scoreboard" class="section">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <span class="section-eyebrow">02 // XP ECONOMY &amp; LEADERBOARD</span>
+            <h2 class="section-title">Club Scoreboard &amp; XP Breakdown</h2>
+            <p class="section-subtitle">
+              Click any member row to inspect the exact breakdown of how their XP was gained across sessions, challenges, and contributions. Unlock <strong>Admin Mode</strong> (PIN: <code>5150</code>) to manually update XP for any user.
+            </p>
+          </div>
+          <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <button type="button" class="btn btn-secondary btn-sm" onclick="window.RauDevApp.expandAllMembers()">
+              Toggle All XP Logs
+            </button>
+            <button type="button" class="btn btn-primary btn-sm" onclick="window.RauDevApp.toggleAdminMode()">
+              ⚡ Update Scoreboard (Admin)
+            </button>
+          </div>
+        </div>
+
+        <!-- Scoreboard Summary Cards -->
+        <div class="scoreboard-top-stats">
+          <div class="stat-card">
+            <div class="stat-label">Ranked Members</div>
+            <div class="stat-value" id="stat-total-members">9</div>
+            <div class="stat-meta">Active on Provisional Scoreboard</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Total Club XP Earned</div>
+            <div class="stat-value" id="stat-total-xp">200 XP</div>
+            <div class="stat-meta">Across verified club activities</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Logged XP Actions</div>
+            <div class="stat-value" id="stat-total-actions">14</div>
+            <div class="stat-meta">With detailed session provenance</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Current High Score</div>
+            <div class="stat-value" id="stat-top-xp">35 XP</div>
+            <div class="stat-meta" id="stat-top-leaders">Led by Andreea, Iulian Fecioru, Mihai, Victor</div>
+          </div>
+        </div>
+
+        <!-- Admin Mode Manual XP Update Panel -->
+        <div id="admin-xp-panel" class="admin-xp-panel admin-only">
+          <div class="admin-panel-header">
+            <div class="admin-panel-title">
+              <span>⚡ Manual Scoreboard Updater — Award XP &amp; Log Details</span>
+            </div>
+            <button type="button" class="btn btn-sm btn-outline-mint" onclick="window.RauDevApp.openBatchXpModal()">
+              👥 Batch Session Check-in (Multiple Members)
+            </button>
+          </div>
+
+          <form id="admin-award-xp-form">
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="admin-xp-member">1. Select Member (or Create New)</label>
+                <select id="admin-xp-member" class="form-control" required></select>
+              </div>
+
+              <div class="form-group" id="new-member-name-group" style="display:none;">
+                <label for="admin-new-member-name">New Member Name</label>
+                <input type="text" id="admin-new-member-name" class="form-control" placeholder="e.g. Elena Popa" />
+              </div>
+
+              <div class="form-group">
+                <label for="admin-xp-action-preset">2. XP Action Type</label>
+                <select id="admin-xp-action-preset" class="form-control"></select>
+              </div>
+
+              <div class="form-group" id="custom-action-label-group" style="display:none;">
+                <label for="admin-xp-custom-action">Custom Action Title</label>
+                <input type="text" id="admin-xp-custom-action" class="form-control" placeholder="e.g. Bonus Debugging Quest" />
+              </div>
+
+              <div class="form-group">
+                <label for="admin-xp-points">3. XP Amount (+/-)</label>
+                <input type="number" id="admin-xp-points" class="form-control" value="10" step="5" required />
+              </div>
+
+              <div class="form-group">
+                <label for="admin-xp-session">4. Session / Event</label>
+                <input type="text" id="admin-xp-session" class="form-control" value="Session 02 // Main Quest" placeholder="e.g. Session 02 // Main Quest" />
+              </div>
+
+              <div class="form-group">
+                <label for="admin-xp-date">5. Date</label>
+                <input type="date" id="admin-xp-date" class="form-control" />
+              </div>
+            </div>
+
+            <div class="form-grid" style="margin-top: 14px; grid-template-columns: 1fr auto;">
+              <div class="form-group">
+                <label for="admin-xp-details">6. Details on How the XP Was Gained (Displayed in Member's XP Log)</label>
+                <input
+                  type="text"
+                  id="admin-xp-details"
+                  class="form-control"
+                  placeholder="e.g. Solved Weekly Challenge in Python and explained O(n) Hash Set optimization to the group"
+                  required
+                />
+              </div>
+              <button type="submit" class="btn btn-primary" style="height: 42px;">
+                + Award XP &amp; Update Scoreboard
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Scoreboard Columns: Left = Member Rankings & Logs, Right = Levels & XP Rules -->
+        <div class="scoreboard-layout">
+          <div>
+            <div class="scoreboard-controls">
+              <div class="search-input-wrap">
+                <span class="search-icon">🔍</span>
+                <input
+                  type="text"
+                  id="scoreboard-search"
+                  class="form-control"
+                  placeholder="Search member name, challenge, or XP log details..."
+                />
+              </div>
+              <select id="scoreboard-level-filter" class="form-control" style="width: auto; min-width: 190px;">
+                <option value="ALL">All Ranks / Levels</option>
+              </select>
+            </div>
+
+            <div id="leaderboard-list" class="leaderboard-list"></div>
+          </div>
+
+          <!-- Right Sidebar: 10 Levels & Rewards + Official XP Actions -->
+          <aside class="sidebar-stack">
+            <div class="panel-card">
+              <h3 class="panel-title" style="font-size: 1.15rem;">
+                <span>🏆</span> Level Progression &amp; Rewards
+              </h3>
+              <p class="panel-sub" style="margin-bottom: 14px;">
+                Unlock badges, collectible pins, certificates, and the legendary 3,500 XP reward:
+              </p>
+              <div id="levels-ladder-list" class="levels-list"></div>
+            </div>
+
+            <div class="panel-card">
+              <h3 class="panel-title" style="font-size: 1.15rem;">
+                <span>⚡</span> Official XP Actions Catalog
+              </h3>
+              <p class="panel-sub" style="margin-bottom: 14px;">
+                How members gain XP during Friday sessions and hackathons:
+              </p>
+              <div id="xp-actions-reference-list" class="xp-actions-compact"></div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         3. Resources Page (Downloadable Solutions & Lectures)
+         ====================================================================== -->
+    <section id="resources" class="section">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <span class="section-eyebrow">03 // KNOWLEDGE VAULT</span>
+            <h2 class="section-title">Resources: Downloadable Solutions &amp; Lectures</h2>
+            <p class="section-subtitle">
+              Download official presentation decks, workshop guides, and commented reference solutions in Python and C++ from our Friday sessions.
+            </p>
+          </div>
+          <button type="button" class="btn btn-primary btn-sm admin-only" onclick="window.RauDevApp.openAddResourceModal()">
+            + Add New Lecture or Solution
+          </button>
+        </div>
+
+        <div class="filter-bar">
+          <div id="resource-filter-pills" class="filter-pills">
+            <button type="button" class="filter-pill active" onclick="window.RauDevApp.setResourceCategoryFilter('ALL', this)">
+              All Resources
+            </button>
+            <button type="button" class="filter-pill" onclick="window.RauDevApp.setResourceCategoryFilter('Challenge Solutions', this)">
+              &lt;/&gt; Challenge Solutions
+            </button>
+            <button type="button" class="filter-pill" onclick="window.RauDevApp.setResourceCategoryFilter('Lectures & Slides', this)">
+              📚 Lectures &amp; Slides
+            </button>
+            <button type="button" class="filter-pill" onclick="window.RauDevApp.setResourceCategoryFilter('Workshops & Guides', this)">
+              🛠️ Workshops &amp; Guides
+            </button>
+          </div>
+
+          <div class="search-input-wrap" style="max-width: 320px;">
+            <span class="search-icon">🔍</span>
+            <input
+              type="text"
+              id="resource-search"
+              class="form-control"
+              placeholder="Filter by problem, language, or session..."
+            />
+          </div>
+        </div>
+
+        <div id="resources-grid" class="resources-grid"></div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         4. News & Updatable Topics Section
+         ====================================================================== -->
+    <section id="news" class="section">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <span class="section-eyebrow">04 // LATEST &amp; GREATEST</span>
+            <h2 class="section-title">RAU DEV News &amp; Updatable Topics</h2>
+            <p class="section-subtitle">
+              Session recaps, upcoming Friday quests, workshop announcements, and community highlights from Room 515.
+            </p>
+          </div>
+          <button type="button" class="btn btn-primary btn-sm admin-only" onclick="window.RauDevApp.openNewNewsModal()">
+            + Publish New Topic
+          </button>
+        </div>
+
+        <div class="filter-bar">
+          <div id="news-topic-pills" class="filter-pills"></div>
+        </div>
+
+        <div id="news-grid" class="news-grid"></div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         5. Meet the Team & Join RAU DEV Section
+         ====================================================================== -->
+    <section id="team" class="section">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <span class="section-eyebrow">05 // WHO ARE WE?</span>
+            <h2 class="section-title">Meet the RAU DEV Team</h2>
+            <p class="section-subtitle">
+              Student-led across four departments: Executive, Tech, Logistics, and Tutoring.
+            </p>
+          </div>
+
+          <div id="team-filter-pills" class="filter-pills">
+            <button type="button" class="filter-pill active" onclick="window.RauDevApp.setTeamDeptFilter('ALL', this)">All Team</button>
+            <button type="button" class="filter-pill" onclick="window.RauDevApp.setTeamDeptFilter('Executive', this)">Executive</button>
+            <button type="button" class="filter-pill" onclick="window.RauDevApp.setTeamDeptFilter('Tech', this)">Tech</button>
+            <button type="button" class="filter-pill" onclick="window.RauDevApp.setTeamDeptFilter('Logistics', this)">Logistics</button>
+            <button type="button" class="filter-pill" onclick="window.RauDevApp.setTeamDeptFilter('Tutoring', this)">Tutoring</button>
+          </div>
+        </div>
+
+        <div id="team-grid" class="team-grid"></div>
+
+        <!-- Join RAU DEV Hub (Matches Poster Bottom Callout!) -->
+        <div id="join" class="join-hub-grid">
+          <div class="join-dark-banner">
+            <div>
+              <span class="section-eyebrow">READY TO SPAWN IN?</span>
+              <h3 style="font-family:var(--font-display); font-size:2rem; font-weight:800; color:#fff; line-height:1.2; margin-bottom:14px;">
+                No matter your experience level, if you’re curious about software engineering, <span style="color:var(--mint);">there’s a place for you at RAU DEV.</span>
+              </h3>
+              <p style="color:var(--text-secondary); font-size:1rem;">
+                Drop into <strong>Room 515</strong> this Friday at <strong>11:00</strong>, introduce yourself in 30 seconds, earn your first <strong>+10 XP</strong> for presence, and start building alongside fellow Romanian-American University students.
+              </p>
+            </div>
+
+            <div style="display:flex; flex-wrap:wrap; gap:12px; align-items:center;">
+              <a href="https://instagram.com/raudev.club" target="_blank" rel="noopener" class="btn btn-primary">
+                📸 Follow @raudev.club on Instagram
+              </a>
+              <a href="assets/brand/poster.jpg" target="_blank" rel="noopener" class="btn btn-secondary">
+                🖼️ View Official Club Poster
+              </a>
+            </div>
+          </div>
+
+          <div class="join-mint-card">
+            <div>
+              <h3>COMPLETE THE FORM &amp; JOIN <span>RAU DEV!</span></h3>
+              <p style="margin-top:6px;">
+                Scan the QR codes below to fill out our short interest form and join the official RAU DEV WhatsApp community!
+              </p>
+            </div>
+
+            <div class="qr-dual-grid">
+              <div class="qr-box">
+                <img src="assets/brand/signup-qr.png" alt="Scan to Sign Up for RAU DEV" />
+                <span class="qr-box-label">📝 Registration Form</span>
+              </div>
+              <div class="qr-box">
+                <img src="assets/brand/whatsapp-qr.png" alt="RAU DEV WhatsApp Community QR" />
+                <span class="qr-box-label">💬 WhatsApp Group</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ========================================================================
+       Footer
+       ======================================================================== -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div>
+        <strong style="color:#fff; font-family:var(--font-display);">RAU <span style="color:var(--mint);">DEV</span> &lt;/&gt;</strong>
+        <span> • Software Engineering Club • Romanian-American University, Bucharest</span>
+      </div>
+      <div>
+        <span>Fridays 11:00 – 14:00 • Room 515 • </span>
+        <a href="https://instagram.com/raudev.club" target="_blank" rel="noopener">@raudev.club</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========================================================================
+       Modals
+       ======================================================================== -->
+
+  <!-- 1. Resource Code / Lecture Preview Modal -->
+  <div id="resource-preview-modal" class="modal-backdrop">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div>
+          <h3 id="resource-preview-title" class="modal-title">Resource Preview</h3>
+          <div id="resource-preview-meta" style="font-size:0.8rem; color:var(--text-secondary); margin-top:2px;"></div>
+        </div>
+        <button type="button" class="modal-close" onclick="document.getElementById('resource-preview-modal').classList.remove('open')">×</button>
+      </div>
+      <div class="modal-body">
+        <div style="display:flex; justify-content:flex-end; gap:8px; margin-bottom:12px;">
+          <button type="button" class="btn btn-secondary btn-sm" onclick="window.RauDevApp.copyPreviewCode()">
+            📋 Copy Code / Notes
+          </button>
+          <button type="button" id="resource-preview-download-btn" class="btn btn-primary btn-sm">
+            ⬇ Download File
+          </button>
+        </div>
+        <pre id="resource-preview-code" class="code-preview-pre"></pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. News Reader Modal -->
+  <div id="news-reader-modal" class="modal-backdrop">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div>
+          <span id="news-reader-topic" class="topic-tag">Topic</span>
+          <h3 id="news-reader-title" class="modal-title" style="margin-top:8px;">Article Title</h3>
+          <div id="news-reader-meta" style="font-size:0.8rem; color:var(--text-muted); margin-top:4px;"></div>
+        </div>
+        <button type="button" class="modal-close" onclick="document.getElementById('news-reader-modal').classList.remove('open')">×</button>
+      </div>
+      <div id="news-reader-body" class="modal-body"></div>
+    </div>
+  </div>
+
+  <!-- 3. Admin PIN Modal -->
+  <div id="admin-pin-modal" class="modal-backdrop">
+    <div class="modal-dialog" style="max-width: 440px;">
+      <div class="modal-header">
+        <h3 class="modal-title">🔒 Unlock RAU DEV Admin Mode</h3>
+        <button type="button" class="modal-close" onclick="document.getElementById('admin-pin-modal').classList.remove('open')">×</button>
+      </div>
+      <div class="modal-body">
+        <p style="color:var(--text-secondary); font-size:0.9rem; margin-bottom:16px;">
+          Enter the club executive PIN to manually award XP on the scoreboard, publish news topics, or upload new downloadable resources.
+          <br /><span style="font-family:var(--font-mono); font-size:0.78rem; color:var(--mint);">(Room 515 Default PIN: 5150)</span>
+        </p>
+        <form onsubmit="window.RauDevApp.submitAdminPin(event)">
+          <div class="form-group" style="margin-bottom:16px;">
+            <label for="admin-pin-input">Admin Passcode / PIN</label>
+            <input type="password" id="admin-pin-input" class="form-control" placeholder="Enter 5150" required />
+          </div>
+          <div style="display:flex; justify-content:flex-end; gap:10px;">
+            <button type="button" class="btn btn-secondary" onclick="document.getElementById('admin-pin-modal').classList.remove('open')">Cancel</button>
+            <button type="submit" class="btn btn-primary">Unlock Admin Controls</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. Admin Batch XP Award Modal -->
+  <div id="batch-xp-modal" class="modal-backdrop">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">👥 Batch Award XP (Session Check-in)</h3>
+        <button type="button" class="modal-close" onclick="document.getElementById('batch-xp-modal').classList.remove('open')">×</button>
+      </div>
+      <div class="modal-body">
+        <form onsubmit="window.RauDevApp.submitBatchXp(event)">
+          <div class="form-grid" style="margin-bottom:16px;">
+            <div class="form-group">
+              <label for="batch-xp-action">XP Action</label>
+              <select id="batch-xp-action" class="form-control"></select>
+            </div>
+            <div class="form-group">
+              <label for="batch-xp-session">Session Name</label>
+              <input type="text" id="batch-xp-session" class="form-control" value="Session 02 // Spawn Point" required />
+            </div>
+            <div class="form-group">
+              <label for="batch-xp-date">Date</label>
+              <input type="date" id="batch-xp-date" class="form-control" required />
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-bottom:16px;">
+            <label for="batch-xp-details">Details on How the XP Was Gained</label>
+            <input type="text" id="batch-xp-details" class="form-control" value="Friday meetup attendance & active participation in Room 515." required />
+          </div>
+
+          <div class="form-group" style="margin-bottom:18px;">
+            <label>Select Members to Award</label>
+            <div id="batch-members-checklist" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap:8px; max-height:240px; overflow-y:auto; padding:4px;"></div>
+          </div>
+
+          <div style="display:flex; justify-content:flex-end; gap:10px;">
+            <button type="button" class="btn btn-secondary" onclick="document.getElementById('batch-xp-modal').classList.remove('open')">Cancel</button>
+            <button type="submit" class="btn btn-primary">Award XP to Selected Members</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. Admin Add Downloadable Resource / Solution Modal -->
+  <div id="add-resource-modal" class="modal-backdrop">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">📚 Add Downloadable Solution or Lecture</h3>
+        <button type="button" class="modal-close" onclick="document.getElementById('add-resource-modal').classList.remove('open')">×</button>
+      </div>
+      <div class="modal-body">
+        <form id="add-resource-form" onsubmit="window.RauDevApp.submitNewResource(event)">
+          <div class="form-grid" style="margin-bottom:14px;">
+            <div class="form-group">
+              <label for="res-form-title">Resource Title</label>
+              <input type="text" id="res-form-title" class="form-control" placeholder="e.g. LeetCode 1: Two Sum (Hash Map Solution)" required />
+            </div>
+            <div class="form-group">
+              <label for="res-form-type">Resource Type</label>
+              <select id="res-form-type" class="form-control">
+                <option value="solution">&lt;/&gt; Downloadable Code Solution</option>
+                <option value="lecture">📚 Lecture / Workshop Guide</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="res-form-category">Category Tab</label>
+              <select id="res-form-category" class="form-control">
+                <option value="Challenge Solutions">Challenge Solutions</option>
+                <option value="Lectures & Slides">Lectures &amp; Slides</option>
+                <option value="Workshops & Guides">Workshops &amp; Guides</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-grid" style="margin-bottom:14px;">
+            <div class="form-group">
+              <label for="res-form-session">Session Tag</label>
+              <input type="text" id="res-form-session" class="form-control" value="Session 02" />
+            </div>
+            <div class="form-group">
+              <label for="res-form-language">Language / Format</label>
+              <input type="text" id="res-form-language" class="form-control" placeholder="e.g. Python 3 / C++20 / Markdown" />
+            </div>
+            <div class="form-group">
+              <label for="res-form-difficulty">Difficulty</label>
+              <input type="text" id="res-form-difficulty" class="form-control" placeholder="e.g. Easy / Medium" />
+            </div>
+            <div class="form-group">
+              <label for="res-form-xptag">XP Badge</label>
+              <input type="text" id="res-form-xptag" class="form-control" placeholder="e.g. +25 XP Harder Route" />
+            </div>
+          </div>
+
+          <div class="form-grid" style="margin-bottom:14px;">
+            <div class="form-group">
+              <label for="res-form-filename">Download Filename</label>
+              <input type="text" id="res-form-filename" class="form-control" placeholder="e.g. session02_two_sum.py" required />
+            </div>
+            <div class="form-group">
+              <label for="res-form-problem-url">Problem Link (Optional)</label>
+              <input type="url" id="res-form-problem-url" class="form-control" placeholder="https://leetcode.com/problems/two-sum/" />
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-bottom:14px;">
+            <label for="res-form-desc">Summary Description</label>
+            <input type="text" id="res-form-desc" class="form-control" placeholder="Explain the time/space complexity and key takeaway..." required />
+          </div>
+
+          <div class="form-group" style="margin-bottom:16px;">
+            <label for="res-form-content">Full Solution Code or Lecture Markdown (Downloadable Content)</label>
+            <textarea id="res-form-content" class="form-control" style="font-family:var(--font-mono); min-height:150px;" placeholder="Paste your Python/C++ solution code or lecture notes here..." required></textarea>
+          </div>
+
+          <div style="display:flex; justify-content:flex-end; gap:10px;">
+            <button type="button" class="btn btn-secondary" onclick="document.getElementById('add-resource-modal').classList.remove('open')">Cancel</button>
+            <button type="submit" class="btn btn-primary">Save &amp; Publish Resource</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. Admin News Topic Editor Modal -->
+  <div id="news-editor-modal" class="modal-backdrop">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 id="news-editor-modal-title" class="modal-title">Publish New Club Topic / News</h3>
+        <button type="button" class="modal-close" onclick="document.getElementById('news-editor-modal').classList.remove('open')">×</button>
+      </div>
+      <div class="modal-body">
+        <form onsubmit="window.RauDevApp.submitNewsEditor(event)">
+          <input type="hidden" id="news-editor-id" />
+          <div class="form-grid" style="margin-bottom:14px;">
+            <div class="form-group">
+              <label for="news-editor-title">Headline / Title</label>
+              <input type="text" id="news-editor-title" class="form-control" placeholder="e.g. Session 02 Recap: Hash Maps & Mock Interviews" required />
+            </div>
+            <div class="form-group">
+              <label for="news-editor-topic">Topic Category</label>
+              <input type="text" id="news-editor-topic" class="form-control" list="topic-suggestions" placeholder="e.g. Session Recap, Weekly Quest, Hackathon" required />
+              <datalist id="topic-suggestions">
+                <option value="Session Recap"></option>
+                <option value="Weekly Quest"></option>
+                <option value="Announcement"></option>
+                <option value="Workshop"></option>
+                <option value="Hackathon"></option>
+                <option value="Community"></option>
+              </datalist>
+            </div>
+          </div>
+
+          <div class="form-grid" style="margin-bottom:14px;">
+            <div class="form-group">
+              <label for="news-editor-author">Author / Department</label>
+              <input type="text" id="news-editor-author" class="form-control" placeholder="e.g. Executive & Tech Team" required />
+            </div>
+            <div class="form-group">
+              <label for="news-editor-date">Publish Date</label>
+              <input type="date" id="news-editor-date" class="form-control" required />
+            </div>
+            <div class="form-group" style="justify-content:center;">
+              <label style="display:flex; align-items:center; gap:8px; cursor:pointer; color:#fff; margin-top:18px;">
+                <input type="checkbox" id="news-editor-pinned" />
+                <span>📌 Pin to top of News section</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-bottom:14px;">
+            <label for="news-editor-summary">Short Card Summary</label>
+            <input type="text" id="news-editor-summary" class="form-control" placeholder="1–2 sentence preview shown on the news card..." required />
+          </div>
+
+          <div class="form-group" style="margin-bottom:16px;">
+            <label for="news-editor-content">Full Article Content (Supports Markdown `### Headings`, `- Lists`, `**Bold**`)</label>
+            <textarea id="news-editor-content" class="form-control" style="min-height:150px;" placeholder="Write the full club update here..." required></textarea>
+          </div>
+
+          <div style="display:flex; justify-content:flex-end; gap:10px;">
+            <button type="button" class="btn btn-secondary" onclick="document.getElementById('news-editor-modal').classList.remove('open')">Cancel</button>
+            <button type="submit" class="btn btn-primary">Publish Topic</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notifications Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Application Scripts -->
+  <script src="js/default-data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
