@@ -1,18 +1,18 @@
 {
   "name": "raudevweb",
-  "module": "index.ts",
-  "type": "module",
   "private": true,
   "workspaces": [
-    "apps/*"
+    "apps/*",
+    "packages/*"
   ],
   "scripts": {
-    "typecheck": "bun check"
+    "dev:backend": "bun --filter backend dev",
+    "dev:frontend": "bun --filter frontend dev",
+    "dev": "bun --filter \"*\" dev",
+    "typecheck": "bun --filter \"*\" check"
   },
   "devDependencies": {
-    "@types/bun": "latest"
-  },
-  "peerDependencies": {
-    "typescript": "^7"
+    "@types/bun": "latest",
+    "typescript": "^5"
   }
 }
