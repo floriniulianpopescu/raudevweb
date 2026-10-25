@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import FirstPage from "./FirstPage.tsx";
-import HomePage from "./HomePage.tsx";
+//import HomePage from "./HomePage.tsx";
 
 function App() {
 	return (
