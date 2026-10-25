@@ -3,13 +3,23 @@
   "type": "module",
   "scripts": {
     "dev": "bun run --hot src/index.ts",
-    "check": "bun check"
+    "check": "bun check",
+    "test:auth": "bun run src/test-auth.ts",
+    "db:generate": "prisma generate",
+    "db:push": "prisma db push",
+    "db:studio": "prisma studio"
   },
   "dependencies": {
+    "@better-auth/prisma-adapter": "^1.7.12",
+    "@prisma/client": "6.19.3",
     "@raudevweb/shared": "workspace:*",
+    "better-auth": "^1.7.12",
     "hono": "^4.13.13"
   },
   "devDependencies": {
-    "@types/bun": "latest"
+    "@better-auth/cli": "^1.4.21",
+    "@types/bun": "latest",
+    "@types/node": "^26.6.5",
+    "prisma": "6.19.3"
   }
 }
