@@ -1,16 +1,18 @@
-import { useState } from 'react'
-import './index.css'
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import FirstPage from "./FirstPage.tsx";
+//import HomePage from "./HomePage.tsx";
 
 function App() {
-  // var declaration
-  const [count, setCount] = useState(0)
-
-  // return
-  return (
-    <>
-      
-    </>
-  )
+	return (
+		<BrowserRouter>
+			<Routes>
+				<Route path="/" element={<FirstPage />} />
+                {/*<Route path="/signup" element={<SignUpPage />} /> */}
+				{/* add these when the pages exist */}
+				{/* <Route path="/login" element={<LoginPage />} /> */}
+			</Routes>
+		</BrowserRouter>
+	);
 }
 
-export default App
+export default App;

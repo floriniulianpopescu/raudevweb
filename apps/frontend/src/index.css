@@ -5,6 +5,9 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* 💡 Add this line pointing to your UI package components */
+@source "components/ui/**/*.{ts,tsx}";
+
 @theme inline {
     --font-heading: var(--font-sans);
     --font-sans: 'Figtree Variable', sans-serif;
