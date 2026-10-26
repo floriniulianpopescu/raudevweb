@@ -8,15 +8,16 @@ import {
 	Mic,
 	Users,
 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-const JOIN_FORM_URL = "https://forms.office.com/your-form-id";
-const INSTAGRAM_URL = "https://www.instagram.com/your_handle";
-const LINKEDIN_URL = "https://www.linkedin.com/company/your-page";
+const JOIN_FORM_URL =
+	"https://forms.cloud.microsoft/pages/responsepage.aspx?id=Fa--e4Wf-020_9kgcQfNfchESy1MQ3pAnsE6zKK_XZBUM1hQRUM3U0pYTkowWUw5SksxQjFOTURGOC4u&route=shorturl";
+const INSTAGRAM_URL = "https://www.instagram.com/raudev.club/";
+const LINKEDIN_URL = "https://www.linkedin.com/company/rau-dev/posts/";
 
 const FEATURES = [
 	{
@@ -51,65 +52,61 @@ const MEETING_DETAILS = [
 	{ icon: MapPin, title: "Room 515", subtitle: "Campus building" },
 ];
 
-function openExternal(url: string) {
-	window.open(url, "_blank", "noopener,noreferrer");
-}
-
 export default function FirstPage() {
-	const navigate = useNavigate();
-
 	return (
-		<div className="min-h-screen bg-background text-foreground flex flex-col justify-between">
+		<div className="relative isolate min-h-screen bg-background text-foreground flex flex-col justify-between overflow-x-hidden">
 			{/* BACKGROUND GRADIENT */}
 			<div
 				aria-hidden
-				className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[500px] bg-[radial-gradient(ellipse_at_top,hsl(var(--primary)/0.15),transparent_70%)]"
+				className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[500px] bg-[radial-gradient(ellipse_at_top,color-mix(in_oklab,var(--primary)_15%,transparent),transparent_70%)]"
 			/>
 
-			<div className="container mx-auto max-w-6xl px-4 py-12 lg:py-16 space-y-16">
-				{/* 1. FULL-WIDTH HERO SECTION (SINGLE LINE TITLE) */}
-				<section className="flex flex-col items-center text-center max-w-5xl mx-auto pt-4 sm:pt-6">
+			<div className="container mx-auto max-w-6xl px-4 py-8 sm:py-12 lg:py-16 space-y-12 sm:space-y-16">
+				{/* 1. HERO SECTION */}
+				<section className="flex flex-col items-center text-center max-w-3xl mx-auto pt-4 sm:pt-6">
 					<Badge
 						variant="secondary"
-						className="mb-4 gap-1.5 px-3 py-1 text-xs sm:text-sm"
+						className="mb-6 gap-1.5 px-3.5 py-1.5 text-xs sm:text-sm font-medium shadow-sm border border-primary/10"
 					>
-						<Code2 className="h-3.5 w-3.5 text-primary" />
+						<Code2 className="h-4 w-4 text-primary shrink-0" />
 						Romanian-American University
 					</Badge>
 
-					<h1 className="text-3xl font-extrabold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl whitespace-nowrap">
+					<h1 className="text-4xl font-extrabold tracking-tight sm:text-6xl md:text-7xl leading-[1.1]">
 						Welcome to{" "}
-						<span className="bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+						<span className="bg-gradient-to-r from-primary via-primary/90 to-primary/60 bg-clip-text text-transparent">
 							RAUDEV
 						</span>
 					</h1>
 
-					<p className="mt-4 text-base text-muted-foreground sm:text-lg max-w-2xl leading-relaxed">
+					<p className="mt-5 text-sm sm:text-base md:text-lg text-muted-foreground leading-relaxed max-w-xl text-balance">
 						The software engineering and programming student club at RAU. Solve
 						challenges, practice interviews, learn from industry experts, and
 						grow together.
 					</p>
 
-					<div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3 w-full max-w-sm">
+					<div className="mt-8 grid grid-cols-2 gap-2 w-full max-w-xs sm:max-w-sm">
 						<Button
-							size="lg"
-							className="shadow-md text-base h-12 px-6 w-full sm:w-auto flex-1 font-medium"
-							onClick={() => navigate("/signup")}
+							size="sm"
+							className="w-full h-10 text-xs sm:text-sm font-medium inline-flex items-center justify-center gap-1.5 shadow-md transition-transform active:scale-[0.98]"
+							render={<Link to="/signup" />}
+							nativeButton={false}
 						>
 							Sign up
 						</Button>
 						<Button
-							size="lg"
+							size="sm"
 							variant="outline"
-							className="text-base h-12 px-6 w-full sm:w-auto flex-1 font-medium"
-							onClick={() => navigate("/login")}
+							className="w-full h-10 text-xs sm:text-sm font-medium inline-flex items-center justify-center gap-1.5 border-primary/20 hover:bg-primary/5 transition-transform active:scale-[0.98]"
+							render={<Link to="/login" />}
+							nativeButton={false}
 						>
 							Log in
 						</Button>
 					</div>
 				</section>
 
-				{/* 2. FULL-WIDTH WHAT WE DO (4-CARD GRID) */}
+				{/* 2. WHAT WE DO */}
 				<section className="space-y-6">
 					<div className="text-center max-w-xl mx-auto">
 						<h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
@@ -143,7 +140,7 @@ export default function FirstPage() {
 					</div>
 				</section>
 
-				{/* 3. PARALLEL BOTTOM ROW: MEETINGS (LEFT) + COMMUNITY (RIGHT) */}
+				{/* 3. PARALLEL BOTTOM ROW: MEETINGS + COMMUNITY */}
 				<section className="grid gap-6 md:grid-cols-2 items-stretch">
 					{/* JOIN OUR MEETINGS (LEFT) */}
 					<Card className="border-primary/20 bg-card/60 shadow-sm backdrop-blur-sm flex flex-col justify-between p-1">
@@ -206,8 +203,15 @@ export default function FirstPage() {
 						<CardContent className="p-4 pt-2 space-y-2.5">
 							<Button
 								size="default"
-								className="w-full h-10 text-sm font-medium inline-flex items-center justify-center gap-2"
-								onClick={() => openExternal(JOIN_FORM_URL)}
+								className="w-full h-11 text-sm font-semibold inline-flex items-center justify-center gap-2"
+								render={
+									<a
+										href={JOIN_FORM_URL}
+										target="_blank"
+										rel="noopener noreferrer"
+									/>
+								}
+								nativeButton={false}
 							>
 								<span>Join the Club</span>
 								<ExternalLink className="h-3.5 w-3.5" />
@@ -217,8 +221,15 @@ export default function FirstPage() {
 								<Button
 									variant="outline"
 									size="sm"
-									className="w-full h-9 text-xs sm:text-sm inline-flex items-center justify-center gap-1.5"
-									onClick={() => openExternal(INSTAGRAM_URL)}
+									className="w-full h-10 text-xs sm:text-sm font-medium inline-flex items-center justify-center gap-1.5"
+									render={
+										<a
+											href={INSTAGRAM_URL}
+											target="_blank"
+											rel="noopener noreferrer"
+										/>
+									}
+									nativeButton={false}
 								>
 									<svg
 										className="h-3.5 w-3.5 fill-current shrink-0"
@@ -232,8 +243,15 @@ export default function FirstPage() {
 								<Button
 									variant="outline"
 									size="sm"
-									className="w-full h-9 text-xs sm:text-sm inline-flex items-center justify-center gap-1.5"
-									onClick={() => openExternal(LINKEDIN_URL)}
+									className="w-full h-10 text-xs sm:text-sm font-medium inline-flex items-center justify-center gap-1.5"
+									render={
+										<a
+											href={LINKEDIN_URL}
+											target="_blank"
+											rel="noopener noreferrer"
+										/>
+									}
+									nativeButton={false}
 								>
 									<svg
 										className="h-3.5 w-3.5 fill-current shrink-0"
