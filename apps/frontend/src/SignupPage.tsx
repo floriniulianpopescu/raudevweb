@@ -41,7 +41,7 @@ export default function SignupPage() {
 				},
 				onSuccess: () => {
 					setLoading(false);
-					navigate("/dashboard", { replace: true });
+					navigate("/home", { replace: true });
 				},
 				onError: (ctx) => {
 					setLoading(false);
