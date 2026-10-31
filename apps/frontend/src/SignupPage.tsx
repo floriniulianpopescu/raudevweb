@@ -5,6 +5,7 @@ import AuthLayout from "@/components/auth-layout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { authClient } from "@/lib/auth-client";
 
 export default function SignupPage() {
 	const navigate = useNavigate();
@@ -28,17 +29,29 @@ export default function SignupPage() {
 			return;
 		}
 
-		setLoading(true);
-		try {
-			// TODO: replace with your real signup call, e.g. await signup({ name, email, password });
-			await new Promise((resolve) => setTimeout(resolve, 600));
-
-			navigate("/dashboard", { replace: true });
-		} catch {
-			setError("Could not create your account. Please try again.");
-		} finally {
-			setLoading(false);
-		}
+		await authClient.signUp.email(
+			{
+				email,
+				password,
+				name,
+			},
+			{
+				onRequest: () => {
+					setLoading(true);
+				},
+				onSuccess: () => {
+					setLoading(false);
+					navigate("/dashboard", { replace: true });
+				},
+				onError: (ctx) => {
+					setLoading(false);
+					setError(
+						ctx.error.message ||
+							"Could not create your account. Please try again.",
+					);
+				},
+			},
+		);
 	}
 
 	return (

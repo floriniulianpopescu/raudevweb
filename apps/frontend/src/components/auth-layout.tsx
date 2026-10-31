@@ -35,16 +35,6 @@ export default function AuthLayout({
 					Back to home
 				</Link>
 
-				<div className="flex flex-col items-center text-center">
-					<Badge
-						variant="secondary"
-						className="mb-4 gap-1.5 px-3 py-1 text-xs font-medium shadow-sm border border-primary/10"
-					>
-						<Code2 className="h-3.5 w-3.5 text-primary shrink-0" />
-						RAUDEV
-					</Badge>
-				</div>
-
 				<Card className="border-primary/20 bg-card/60 shadow-sm backdrop-blur-sm p-1">
 					<CardHeader className="p-5 pb-2 text-center">
 						<CardTitle className="text-2xl">{title}</CardTitle>

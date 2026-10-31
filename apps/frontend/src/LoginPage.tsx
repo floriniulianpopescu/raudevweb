@@ -5,6 +5,7 @@ import AuthLayout from "@/components/auth-layout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { authClient } from "@/lib/auth-client";
 
 export default function LoginPage() {
 	const navigate = useNavigate();
@@ -16,18 +17,26 @@ export default function LoginPage() {
 	async function handleSubmit(e: FormEvent<HTMLFormElement>) {
 		e.preventDefault();
 		setError(null);
-		setLoading(true);
 
-		try {
-			// TODO: replace with your real login call, e.g. await login({ email, password });
-			await new Promise((resolve) => setTimeout(resolve, 600));
-
-			navigate("/dashboard", { replace: true });
-		} catch {
-			setError("Invalid email or password.");
-		} finally {
-			setLoading(false);
-		}
+		await authClient.signIn.email(
+			{
+				email,
+				password,
+			},
+			{
+				onRequest: () => {
+					setLoading(true);
+				},
+				onSuccess: () => {
+					setLoading(false);
+					navigate("/dashboard", { replace: true });
+				},
+				onError: (ctx) => {
+					setLoading(false);
+					setError(ctx.error.message || "Invalid email or password.");
+				},
+			},
+		);
 	}
 
 	return (
