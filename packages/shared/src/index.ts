@@ -34,3 +34,19 @@ export const ResetPasswordInputSchema = z.object({
 });
 
 export type ResetPasswordInput = z.infer<typeof ResetPasswordInputSchema>;
+
+export const UpdateProfileInputSchema = z
+  .object({
+    name: z
+      .string()
+      .trim()
+      .min(2, "Name must be at least 2 characters long")
+      .max(100, "Name must not exceed 100 characters")
+      .optional(),
+    image: z.string().url("Image must be a valid URL").optional(),
+  })
+  .refine((data) => data.name !== undefined || data.image !== undefined, {
+    message: "Provide at least one field to update",
+  })
+
+export type UpdateProfileInput = z.infer<typeof UpdateProfileInputSchema>;

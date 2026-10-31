@@ -1,7 +1,9 @@
 import { Hono } from "hono";
+import { UpdateProfileInputSchema } from "@raudevweb/shared";
 import { requireAuth, type AuthContext } from "../middlewares/auth.middleware";
 import { requireRole } from "../middlewares/role.middleware";
 import { prisma } from "../lib/prisma";
+import { error } from "node:console";
 
 export const userRouter = new Hono<AuthContext>();
 
@@ -18,14 +20,22 @@ userRouter.get("/me", requireAuth, (c) => {
 // PATCH /me - Update current user profile
 userRouter.patch("/me", requireAuth, async (c) => {
   const user = c.get("user");
-  const body = await c.req.json().catch(() => ({}));
+  const body = await c.req.json().catch(() => (null));
+  const parsed = UpdateProfileInputSchema.safeParse(body);
+
+  if (!parsed.success) {
+    return c.json ({
+        error: "Bad request",
+        message: "Invalid profile data",
+        details: parsed.error.flatten(),
+      },
+      400
+    );
+  }
 
   const updatedUser = await prisma.user.update({
     where: { id: user.id },
-    data: {
-      name: body.name ?? user.name,
-      image: body.image ?? user.image,
-    },
+    data: parsed.data,
   });
 
   return c.json({
