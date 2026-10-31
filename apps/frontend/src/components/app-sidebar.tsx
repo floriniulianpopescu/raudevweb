@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import {
 	Binary,
 	BookOpenText,
@@ -33,25 +34,25 @@ const collapsibles = [
 		title: "Practice",
 		icon: Binary,
 		children: [
-			{ title: "Challenges", url: "#" },
-			{ title: "Problems", url: "#" },
-			{ title: "Exercises", url: "#" },
-			{ title: "Quizes", url: "#" },
+			{ title: "Challenges", url: "/home/challenges" },
+			{ title: "Problems", url: "/home/problems" },
+			{ title: "Exercises", url: "/home/exercises" },
+			{ title: "Quizes", url: "/home/quizes" },
 		],
 	},
 	{
 		title: "Resources",
 		icon: BookOpenText,
 		children: [
-			{ title: "Lessons", url: "#" },
-			{ title: "Extras", url: "#" },
+			{ title: "Lessons", url: "/home/lessons" },
+			{ title: "Extras", url: "/home/extras" },
 		],
 	},
 ];
 
 const bitems = [
-	{ title: "Leaderboard", url: "#", icon: Trophy },
-	{ title: "Settings", url: "#", icon: Settings },
+	{ title: "Leaderboard", url: "/home/leaderboard", icon: Trophy },
+	{ title: "Settings", url: "/home/settings", icon: Settings },
 ];
 
 export function AppSidebar() {
@@ -65,7 +66,7 @@ export function AppSidebar() {
 						{/* Home */}
 						<SidebarMenu>
 							<SidebarMenuItem>
-								<SidebarMenuButton render={<a href="#" />}>
+								<SidebarMenuButton render={<Link to="/home" />}>
 									<Home />
 									<span>Home</span>
 								</SidebarMenuButton>
@@ -91,7 +92,7 @@ export function AppSidebar() {
 										<SidebarMenuSub>
 											{item.children.map((child) => (
 												<SidebarMenuSubItem key={child.title}>
-													<SidebarMenuSubButton render={<a href={child.url} />}>
+													<SidebarMenuSubButton render={<Link to={child.url} />}>
 														<span>{child.title}</span>
 													</SidebarMenuSubButton>
 												</SidebarMenuSubItem>
@@ -106,7 +107,7 @@ export function AppSidebar() {
 						<SidebarMenu>
 							{bitems.map((item) => (
 								<SidebarMenuItem key={item.title}>
-									<SidebarMenuButton render={<a href={item.url} />}>
+									<SidebarMenuButton render={<Link to={item.url} />}>
 										<item.icon />
 										<span>{item.title}</span>
 									</SidebarMenuButton>
@@ -121,7 +122,7 @@ export function AppSidebar() {
 					<SidebarGroupContent>
 						<SidebarMenu>
 							<SidebarMenuItem>
-								<SidebarMenuButton render={<a href="#" />}>
+								<SidebarMenuButton render={<Link to="/home/account" />}>
 									<User />
 									<span>Account</span>
 								</SidebarMenuButton>

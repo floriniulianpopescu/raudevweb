@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import {
 	NavigationMenu,
 	NavigationMenuContent,
@@ -16,39 +17,39 @@ export function AppNavigationMenu() {
 				<NavigationMenuItem className="flex-1" aria-hidden />
 
 				<NavigationMenuItem>
-					<NavigationMenuLink className={navigationMenuTriggerStyle()}>
+					<NavigationMenuLink className={navigationMenuTriggerStyle()} render={<Link to="/home" />}>
 						Home
 					</NavigationMenuLink>
 				</NavigationMenuItem>
 				<NavigationMenuItem>
 					<NavigationMenuTrigger>Practice</NavigationMenuTrigger>
 					<NavigationMenuContent>
-						<NavigationMenuLink>Challenges</NavigationMenuLink>
-						<NavigationMenuLink>Problems</NavigationMenuLink>
-						<NavigationMenuLink>Exercises</NavigationMenuLink>
-						<NavigationMenuLink>Quizes</NavigationMenuLink>
+						<NavigationMenuLink render={<Link to="/home/challenges" />}>Challenges</NavigationMenuLink>
+						<NavigationMenuLink render={<Link to="/home/problems" />}>Problems</NavigationMenuLink>
+						<NavigationMenuLink render={<Link to="/home/exercises" />}>Exercises</NavigationMenuLink>
+						<NavigationMenuLink render={<Link to="/home/quizes" />}>Quizes</NavigationMenuLink>
 					</NavigationMenuContent>
 				</NavigationMenuItem>
 				<NavigationMenuItem>
 					<NavigationMenuTrigger>Resources</NavigationMenuTrigger>
 					<NavigationMenuContent>
-						<NavigationMenuLink>Lessons</NavigationMenuLink>
-						<NavigationMenuLink>Extras</NavigationMenuLink>
+						<NavigationMenuLink render={<Link to="/home/lessons" />}>Lessons</NavigationMenuLink>
+						<NavigationMenuLink render={<Link to="/home/extras" />}>Extras</NavigationMenuLink>
 					</NavigationMenuContent>
 				</NavigationMenuItem>
 				<NavigationMenuItem>
-					<NavigationMenuLink className={navigationMenuTriggerStyle()}>
+					<NavigationMenuLink className={navigationMenuTriggerStyle()} render={<Link to="/home/leaderboard" />}>
 						Leaderboard
 					</NavigationMenuLink>
 				</NavigationMenuItem>
 				<NavigationMenuItem>
-					<NavigationMenuLink className={navigationMenuTriggerStyle()}>
+					<NavigationMenuLink className={navigationMenuTriggerStyle()} render={<Link to="/home/settings" />}>
 						Settings
 					</NavigationMenuLink>
 				</NavigationMenuItem>
 
 				<NavigationMenuItem className="flex flex-1 justify-end">
-					<NavigationMenuLink className={navigationMenuTriggerStyle()}>
+					<NavigationMenuLink className={navigationMenuTriggerStyle()} render={<Link to="/home/account" />}>
 						Account
 					</NavigationMenuLink>
 				</NavigationMenuItem>
