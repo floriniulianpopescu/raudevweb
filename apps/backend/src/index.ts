@@ -6,11 +6,13 @@ import { userRouter } from "./routes/user.route";
 
 const app = new Hono();
 
+const corsOrigin = (process.env.CORS_ORIGIN || "http://localhost:5173").replace(/\/+$/, "");
+
 // CORS configuration for cross-origin frontend support with cookies
 app.use(
   "*",
   cors({
-    origin: process.env.CORS_ORIGIN || "http://localhost:5173",
+    origin: corsOrigin,
     credentials: true,
     allowHeaders: ["Content-Type", "Authorization", "Cookie"],
     allowMethods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
