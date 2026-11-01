@@ -14,7 +14,8 @@
     "@prisma/client": "6.19.3",
     "@raudevweb/shared": "workspace:*",
     "better-auth": "^1.7.12",
-    "hono": "^4.13.13"
+    "hono": "^4.13.13",
+    "resend": "^6.37.0"
   },
   "devDependencies": {
     "@better-auth/cli": "^1.4.21",
