@@ -4,6 +4,7 @@ import { prismaAdapter } from "@better-auth/prisma-adapter";
 import { bearer, admin } from "better-auth/plugins";
 import { SignUpInputSchema } from "@raudevweb/shared";
 import { prisma } from "./prisma";
+import { sendEmail } from "./email";
 
 // Better Auth endpoints that accept a user-supplied name
 const NAME_PATHS = ["/sign-up/email", "/update-user"];
@@ -19,14 +20,30 @@ export const auth = betterAuth({
     enabled: true,
     requireEmailVerification: false,
     revokeSessionsOnPasswordReset: true,
-    async sendResetPassword(data) {
-      console.log(`[AUTH] Password reset requested for ${data.user.email}: ${data.url}`);
+    async sendResetPassword({ user, url }) {
+      // Not awaited: waiting on the email provider only for existing users would let
+      // response timing reveal which emails are registered
+      void sendEmail({
+        to: user.email,
+        subject: "Reset your RAUDEV password",
+        text: `We received a request to reset your password.\n\nOpen this link to choose a new one (valid for 1 hour):\n${url}\n\nIf you didn't request this, you can ignore this email.`,
+        html: `<p>We received a request to reset your password.</p><p><a href="${url}">Choose a new password</a> (valid for 1 hour)</p><p>If you didn't request this, you can ignore this email.</p>`,
+      }).catch((err) => console.error("[AUTH] Password reset email failed:", err));
     },
-    // Invalidate any other pending reset links once the password has been changed
     async onPasswordReset({ user }) {
+      // Invalidate any other pending reset links once the password has been changed
       await prisma.verification.deleteMany({
         where: { value: user.id, identifier: { startsWith: "reset-password:" } },
       });
+
+      // Let the owner know, so an unexpected reset doesn't go unnoticed.
+      // A failed notice must not fail the reset itself, which has already happened.
+      void sendEmail({
+        to: user.email,
+        subject: "Your RAUDEV password was changed",
+        text: `Your RAUDEV password was just changed and all your devices were signed out.\n\nIf this was you, no action is needed.\nIf it wasn't, reset your password again right away and contact us.`,
+        html: `<p>Your RAUDEV password was just changed and all your devices were signed out.</p><p>If this was you, no action is needed.<br>If it wasn't, reset your password again right away and contact us.</p>`,
+      }).catch((err) => console.error("[AUTH] Password changed notice failed:", err));
     },
   },
   hooks: {
