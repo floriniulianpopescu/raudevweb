@@ -3,6 +3,10 @@ import { cors } from "hono/cors";
 import { HealthCheckResponseSchema } from "@raudevweb/shared";
 import { auth } from "./lib/auth";
 import { userRouter } from "./routes/user.route";
+import { adminContentRouter, contentRouter } from "./routes/content.route";
+import { adminXpRouter } from "./routes/xp.route";
+import { leaderboardRouter } from "./routes/leaderboard.route";
+import { adminScheduleRouter, scheduleRouter } from "./routes/schedule.route";
 
 const app = new Hono();
 
@@ -27,6 +31,13 @@ app.on(["POST", "GET"], "/api/auth/*", (c) => {
 
 // Protected & user-related API routes
 app.route("/api/user", userRouter);
+app.route("/api/content", contentRouter);
+app.route("/api/leaderboard", leaderboardRouter);
+app.route("/api/schedule", scheduleRouter);
+// Must be mounted before adminContentRouter, whose /:type would otherwise match "users"
+app.route("/api/admin/users", adminXpRouter);
+app.route("/api/admin/schedule", adminScheduleRouter);
+app.route("/api/admin", adminContentRouter);
 
 // Health check endpoint
 app.get("/health", (c) => {

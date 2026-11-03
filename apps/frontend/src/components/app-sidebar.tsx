@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import {
 	Binary,
 	BookOpenText,
@@ -6,9 +5,10 @@ import {
 	Home,
 	Settings,
 	Trophy,
-	User,
+	Info,
 } from "lucide-react";
-
+import { Link } from "react-router-dom";
+import logo from "@/assets/logo.png";
 import {
 	Collapsible,
 	CollapsibleContent,
@@ -37,7 +37,7 @@ const collapsibles = [
 			{ title: "Challenges", url: "/home/challenges" },
 			{ title: "Problems", url: "/home/problems" },
 			{ title: "Exercises", url: "/home/exercises" },
-			{ title: "Quizes", url: "/home/quizes" },
+			{ title: "Quizzes", url: "/home/quizzes" },
 		],
 	},
 	{
@@ -61,7 +61,9 @@ export function AppSidebar() {
 			<SidebarContent>
 				{/* Upper */}
 				<SidebarGroup>
-					<SidebarGroupLabel>RAU DEV Logo</SidebarGroupLabel>
+					<SidebarGroupLabel className="h-auto">
+						<img src={logo} alt="RAU DEV" className="h-32 w-auto" />
+					</SidebarGroupLabel>
 					<SidebarGroupContent>
 						{/* Home */}
 						<SidebarMenu>
@@ -92,7 +94,9 @@ export function AppSidebar() {
 										<SidebarMenuSub>
 											{item.children.map((child) => (
 												<SidebarMenuSubItem key={child.title}>
-													<SidebarMenuSubButton render={<Link to={child.url} />}>
+													<SidebarMenuSubButton
+														render={<Link to={child.url} />}
+													>
 														<span>{child.title}</span>
 													</SidebarMenuSubButton>
 												</SidebarMenuSubItem>
@@ -122,9 +126,9 @@ export function AppSidebar() {
 					<SidebarGroupContent>
 						<SidebarMenu>
 							<SidebarMenuItem>
-								<SidebarMenuButton render={<Link to="/home/account" />}>
-									<User />
-									<span>Account</span>
+								<SidebarMenuButton render={<Link to="/home/about" />}>
+									<Info />
+									<span>About</span>
 								</SidebarMenuButton>
 							</SidebarMenuItem>
 						</SidebarMenu>
@@ -134,7 +138,7 @@ export function AppSidebar() {
 
 			<SidebarFooter className="gap-0">
 				<SidebarGroupLabel className="h-auto">Version 0.0.1</SidebarGroupLabel>
-				<SidebarGroupLabel>RAUDEV © 2026</SidebarGroupLabel>
+				<SidebarGroupLabel>© {new Date().getFullYear()} RAUDEV</SidebarGroupLabel>
 				<SidebarGroupLabel className="h-auto">
 					Romanian-American University
 				</SidebarGroupLabel>
