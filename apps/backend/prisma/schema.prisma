@@ -20,6 +20,7 @@ model User {
   banned        Boolean?  @default(false)
   banReason     String?
   banExpires    DateTime?
+  xp            Int       @default(0)
 
   sessions Session[]
   accounts Account[]
@@ -76,4 +77,127 @@ model Verification {
 
   @@map("verification")
   @@index([identifier])
+}
+
+// ---------------------------------------------------------------------------
+// Content
+// ---------------------------------------------------------------------------
+
+/// Practice item that lives on another website.
+model Problem {
+  id          String      @id @default(cuid())
+  title       String
+  description String      @default("")
+  href        String
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  challenges  Challenge[]
+
+  @@map("problem")
+}
+
+/// Practice item that lives on another website.
+model Exercise {
+  id          String      @id @default(cuid())
+  title       String
+  description String      @default("")
+  href        String
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  challenges  Challenge[]
+
+  @@map("exercise")
+}
+
+/// Groups several problems and/or exercises under one in-site page.
+model Challenge {
+  id          String     @id @default(cuid())
+  title       String
+  description String     @default("")
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  problems    Problem[]
+  exercises   Exercise[]
+
+  @@map("challenge")
+}
+
+model Quiz {
+  id          String         @id @default(cuid())
+  title       String
+  description String         @default("")
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  questions   QuizQuestion[]
+
+  @@map("quiz")
+}
+
+/// Always 4 answers with exactly one correct (enforced by the API schema).
+model QuizQuestion {
+  id           String   @id @default(cuid())
+  quizId       String
+  quiz         Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  position     Int
+  question     String
+  answers      String[]
+  correctIndex Int
+
+  @@map("quiz_question")
+  @@index([quizId])
+}
+
+enum ResourceKind {
+  lesson
+  extra
+}
+
+/// Lessons and extras: title, description and a small bibliography.
+model Resource {
+  id          String         @id @default(cuid())
+  kind        ResourceKind
+  title       String
+  description String         @default("")
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  links       ResourceLink[]
+
+  @@map("resource")
+  @@index([kind])
+}
+
+model ResourceLink {
+  id          String   @id @default(cuid())
+  resourceId  String
+  resource    Resource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+  position    Int
+  title       String
+  description String   @default("")
+  href        String
+
+  @@map("resource_link")
+  @@index([resourceId])
+}
+
+// ---------------------------------------------------------------------------
+// Site settings
+// ---------------------------------------------------------------------------
+
+/// Single row (id = "default") describing the weekly physical session.
+model SessionSchedule {
+  id            String   @id @default("default")
+  /// This week's lesson name (empty → "Physical session")
+  title         String   @default("")
+  /// 0 = Sunday … 6 = Saturday
+  weekday       Int      @default(5)
+  startTime     String   @default("11:00")
+  endTime       String   @default("14:00")
+  location      String   @default("")
+  note          String   @default("")
+  /// YYYY-MM-DD; null → use the calendar week number
+  semesterStart String?
+  cancelled     Boolean  @default(false)
+  updatedAt     DateTime @updatedAt
+
+  @@map("session_schedule")
 }

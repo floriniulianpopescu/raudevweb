@@ -1,8 +1,7 @@
-import { ArrowLeft, Code2 } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
 
-import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface AuthLayoutProps {

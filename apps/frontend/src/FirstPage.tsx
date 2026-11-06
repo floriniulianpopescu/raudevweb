@@ -8,7 +8,11 @@ import {
 	Mic,
 	Users,
 } from "lucide-react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { WEEKDAYS, type SessionSchedule } from "@raudevweb/shared";
+import { apiGet } from "@/lib/admin-api";
+import { formatDay, sessionInfo } from "@/lib/schedule";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -46,13 +50,59 @@ const FEATURES = [
 	},
 ];
 
-const MEETING_DETAILS = [
+/** Shown until the schedule loads (or if the API is unreachable). */
+const FALLBACK_MEETING_DETAILS = [
 	{ icon: Calendar, title: "Every Friday", subtitle: "Weekly session" },
 	{ icon: Clock, title: "11:00 – 14:00", subtitle: "3 hours duration" },
 	{ icon: MapPin, title: "Room 515", subtitle: "Campus building" },
 ];
 
+function durationLabel(start: string, end: string) {
+	const toMin = (t: string) => {
+		const [h, m] = t.split(":").map(Number);
+		return h * 60 + m;
+	};
+	const total = toMin(end) - toMin(start);
+	const h = Math.floor(total / 60);
+	const m = total % 60;
+	if (m === 0) return `${h} hour${h === 1 ? "" : "s"} duration`;
+	return h === 0 ? `${m} min duration` : `${h}h ${m}m duration`;
+}
+
+/** Meeting rows built from the schedule admins edit on /home. */
+function meetingDetails(s: SessionSchedule, now = new Date()) {
+	const session = sessionInfo(now, s);
+	const nextLabel = s.cancelled
+		? `Cancelled this week · next: ${formatDay(session.next)}`
+		: session.status === "live"
+			? "Happening now!"
+			: session.status === "ended"
+				? `Next: ${formatDay(session.next)}`
+				: session.status === "today"
+					? "Today"
+					: `Next: ${formatDay(session.start)}`;
+
+	return [
+		{ icon: Calendar, title: `Every ${WEEKDAYS[s.weekday]}`, subtitle: nextLabel },
+		{ icon: Clock, title: `${s.startTime} – ${s.endTime}`, subtitle: durationLabel(s.startTime, s.endTime) },
+		...(s.location ? [{ icon: MapPin, title: s.location, subtitle: "Campus building" }] : []),
+	];
+}
+
+function useSchedule() {
+	const [schedule, setSchedule] = useState<SessionSchedule | null>(null);
+	useEffect(() => {
+		apiGet<SessionSchedule>("schedule").then(setSchedule, () => {
+			/* keep the fallback */
+		});
+	}, []);
+	return schedule;
+}
+
 export default function FirstPage() {
+	const schedule = useSchedule();
+	const details = schedule ? meetingDetails(schedule) : FALLBACK_MEETING_DETAILS;
+
 	return (
 		<div className="relative isolate min-h-screen bg-background text-foreground flex flex-col justify-between overflow-x-hidden">
 			{/* BACKGROUND GRADIENT */}
@@ -159,7 +209,7 @@ export default function FirstPage() {
 							</p>
 						</CardHeader>
 						<CardContent className="p-4 pt-2 space-y-2.5">
-							{MEETING_DETAILS.map(({ icon: Icon, title, subtitle }) => (
+							{details.map(({ icon: Icon, title, subtitle }) => (
 								<div
 									key={title}
 									className="flex items-center gap-3 rounded-lg border bg-background/80 p-2.5 transition-colors hover:border-primary/40"
@@ -177,6 +227,9 @@ export default function FirstPage() {
 									</div>
 								</div>
 							))}
+							{schedule?.note && (
+								<p className="px-1 text-xs text-muted-foreground whitespace-pre-wrap">{schedule.note}</p>
+							)}
 						</CardContent>
 					</Card>
 

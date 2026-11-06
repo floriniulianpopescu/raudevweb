@@ -11,11 +11,8 @@ import {
 
 export function AppNavigationMenu() {
 	return (
-		<NavigationMenu className="hidden max-w-full w-full md:flex">
-			<NavigationMenuList className="w-full">
-				{/* Left spacer, balances Account */}
-				<NavigationMenuItem className="flex-1" aria-hidden />
-
+		<NavigationMenu className="hidden md:flex">
+			<NavigationMenuList>
 				<NavigationMenuItem>
 					<NavigationMenuLink className={navigationMenuTriggerStyle()} render={<Link to="/home" />}>
 						Home
@@ -27,7 +24,7 @@ export function AppNavigationMenu() {
 						<NavigationMenuLink render={<Link to="/home/challenges" />}>Challenges</NavigationMenuLink>
 						<NavigationMenuLink render={<Link to="/home/problems" />}>Problems</NavigationMenuLink>
 						<NavigationMenuLink render={<Link to="/home/exercises" />}>Exercises</NavigationMenuLink>
-						<NavigationMenuLink render={<Link to="/home/quizes" />}>Quizes</NavigationMenuLink>
+						<NavigationMenuLink render={<Link to="/home/quizzes" />}>Quizzes</NavigationMenuLink>
 					</NavigationMenuContent>
 				</NavigationMenuItem>
 				<NavigationMenuItem>
@@ -45,12 +42,6 @@ export function AppNavigationMenu() {
 				<NavigationMenuItem>
 					<NavigationMenuLink className={navigationMenuTriggerStyle()} render={<Link to="/home/settings" />}>
 						Settings
-					</NavigationMenuLink>
-				</NavigationMenuItem>
-
-				<NavigationMenuItem className="flex flex-1 justify-end">
-					<NavigationMenuLink className={navigationMenuTriggerStyle()} render={<Link to="/home/account" />}>
-						Account
 					</NavigationMenuLink>
 				</NavigationMenuItem>
 			</NavigationMenuList>
