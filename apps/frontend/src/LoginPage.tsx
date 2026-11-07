@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { authClient } from "@/lib/auth-client";
-import { verifyCallbackURL } from "@/lib/email-verification";
 
 export default function LoginPage() {
 	const navigate = useNavigate();
@@ -29,8 +28,8 @@ export default function LoginPage() {
 			{
 				email: email.trim(),
 				password,
-				// Used by the fresh confirmation link the backend sends to unverified accounts
-				callbackURL: verifyCallbackURL(),
+				// No callbackURL here: Better Auth would redirect to it after every successful login.
+				// The backend points confirmation links to /verify-email by itself.
 			},
 			{
 				onRequest: () => {
