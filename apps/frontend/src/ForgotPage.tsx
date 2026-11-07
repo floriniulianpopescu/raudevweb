@@ -6,6 +6,7 @@ import AuthLayout from "@/components/auth-layout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { sendPasswordResetEmail } from "@/lib/password-reset";
 
 export default function ForgotPasswordPage() {
 	const [email, setEmail] = useState("");
@@ -19,12 +20,10 @@ export default function ForgotPasswordPage() {
 		setLoading(true);
 
 		try {
-			// TODO: replace with your real request, e.g. await requestPasswordReset(email);
-			await new Promise((resolve) => setTimeout(resolve, 600));
-
+			await sendPasswordResetEmail(email.trim());
 			setSent(true);
-		} catch {
-			setError("Something went wrong. Please try again.");
+		} catch (err) {
+			setError((err as Error).message);
 		} finally {
 			setLoading(false);
 		}
@@ -55,7 +54,18 @@ export default function ForgotPasswordPage() {
 					<p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
 						If an account exists for{" "}
 						<span className="font-medium">{email}</span>, you&apos;ll receive a
-						password reset link shortly.
+						password reset link shortly. The link is valid for 1 hour.
+					</p>
+					<p className="text-xs text-muted-foreground">
+						Didn&apos;t get it? Check your spam folder or{" "}
+						<button
+							type="button"
+							onClick={() => setSent(false)}
+							className="font-medium text-primary hover:underline"
+						>
+							try again
+						</button>
+						.
 					</p>
 				</div>
 			) : (

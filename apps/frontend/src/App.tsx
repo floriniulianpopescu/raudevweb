@@ -62,14 +62,8 @@ function App() {
 						</GuestRoute>
 					}
 				/>
-				<Route
-					path="/reset"
-					element={
-						<GuestRoute>
-							<ResetPage />
-						</GuestRoute>
-					}
-				/>
+				{/* Not guest-only: signed-in users also reset via Settings → email link */}
+				<Route path="/reset" element={<ResetPage />} />
 			</Routes>
 		</BrowserRouter>
 	);
