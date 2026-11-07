@@ -1,16 +1,20 @@
 import { type FormEvent, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 
+import { ResetPasswordInputSchema } from "@raudevweb/shared";
 import AuthLayout from "@/components/auth-layout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { authClient } from "@/lib/auth-client";
 
 export default function ResetPasswordPage() {
 	const navigate = useNavigate();
-	// The emailed link looks like /reset-password?token=abc123
+	// The emailed link goes through the backend, which redirects here with
+	// ?token=… when valid, or ?error=INVALID_TOKEN when expired/used.
 	const [searchParams] = useSearchParams();
 	const token = searchParams.get("token");
+	const linkError = searchParams.get("error");
 
 	const [password, setPassword] = useState("");
 	const [confirmPassword, setConfirmPassword] = useState("");
@@ -21,8 +25,9 @@ export default function ResetPasswordPage() {
 		e.preventDefault();
 		setError(null);
 
-		if (password.length < 8) {
-			setError("Password must be at least 8 characters.");
+		const parsed = ResetPasswordInputSchema.safeParse({ token, newPassword: password });
+		if (!parsed.success) {
+			setError(parsed.error.issues[0]?.message ?? "Invalid password.");
 			return;
 		}
 		if (password !== confirmPassword) {
@@ -32,18 +37,26 @@ export default function ResetPasswordPage() {
 
 		setLoading(true);
 		try {
-			// TODO: replace with your real call, e.g. await resetPassword({ token, password });
-			await new Promise((resolve) => setTimeout(resolve, 600));
-
-			navigate("/login", { replace: true });
+			const { error } = await authClient.resetPassword(parsed.data);
+			if (error) {
+				setError(
+					error.code === "INVALID_TOKEN"
+						? "This reset link is invalid or has expired. Request a new one."
+						: error.message || "Couldn't reset your password. Please try again.",
+				);
+				return;
+			}
+			// The backend signs out every device after a reset; clear this tab's session too
+			await authClient.signOut().catch(() => {});
+			navigate("/login?reset=success", { replace: true });
 		} catch {
-			setError("This reset link is invalid or has expired.");
+			setError("Couldn't reach the server. Please try again.");
 		} finally {
 			setLoading(false);
 		}
 	}
 
-	if (!token) {
+	if (!token || linkError) {
 		return (
 			<AuthLayout
 				title="Invalid reset link"
@@ -59,7 +72,7 @@ export default function ResetPasswordPage() {
 			>
 				<Button
 					className="w-full h-11 text-sm font-semibold"
-					render={<Link to="/forgot-password" />}
+					render={<Link to="/forgot" />}
 					nativeButton={false}
 				>
 					Request a new link

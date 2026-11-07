@@ -1,5 +1,5 @@
 import { type FormEvent, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 
 import AuthLayout from "@/components/auth-layout";
 import { Button } from "@/components/ui/button";
@@ -13,6 +13,9 @@ export default function LoginPage() {
 	const [password, setPassword] = useState("");
 	const [error, setError] = useState<string | null>(null);
 	const [loading, setLoading] = useState(false);
+	// Set by ResetPage after a successful password reset
+	const [searchParams] = useSearchParams();
+	const passwordReset = searchParams.get("reset") === "success";
 
 	async function handleSubmit(e: FormEvent<HTMLFormElement>) {
 		e.preventDefault();
@@ -93,6 +96,12 @@ export default function LoginPage() {
 						required
 					/>
 				</div>
+
+				{passwordReset && !error && (
+					<p role="status" className="text-xs sm:text-sm text-green-600 dark:text-green-400">
+						Your password was changed. Log in with your new password.
+					</p>
+				)}
 
 				{error && (
 					<p role="alert" className="text-xs sm:text-sm text-destructive">

@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { authClient } from "@/lib/auth-client";
+import { sendPasswordResetEmail } from "@/lib/password-reset";
 import {
 	AlertDialog,
 	AlertDialogAction,
@@ -29,6 +30,9 @@ export function AppSettingsPage() {
 	const navigate = useNavigate();
 	const [usernameOpen, setUsernameOpen] = useState(false);
 	const [resetOpen, setResetOpen] = useState(false);
+	const [sendingReset, setSendingReset] = useState(false);
+	const [resetError, setResetError] = useState<string | null>(null);
+	const [resetSent, setResetSent] = useState<string | null>(null);
 	const [logoutOpen, setLogoutOpen] = useState(false);
 	const [loggingOut, setLoggingOut] = useState(false);
 	const [logoutError, setLogoutError] = useState<string | null>(null);
@@ -72,9 +76,20 @@ export function AppSettingsPage() {
 		setUsernameSaved(`Username changed to "${parsed.data}".`);
 	};
 
-	const handleResetPassword = () => {
-		// TODO: call your reset password flow (e.g. send a reset email)
-		setResetOpen(false);
+	const handleResetPassword = async () => {
+		const email = session?.user.email;
+		if (!email) return;
+		setSendingReset(true);
+		setResetError(null);
+		try {
+			await sendPasswordResetEmail(email);
+			setResetOpen(false);
+			setResetSent(`We sent a password reset link to ${email}. It's valid for 1 hour.`);
+		} catch (err) {
+			setResetError((err as Error).message);
+		} finally {
+			setSendingReset(false);
+		}
 	};
 
 	const handleLogout = async () => {
@@ -99,6 +114,11 @@ export function AppSettingsPage() {
 				<p className="mt-4 text-sm">
 					Signed in as <span className="font-semibold">{currentName}</span>
 					{session?.user.email && <span className="text-muted-foreground"> · {session.user.email}</span>}
+				</p>
+			)}
+			{resetSent && (
+				<p role="status" className="mt-2 text-sm text-green-600 dark:text-green-400">
+					{resetSent}
 				</p>
 			)}
 			{usernameSaved && (
@@ -176,19 +196,31 @@ export function AppSettingsPage() {
 			</Dialog>
 
 			{/* Reset password confirmation */}
-			<AlertDialog open={resetOpen} onOpenChange={setResetOpen}>
+			<AlertDialog
+				open={resetOpen}
+				onOpenChange={(open) => {
+					setResetOpen(open);
+					if (!open) setResetError(null);
+				}}
+			>
 				<AlertDialogContent>
 					<AlertDialogHeader>
 						<AlertDialogTitle>Reset your password?</AlertDialogTitle>
 						<AlertDialogDescription>
-							We'll start the password reset process for your account. You can
-							cancel now if this wasn't intended.
+							We'll email a reset link to{" "}
+							<span className="font-medium text-foreground">{session?.user.email}</span>. After you
+							choose a new password, you'll be signed out on every device.
 						</AlertDialogDescription>
+						{resetError && (
+							<p role="alert" className="text-sm text-destructive">
+								{resetError}
+							</p>
+						)}
 					</AlertDialogHeader>
 					<AlertDialogFooter>
 						<AlertDialogCancel>Cancel</AlertDialogCancel>
-						<AlertDialogAction onClick={handleResetPassword}>
-							Reset password
+						<AlertDialogAction disabled={sendingReset} onClick={handleResetPassword}>
+							{sendingReset ? "Sending…" : "Send reset link"}
 						</AlertDialogAction>
 					</AlertDialogFooter>
 				</AlertDialogContent>
