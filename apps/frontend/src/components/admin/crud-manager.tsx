@@ -16,7 +16,7 @@ type Item = { id: string; title: string; description?: string };
 export type Schema = {
 	safeParse(value: unknown):
 		| { success: true; data: unknown }
-		| { success: false; error: { issues: { path: (string | number)[]; message: string }[] } };
+		| { success: false; error: { issues: { path: PropertyKey[]; message: string }[] } };
 };
 
 export function CrudManager<Draft>({
@@ -76,7 +76,7 @@ export function CrudManager<Draft>({
 		if (!parsed.success) {
 			setError(
 				parsed.error.issues
-					.map((i) => (i.path.length ? `${i.path.join(".")}: ${i.message}` : i.message))
+					.map((i) => (i.path.length ? `${i.path.map(String).join(".")}: ${i.message}` : i.message))
 					.join("; "),
 			);
 			return;

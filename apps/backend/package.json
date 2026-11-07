@@ -18,7 +18,6 @@
     "resend": "^6.37.0"
   },
   "devDependencies": {
-    "@better-auth/cli": "^1.4.21",
     "@types/bun": "latest",
     "@types/node": "^26.6.5",
     "prisma": "6.19.3"
