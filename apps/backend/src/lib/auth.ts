@@ -6,6 +6,21 @@ import { SignUpInputSchema } from "@raudevweb/shared";
 import { prisma } from "./prisma";
 import { escapeHtml, sendEmail } from "./email";
 
+const FRONTEND_URL = (process.env.CORS_ORIGIN || "http://localhost:5173").replace(/\/+$/, "");
+
+/**
+ * Confirmation links sent without a site URL (e.g. on login) would otherwise land on the API's "/".
+ * Point those at the frontend's /verify-email page instead.
+ */
+function withFrontendCallback(link: string) {
+  const url = new URL(link);
+  const callback = url.searchParams.get("callbackURL");
+  if (!callback || callback.startsWith("/")) {
+    url.searchParams.set("callbackURL", `${FRONTEND_URL}/verify-email`);
+  }
+  return url.toString();
+}
+
 // Better Auth endpoints that accept a user-supplied name
 const NAME_PATHS = ["/sign-up/email", "/update-user"];
 
@@ -54,7 +69,8 @@ export const auth = betterAuth({
     // Clicking the link confirms the email AND logs the user in
     autoSignInAfterVerification: true,
     expiresIn: 60 * 60 * 24, // 24 hours
-    async sendVerificationEmail({ user, url }) {
+    async sendVerificationEmail({ user, url: rawUrl }) {
+      const url = withFrontendCallback(rawUrl);
       // Not awaited: sign-up for an existing email sends nothing, so waiting here
       // would let response timing reveal which emails are registered
       const name = user.name ? `Hi ${user.name},` : "Hi,";
