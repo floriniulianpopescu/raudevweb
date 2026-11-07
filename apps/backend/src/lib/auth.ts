@@ -4,7 +4,7 @@ import { prismaAdapter } from "@better-auth/prisma-adapter";
 import { bearer, admin } from "better-auth/plugins";
 import { SignUpInputSchema } from "@raudevweb/shared";
 import { prisma } from "./prisma";
-import { sendEmail } from "./email";
+import { escapeHtml, sendEmail } from "./email";
 
 // Better Auth endpoints that accept a user-supplied name
 const NAME_PATHS = ["/sign-up/email", "/update-user"];
@@ -18,7 +18,8 @@ export const auth = betterAuth({
   trustedOrigins: [(process.env.CORS_ORIGIN || "http://localhost:5173").replace(/\/+$/, "")],
   emailAndPassword: {
     enabled: true,
-    requireEmailVerification: false,
+    // Users must click the link in the confirmation email before they can log in
+    requireEmailVerification: true,
     revokeSessionsOnPasswordReset: true,
     async sendResetPassword({ user, url }) {
       // Not awaited: waiting on the email provider only for existing users would let
@@ -44,6 +45,25 @@ export const auth = betterAuth({
         text: `Your RAUDEV password was just changed and all your devices were signed out.\n\nIf this was you, no action is needed.\nIf it wasn't, reset your password again right away and contact us.`,
         html: `<p>Your RAUDEV password was just changed and all your devices were signed out.</p><p>If this was you, no action is needed.<br>If it wasn't, reset your password again right away and contact us.</p>`,
       }).catch((err) => console.error("[AUTH] Password changed notice failed:", err));
+    },
+  },
+  emailVerification: {
+    sendOnSignUp: true,
+    // Logging in while unverified sends a fresh link (the old one may be lost/expired)
+    sendOnSignIn: true,
+    // Clicking the link confirms the email AND logs the user in
+    autoSignInAfterVerification: true,
+    expiresIn: 60 * 60 * 24, // 24 hours
+    async sendVerificationEmail({ user, url }) {
+      // Not awaited: sign-up for an existing email sends nothing, so waiting here
+      // would let response timing reveal which emails are registered
+      const name = user.name ? `Hi ${user.name},` : "Hi,";
+      void sendEmail({
+        to: user.email,
+        subject: "Confirm your RAUDEV account",
+        text: `${name}\n\nThanks for signing up to RAUDEV! Confirm your email address to activate your account (link valid for 24 hours):\n${url}\n\nIf you didn't create an account, you can ignore this email.`,
+        html: `<p>${escapeHtml(name)}</p><p>Thanks for signing up to RAUDEV! Confirm your email address to activate your account.</p><p><a href="${url}">Confirm my email</a> (valid for 24 hours)</p><p>If you didn't create an account, you can ignore this email.</p>`,
+      }).catch((err) => console.error("[AUTH] Verification email failed:", err));
     },
   },
   hooks: {

@@ -22,3 +22,13 @@ export async function sendEmail(message: EmailMessage) {
     throw new Error(`Failed to send email to ${message.to}: ${error.message}`);
   }
 }
+
+/** Escape user-provided text (e.g. a name) before putting it in an HTML email. */
+export function escapeHtml(text: string) {
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}

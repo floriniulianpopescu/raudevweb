@@ -1,20 +1,23 @@
 import { type FormEvent, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import AuthLayout from "@/components/auth-layout";
+import { CheckInbox } from "@/components/check-inbox";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { authClient } from "@/lib/auth-client";
+import { verifyCallbackURL } from "@/lib/email-verification";
 
 export default function SignupPage() {
-	const navigate = useNavigate();
 	const [name, setName] = useState("");
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [confirmPassword, setConfirmPassword] = useState("");
 	const [error, setError] = useState<string | null>(null);
 	const [loading, setLoading] = useState(false);
+	/** Set after sign-up: the account must be confirmed by email before logging in */
+	const [sentTo, setSentTo] = useState<string | null>(null);
 
 	async function handleSubmit(e: FormEvent<HTMLFormElement>) {
 		e.preventDefault();
@@ -31,9 +34,10 @@ export default function SignupPage() {
 
 		await authClient.signUp.email(
 			{
-				email,
+				email: email.trim(),
 				password,
 				name,
+				callbackURL: verifyCallbackURL(),
 			},
 			{
 				onRequest: () => {
@@ -41,7 +45,7 @@ export default function SignupPage() {
 				},
 				onSuccess: () => {
 					setLoading(false);
-					navigate("/home", { replace: true });
+					setSentTo(email.trim());
 				},
 				onError: (ctx) => {
 					setLoading(false);
@@ -70,6 +74,9 @@ export default function SignupPage() {
 				</>
 			}
 		>
+			{sentTo ? (
+				<CheckInbox email={sentTo} title="Confirm your email" />
+			) : (
 			<form onSubmit={handleSubmit} className="space-y-4">
 				<div className="space-y-1.5">
 					<Label htmlFor="name" className="text-xs sm:text-sm">
@@ -145,6 +152,7 @@ export default function SignupPage() {
 					{loading ? "Creating account..." : "Sign up"}
 				</Button>
 			</form>
+			)}
 		</AuthLayout>
 	);
 }
