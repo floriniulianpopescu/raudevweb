@@ -6,10 +6,15 @@ import {
   type LeaderboardResponse,
 } from "@raudevweb/shared";
 import { requireAuth, type AuthContext } from "../middlewares/auth.middleware";
+import type { Prisma } from "@prisma/client";
 import { prisma } from "../lib/prisma";
 
-// Banned users are hidden from the ranking
-const visible = { NOT: { banned: true } } as const;
+// Only confirmed (email-verified), non-banned users appear on the leaderboard and count toward ranks.
+// `banned` is nullable: list false/null explicitly, since SQL `NOT (banned = true)` also drops NULL rows.
+const visible: Prisma.UserWhereInput = {
+  emailVerified: true,
+  OR: [{ banned: false }, { banned: null }],
+};
 const publicSelect = { id: true, name: true, image: true, xp: true } as const;
 
 /** Public leaderboard for signed-in users: /api/leaderboard?limit=50 */
