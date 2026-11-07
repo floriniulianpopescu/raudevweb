@@ -2,16 +2,20 @@ import { type FormEvent, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 
 import AuthLayout from "@/components/auth-layout";
+import { CheckInbox } from "@/components/check-inbox";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { authClient } from "@/lib/auth-client";
+import { verifyCallbackURL } from "@/lib/email-verification";
 
 export default function LoginPage() {
 	const navigate = useNavigate();
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [error, setError] = useState<string | null>(null);
+	/** Set when the password was right but the email isn't confirmed yet (a new link was emailed) */
+	const [unverifiedEmail, setUnverifiedEmail] = useState<string | null>(null);
 	const [loading, setLoading] = useState(false);
 	// Set by ResetPage after a successful password reset
 	const [searchParams] = useSearchParams();
@@ -23,8 +27,10 @@ export default function LoginPage() {
 
 		await authClient.signIn.email(
 			{
-				email,
+				email: email.trim(),
 				password,
+				// Used by the fresh confirmation link the backend sends to unverified accounts
+				callbackURL: verifyCallbackURL(),
 			},
 			{
 				onRequest: () => {
@@ -36,6 +42,10 @@ export default function LoginPage() {
 				},
 				onError: (ctx) => {
 					setLoading(false);
+					if (ctx.error.code === "EMAIL_NOT_VERIFIED") {
+						setUnverifiedEmail(email.trim());
+						return;
+					}
 					setError(ctx.error.message || "Invalid email or password.");
 				},
 			},
@@ -58,6 +68,21 @@ export default function LoginPage() {
 				</>
 			}
 		>
+			{unverifiedEmail ? (
+				<div className="space-y-3">
+					<CheckInbox email={unverifiedEmail} title="Confirm your email to log in" />
+					<button
+						type="button"
+						onClick={() => {
+							setUnverifiedEmail(null);
+							setPassword("");
+						}}
+						className="w-full text-center text-xs text-muted-foreground hover:text-foreground hover:underline"
+					>
+						Use a different account
+					</button>
+				</div>
+			) : (
 			<form onSubmit={handleSubmit} className="space-y-4">
 				<div className="space-y-1.5">
 					<Label htmlFor="email" className="text-xs sm:text-sm">
@@ -117,6 +142,7 @@ export default function LoginPage() {
 					{loading ? "Logging in..." : "Log in"}
 				</Button>
 			</form>
+			)}
 		</AuthLayout>
 	);
 }

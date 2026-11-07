@@ -6,6 +6,7 @@ import ForgotPage from "./ForgotPage.tsx";
 import HomePage from "./HomePage.tsx";
 import LoginPage from "./LoginPage.tsx";
 import ResetPage from "./ResetPage.tsx";
+import VerifyEmailPage from "./VerifyEmailPage.tsx";
 import SignupPage from "./SignupPage.tsx";
 
 /** Floating theme button for the guest pages (/home has one in its header). */
@@ -64,6 +65,8 @@ function App() {
 				/>
 				{/* Not guest-only: signed-in users also reset via Settings → email link */}
 				<Route path="/reset" element={<ResetPage />} />
+				{/* Confirmation-email landing page; not guest-only since the link logs the user in */}
+				<Route path="/verify-email" element={<VerifyEmailPage />} />
 			</Routes>
 		</BrowserRouter>
 	);
