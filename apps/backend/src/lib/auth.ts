@@ -1,5 +1,5 @@
 import { betterAuth } from "better-auth";
-import { APIError, createAuthMiddleware } from "better-auth/api";
+import { APIError, createAuthMiddleware, createEmailVerificationToken } from "better-auth/api";
 import { prismaAdapter } from "@better-auth/prisma-adapter";
 import { bearer, admin } from "better-auth/plugins";
 import { SignUpInputSchema } from "@raudevweb/shared";
@@ -21,6 +21,36 @@ function withFrontendCallback(link: string) {
   return url.toString();
 }
 
+const API_URL = (process.env.BETTER_AUTH_URL || "http://localhost:3000").replace(/\/+$/, "");
+const VERIFY_EXPIRES_IN = 60 * 60 * 24; // 24 hours
+
+type EmailUser = { name?: string | null; email: string };
+const greeting = (user: EmailUser) => (user.name ? `Hi ${user.name},` : "Hi,");
+
+/** "Confirm your account" email. Not awaited by callers, so response timing never reveals registered emails. */
+function sendConfirmationEmail(user: EmailUser, url: string) {
+  const hi = greeting(user);
+  void sendEmail({
+    to: user.email,
+    subject: "Confirm your RAUDEV account",
+    text: `${hi}\n\nThanks for signing up to RAUDEV! Confirm your email address to activate your account (link valid for 24 hours):\n${url}\n\nIf you didn't create an account, you can ignore this email.`,
+    html: `<p>${escapeHtml(hi)}</p><p>Thanks for signing up to RAUDEV! Confirm your email address to activate your account.</p><p><a href="${url}">Confirm my email</a> (valid for 24 hours)</p><p>If you didn't create an account, you can ignore this email.</p>`,
+  }).catch((err) => console.error("[AUTH] Verification email failed:", err));
+}
+
+/** Sent when someone signs up with an email that already has a confirmed account. */
+function sendAlreadyRegisteredEmail(user: EmailUser) {
+  const hi = greeting(user);
+  const login = `${FRONTEND_URL}/login`;
+  const forgot = `${FRONTEND_URL}/forgot`;
+  void sendEmail({
+    to: user.email,
+    subject: "You already have a RAUDEV account",
+    text: `${hi}\n\nSomeone (hopefully you) just tried to create a RAUDEV account with this email, but you already have one.\n\nLog in: ${login}\nForgot your password? Reset it: ${forgot}\n\nIf this wasn't you, you can ignore this email. Your account hasn't been changed.`,
+    html: `<p>${escapeHtml(hi)}</p><p>Someone (hopefully you) just tried to create a RAUDEV account with this email, but you already have one.</p><p><a href="${login}">Log in</a> · <a href="${forgot}">Reset your password</a></p><p>If this wasn't you, you can ignore this email. Your account hasn't been changed.</p>`,
+  }).catch((err) => console.error("[AUTH] Already-registered email failed:", err));
+}
+
 // Better Auth endpoints that accept a user-supplied name
 const NAME_PATHS = ["/sign-up/email", "/update-user"];
 
@@ -29,13 +59,41 @@ export const auth = betterAuth({
     provider: "postgresql",
   }),
   secret: process.env.BETTER_AUTH_SECRET,
-  baseURL: (process.env.BETTER_AUTH_URL || "http://localhost:3000").replace(/\/+$/, ""),
-  trustedOrigins: [(process.env.CORS_ORIGIN || "http://localhost:5173").replace(/\/+$/, "")],
+  baseURL: API_URL,
+  trustedOrigins: [FRONTEND_URL],
   emailAndPassword: {
     enabled: true,
     // Users must click the link in the confirmation email before they can log in
     requireEmailVerification: true,
     revokeSessionsOnPasswordReset: true,
+    // Sign-up with an email that's already registered: the page still shows "check your inbox"
+    // (so it can't be used to find out who has an account), and the owner gets a useful email.
+    async onExistingUserSignUp({ user }) {
+      if (user.emailVerified) {
+        sendAlreadyRegisteredEmail(user);
+        return;
+      }
+      // Registered but never confirmed (e.g. lost the first email): send a fresh confirmation link
+      const token = await createEmailVerificationToken(
+        process.env.BETTER_AUTH_SECRET!,
+        user.email,
+        undefined,
+        VERIFY_EXPIRES_IN,
+      );
+      const callback = encodeURIComponent(`${FRONTEND_URL}/verify-email`);
+      sendConfirmationEmail(user, `${API_URL}/api/auth/verify-email?token=${token}&callbackURL=${callback}`);
+    },
+    // The fake "created" user returned for an existing email must look exactly like a real one
+    // (the admin plugin adds role/ban fields), otherwise the API response would reveal it.
+    customSyntheticUser: ({ coreFields, additionalFields, id }) => ({
+      ...coreFields,
+      role: "user",
+      banned: false,
+      banReason: null,
+      banExpires: null,
+      ...additionalFields,
+      id,
+    }),
     async sendResetPassword({ user, url }) {
       // Not awaited: waiting on the email provider only for existing users would let
       // response timing reveal which emails are registered
@@ -68,18 +126,9 @@ export const auth = betterAuth({
     sendOnSignIn: true,
     // Clicking the link confirms the email AND logs the user in
     autoSignInAfterVerification: true,
-    expiresIn: 60 * 60 * 24, // 24 hours
-    async sendVerificationEmail({ user, url: rawUrl }) {
-      const url = withFrontendCallback(rawUrl);
-      // Not awaited: sign-up for an existing email sends nothing, so waiting here
-      // would let response timing reveal which emails are registered
-      const name = user.name ? `Hi ${user.name},` : "Hi,";
-      void sendEmail({
-        to: user.email,
-        subject: "Confirm your RAUDEV account",
-        text: `${name}\n\nThanks for signing up to RAUDEV! Confirm your email address to activate your account (link valid for 24 hours):\n${url}\n\nIf you didn't create an account, you can ignore this email.`,
-        html: `<p>${escapeHtml(name)}</p><p>Thanks for signing up to RAUDEV! Confirm your email address to activate your account.</p><p><a href="${url}">Confirm my email</a> (valid for 24 hours)</p><p>If you didn't create an account, you can ignore this email.</p>`,
-      }).catch((err) => console.error("[AUTH] Verification email failed:", err));
+    expiresIn: VERIFY_EXPIRES_IN,
+    async sendVerificationEmail({ user, url }) {
+      sendConfirmationEmail(user, withFrontendCallback(url));
     },
   },
   hooks: {
