@@ -8,6 +8,7 @@ import {
 	Info,
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import darkLogo from "@/assets/darklogo.png";
 import logo from "@/assets/logo.png";
 import {
 	Collapsible,
@@ -28,6 +29,7 @@ import {
 	SidebarMenuSubButton,
 	SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
+import { useTheme } from "@/lib/theme";
 
 const collapsibles = [
 	{
@@ -56,13 +58,15 @@ const bitems = [
 ];
 
 export function AppSidebar() {
+	const { theme } = useTheme();
+
 	return (
 		<Sidebar>
 			<SidebarContent>
 				{/* Upper */}
 				<SidebarGroup>
 					<SidebarGroupLabel className="h-auto">
-						<img src={logo} alt="RAU DEV" className="h-32 w-auto" />
+						<img src={theme === "dark" ? darkLogo : logo} alt="RAU DEV" className="h-32 w-auto" />
 					</SidebarGroupLabel>
 					<SidebarGroupContent>
 						{/* Home */}
