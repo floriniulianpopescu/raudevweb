@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { SignUpInputSchema } from "@raudevweb/shared";
 import { useNavigate } from "react-router-dom";
-import { KeyRound, LogOut, UserPen } from "lucide-react";
+import { KeyRound, LogOut, Mail, UserPen, type LucideIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -107,40 +107,46 @@ export function AppSettingsPage() {
 	};
 
 	return (
-		<div>
+		<div className="mx-auto max-w-3xl">
 			<h1 className="text-2xl font-bold">Settings</h1>
 			<p className="text-muted-foreground mt-2">Manage your account details.</p>
-			{currentName && (
-				<p className="mt-4 text-sm">
-					Signed in as <span className="font-semibold">{currentName}</span>
-					{session?.user.email && <span className="text-muted-foreground"> · {session.user.email}</span>}
-				</p>
-			)}
-			{resetSent && (
-				<p role="status" className="mt-2 text-sm text-green-600 dark:text-green-400">
-					{resetSent}
-				</p>
-			)}
-			{usernameSaved && (
-				<p role="status" className="mt-2 text-sm text-green-600 dark:text-green-400">
-					{usernameSaved}
-				</p>
+
+			{(resetSent || usernameSaved) && (
+				<div className="mt-4 space-y-1">
+					{resetSent && (
+						<p role="status" className="text-sm text-green-600 dark:text-green-400">
+							{resetSent}
+						</p>
+					)}
+					{usernameSaved && (
+						<p role="status" className="text-sm text-green-600 dark:text-green-400">
+							{usernameSaved}
+						</p>
+					)}
+				</div>
 			)}
 
-			<div className="mt-6 flex max-w-xs flex-col gap-3">
-				<Button variant="outline" onClick={openUsernameDialog}>
-					<UserPen />
-					Change username
-				</Button>
-				<Button variant="outline" onClick={() => setResetOpen(true)}>
-					<KeyRound />
-					Reset password
-				</Button>
-				<Button variant="destructive" onClick={() => setLogoutOpen(true)}>
-					<LogOut />
-					Log out
-				</Button>
-			</div>
+			<SettingsSection title="Account">
+				<SettingsRow icon={UserPen} label="Username" value={currentName || "—"}>
+					<Button variant="outline" size="sm" onClick={openUsernameDialog}>
+						Change
+					</Button>
+				</SettingsRow>
+				<SettingsRow icon={Mail} label="Email" value={session?.user.email ?? "—"} />
+				<SettingsRow icon={KeyRound} label="Password" value="We'll email you a link to choose a new one">
+					<Button variant="outline" size="sm" onClick={() => setResetOpen(true)}>
+						Reset
+					</Button>
+				</SettingsRow>
+			</SettingsSection>
+
+			<SettingsSection title="Session">
+				<SettingsRow icon={LogOut} label="Log out" value="Sign out of RAUDEV on this device">
+					<Button variant="destructive" size="sm" onClick={() => setLogoutOpen(true)}>
+						Log out
+					</Button>
+				</SettingsRow>
+			</SettingsSection>
 
 			{/* Change username */}
 			<Dialog
@@ -259,3 +265,39 @@ export function AppSettingsPage() {
 	);
 }
 
+
+/** Titled, bordered group of setting rows (same card look as the leaderboard). */
+function SettingsSection({ title, children }: { title: string; children: React.ReactNode }) {
+	return (
+		<section className="mt-6">
+			<h2 className="mb-2 px-1 text-xs font-medium tracking-wide text-muted-foreground uppercase">{title}</h2>
+			<div className="divide-y overflow-hidden rounded-2xl border bg-card shadow-sm">{children}</div>
+		</section>
+	);
+}
+
+/** One setting: icon, label and current value on the left; optional action on the right. */
+function SettingsRow({
+	icon: Icon,
+	label,
+	value,
+	children,
+}: {
+	icon: LucideIcon;
+	label: string;
+	value: string;
+	children?: React.ReactNode;
+}) {
+	return (
+		<div className="flex flex-wrap items-center gap-3 px-4 py-3">
+			<span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-muted text-muted-foreground">
+				<Icon className="size-4" />
+			</span>
+			<div className="min-w-0 flex-1">
+				<p className="text-sm font-medium">{label}</p>
+				<p className="truncate text-sm text-muted-foreground">{value}</p>
+			</div>
+			{children && <div className="shrink-0">{children}</div>}
+		</div>
+	);
+}

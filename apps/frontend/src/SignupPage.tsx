@@ -101,7 +101,7 @@ export default function SignupPage() {
 						id="email"
 						type="email"
 						autoComplete="email"
-						placeholder="you@student.rau.ro"
+						placeholder="@email.com"
 						value={email}
 						onChange={(e) => setEmail(e.target.value)}
 						required

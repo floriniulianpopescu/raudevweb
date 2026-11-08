@@ -20,6 +20,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const JOIN_FORM_URL =
 	"https://forms.cloud.microsoft/pages/responsepage.aspx?id=Fa--e4Wf-020_9kgcQfNfchESy1MQ3pAnsE6zKK_XZBUM1hQRUM3U0pYTkowWUw5SksxQjFOTURGOC4u&route=shorturl";
+const RAU_URL = "https://www.rau.ro/?lang=en";
 const INSTAGRAM_URL = "https://www.instagram.com/raudev.club/";
 const LINKEDIN_URL = "https://www.linkedin.com/company/rau-dev/posts/";
 
@@ -113,10 +114,11 @@ export default function FirstPage() {
 
 			<div className="container mx-auto max-w-6xl px-4 py-8 sm:py-12 lg:py-16 space-y-12 sm:space-y-16">
 				{/* 1. HERO SECTION */}
-				<section className="flex flex-col items-center text-center max-w-3xl mx-auto pt-4 sm:pt-6">
+				<section className="flex flex-col items-center text-center max-w-3xl mx-auto pt-4 sm:pt-6 mb-6 sm:mb-8">
 					<Badge
 						variant="secondary"
-						className="mb-6 gap-1.5 px-3.5 py-1.5 text-xs sm:text-sm font-medium shadow-sm border border-primary/10"
+						render={<a href={RAU_URL} target="_blank" rel="noopener noreferrer" />}
+						className="mb-6 h-auto gap-1.5 px-3.5 py-1.5 text-xs sm:text-sm font-medium shadow-sm border border-primary/10 transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/40 hover:bg-primary/10 hover:shadow-md motion-reduce:hover:translate-y-0"
 					>
 						<Code2 className="h-4 w-4 text-primary shrink-0" />
 						Romanian-American University
@@ -124,9 +126,14 @@ export default function FirstPage() {
 
 					<h1 className="text-4xl font-extrabold tracking-tight sm:text-6xl md:text-7xl leading-[1.1]">
 						Welcome to{" "}
-						<span className="bg-gradient-to-r from-primary via-primary/90 to-primary/60 bg-clip-text text-transparent">
+						{/* Plain <a> (not <Link>) so clicking does a real page reload */}
+						<a
+							href="/"
+							title="Reload"
+							className="bg-[linear-gradient(90deg,var(--primary),color-mix(in_oklab,var(--primary)_90%,transparent),color-mix(in_oklab,var(--primary)_60%,transparent),#10b981,#22c55e,#4ade80)] bg-[length:200%_100%] bg-left bg-clip-text text-transparent transition-[background-position] duration-700 ease-out hover:bg-right focus-visible:bg-right focus-visible:outline-none motion-reduce:transition-none"
+						>
 							RAUDEV
-						</span>
+						</a>
 					</h1>
 
 					<p className="mt-5 text-sm sm:text-base md:text-lg text-muted-foreground leading-relaxed max-w-xl text-balance">
@@ -172,10 +179,10 @@ export default function FirstPage() {
 						{FEATURES.map(({ icon: Icon, title, description }) => (
 							<Card
 								key={title}
-								className="flex flex-col justify-between transition-all hover:border-primary/40 hover:shadow-sm"
+								className="group flex flex-col justify-between transition-all duration-200 hover:-translate-y-1 hover:shadow-lg hover:ring-primary/40 motion-reduce:hover:translate-y-0"
 							>
 								<CardHeader className="p-5 pb-2">
-									<div className="mb-3 flex h-10 w-10 items-center justify-center rounded-md bg-primary/10 text-primary">
+									<div className="mb-3 flex h-10 w-10 items-center justify-center rounded-md bg-primary/10 text-primary transition-all duration-200 group-hover:scale-110 group-hover:bg-primary/20 motion-reduce:group-hover:scale-100">
 										<Icon className="h-5 w-5" />
 									</div>
 									<CardTitle className="text-base">{title}</CardTitle>

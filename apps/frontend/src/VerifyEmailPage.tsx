@@ -103,7 +103,7 @@ function LinkProblem({ message }: { message: string }) {
 							id="email"
 							type="email"
 							autoComplete="email"
-							placeholder="you@student.rau.ro"
+							placeholder="@email.com"
 							value={email}
 							onChange={(e) => setEmail(e.target.value)}
 							required
