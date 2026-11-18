@@ -1,8 +1,9 @@
 import { type FormEvent, useState } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useSearchParams } from "react-router-dom";
 
 import AuthLayout from "@/components/auth-layout";
 import { CheckInbox } from "@/components/check-inbox";
+import { redirectAfterLogin } from "@/lib/redirect";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -10,6 +11,7 @@ import { authClient } from "@/lib/auth-client";
 
 export default function LoginPage() {
 	const navigate = useNavigate();
+	const location = useLocation();
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [error, setError] = useState<string | null>(null);
@@ -37,7 +39,7 @@ export default function LoginPage() {
 				},
 				onSuccess: () => {
 					setLoading(false);
-					navigate("/home", { replace: true });
+					navigate(redirectAfterLogin(location), { replace: true });
 				},
 				onError: (ctx) => {
 					setLoading(false);
