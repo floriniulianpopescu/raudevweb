@@ -127,10 +127,14 @@ export const ResourceLinkSchema = z.object({
   href: externalUrl,
 });
 
-/** Lessons & extras: { title, description, links[] } — a minimal bibliography. */
+/** Longest Markdown body a lesson/extra can have. */
+export const RESOURCE_BODY_MAX = 50_000;
+
+/** Lessons & extras: { title, description, body, links[] } — an optional Markdown article plus its sources. */
 export const ResourceSchema = z.object({
   title,
   description,
+  body: z.string().max(RESOURCE_BODY_MAX, "The body is too long").default(""),
   links: z.array(ResourceLinkSchema).min(1, "Add at least one link").max(50),
 });
 
@@ -186,6 +190,8 @@ export type ResourceItem = {
   id: string;
   title: string;
   description: string;
+  /** Markdown article condensing the sources (may be empty). */
+  body: string;
   links: LinkItem[];
 };
 

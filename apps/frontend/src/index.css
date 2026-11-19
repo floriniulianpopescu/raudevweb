@@ -131,3 +131,19 @@
     @apply font-sans;
     }
 }
+
+/* Code blocks in lesson bodies (components/markdown). Shiki writes both themes as
+   CSS variables; pick the one matching the current theme. */
+@layer components {
+  .md-code pre {
+    @apply overflow-x-auto px-4 py-3 font-mono text-[13px] leading-6;
+    background: transparent !important;
+    tab-size: 4;
+  }
+  .md-code .shiki span {
+    color: var(--shiki-light);
+  }
+  .dark .md-code .shiki span {
+    color: var(--shiki-dark);
+  }
+}

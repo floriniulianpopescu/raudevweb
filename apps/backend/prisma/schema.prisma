@@ -152,12 +152,13 @@ enum ResourceKind {
   extra
 }
 
-/// Lessons and extras: title, description and a small bibliography.
+/// Lessons and extras: title, description, an optional Markdown body and a small bibliography.
 model Resource {
   id          String         @id @default(cuid())
   kind        ResourceKind
   title       String
   description String         @default("")
+  body        String         @default("")
   createdAt   DateTime       @default(now())
   updatedAt   DateTime       @updatedAt
   links       ResourceLink[]
