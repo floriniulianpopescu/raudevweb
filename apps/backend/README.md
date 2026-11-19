@@ -1,11 +1,7 @@
-To install dependencies:
-```sh
-bun install
-```
+# Backend
 
-To run:
-```sh
-bun run dev
-```
+Hono + Better Auth + Prisma API for the RAUDEV site.
 
-open http://localhost:3000
+- Setup and commands: [root README](../../README.md)
+- Endpoints: [docs/api.md](../../docs/api.md) · Schema: [docs/data-model.md](../../docs/data-model.md)
+- Structure and conventions: [docs/architecture.md](../../docs/architecture.md), [docs/development.md](../../docs/development.md)
