@@ -1,3 +1,4 @@
+import { PageTitle } from "@/components/page-title";
 import { useState } from "react";
 import { BookOpenIcon, ListChecksIcon, PuzzleIcon, TrophyIcon } from "lucide-react";
 import type { ContentType } from "@raudevweb/shared";
@@ -21,6 +22,7 @@ export function AppMainPage() {
 
 	return (
 		<div>
+			<PageTitle title="Home" />
 			<h1 className="text-2xl font-bold">Hello, {session?.user.name}!</h1>
 			<p className="text-muted-foreground mt-2">Here's what's happening this week.</p>
 

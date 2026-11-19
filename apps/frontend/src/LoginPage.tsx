@@ -55,6 +55,7 @@ export default function LoginPage() {
 
 	return (
 		<AuthLayout
+			pageTitle="Log in"
 			title="Welcome back"
 			description="Log in to your RAUDEV account."
 			footer={

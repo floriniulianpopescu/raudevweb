@@ -1,9 +1,11 @@
+import { PageTitle } from "@/components/page-title";
 import { StaffCard } from "@/components/staff-card";
 import { STAFF } from "@/data/staff";
 
 export function AppAboutPage() {
 	return (
 		<div>
+			<PageTitle title="About" />
 			<h1 className="text-2xl font-bold">About</h1>
 			<p className="text-muted-foreground mt-2">We are a programming club.</p>
 

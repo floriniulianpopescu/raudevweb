@@ -1,3 +1,4 @@
+import { PageTitle } from "@/components/page-title";
 import {
 	Calendar,
 	Clock,
@@ -106,6 +107,7 @@ export default function FirstPage() {
 
 	return (
 		<div className="relative isolate min-h-screen bg-background text-foreground flex flex-col justify-between overflow-x-hidden">
+			<PageTitle />
 			{/* BACKGROUND GRADIENT */}
 			<div
 				aria-hidden

@@ -8,6 +8,7 @@ import { AdminContentPanel } from "./admin/admin-content-panel";
 import { ContentCard } from "./content-card";
 import { LoadError } from "./load-error";
 import { NotFoundView } from "./not-found";
+import { PageTitle } from "./page-title";
 import { SearchInput } from "./search-input";
 import { Skeleton } from "./ui/skeleton";
 
@@ -89,6 +90,7 @@ export function ContentList({
 
 	return (
 		<div>
+			<PageTitle title={label} />
 			<h1 className="text-2xl font-bold">{label}</h1>
 			{intro && <p className="text-muted-foreground mt-2">{intro}</p>}
 
@@ -150,6 +152,8 @@ export function DetailLayout<T extends { title: string; description: string }>({
 	}
 	return (
 		<div>
+			{/* Section name while loading or on error, then the item's own title */}
+			<PageTitle title={data?.title ?? cfg.label} />
 			<Link to={`/home/${cfg.route}`} className="text-sm text-muted-foreground hover:underline">
 				← Back to {cfg.label}
 			</Link>

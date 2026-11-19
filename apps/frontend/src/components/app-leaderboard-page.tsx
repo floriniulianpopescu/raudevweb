@@ -1,3 +1,4 @@
+import { PageTitle } from "@/components/page-title";
 import { useCallback, useEffect, useState } from "react";
 import { MedalIcon, TrophyIcon } from "lucide-react";
 import type { LeaderboardEntry, LeaderboardResponse } from "@raudevweb/shared";
@@ -85,6 +86,7 @@ export function AppLeaderboardPage() {
 
 	return (
 		<div className="mx-auto max-w-3xl">
+			<PageTitle title="Leaderboard" />
 			<h1 className="text-2xl font-bold">Leaderboard</h1>
 			<p className="text-muted-foreground mt-2">See how you rank against others.</p>
 

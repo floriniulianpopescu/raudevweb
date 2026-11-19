@@ -59,6 +59,7 @@ export default function ResetPasswordPage() {
 	if (!token || linkError) {
 		return (
 			<AuthLayout
+				pageTitle="Reset password"
 				title="Invalid reset link"
 				description="This link is missing or has expired."
 				footer={
@@ -83,6 +84,7 @@ export default function ResetPasswordPage() {
 
 	return (
 		<AuthLayout
+			pageTitle="Reset password"
 			title="Choose a new password"
 			description="Enter a new password for your account."
 			footer={

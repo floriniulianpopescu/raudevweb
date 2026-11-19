@@ -1,7 +1,14 @@
+import { useEffect } from "react";
+
 /**
  * Sets the browser tab title to "<title> · RAUDEV" (or just "RAUDEV").
- * React 19 hoists <title> into <head> from anywhere in the tree.
+ * Sets document.title instead of rendering <title>, so the fallback <title> in index.html
+ * isn't duplicated (React 19 would add a second <title> element).
  */
 export function PageTitle({ title }: { title?: string }) {
-	return <title>{title ? `${title} · RAUDEV` : "RAUDEV"}</title>;
+	const full = title ? `${title} · RAUDEV` : "RAUDEV";
+	useEffect(() => {
+		document.title = full;
+	}, [full]);
+	return null;
 }

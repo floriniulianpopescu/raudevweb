@@ -60,6 +60,7 @@ export default function SignupPage() {
 
 	return (
 		<AuthLayout
+			pageTitle="Sign up"
 			title="Create your account"
 			description="Join the RAUDEV student community."
 			footer={

@@ -1,3 +1,4 @@
+import { PageTitle } from "@/components/page-title";
 import { useState } from "react";
 import { SignUpInputSchema } from "@raudevweb/shared";
 import { useNavigate } from "react-router-dom";
@@ -108,6 +109,7 @@ export function AppSettingsPage() {
 
 	return (
 		<div className="mx-auto max-w-3xl">
+			<PageTitle title="Settings" />
 			<h1 className="text-2xl font-bold">Settings</h1>
 			<p className="text-muted-foreground mt-2">Manage your account details.</p>
 
