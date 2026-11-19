@@ -1,4 +1,4 @@
-**Before you start:** you should know loops, functions, `std::vector` and the idea of Big-O (the **Introduction to Algorithms** lesson).
+**Before you start:** you should know loops, functions, `std::vector`, the idea of Big-O (the **Introduction to Algorithms** lesson) and pointers (the **Pointers & References** lesson).
 
 **In this lesson you'll learn to:**
 
@@ -179,7 +179,7 @@ Think of a treasure hunt: each clue tells you where the next one is hidden. A **
 
 Watch both happen on [VisuAlgo](https://visualgo.net/en/list).
 
-A node remembers "where the next one is" with a **pointer**: a value that holds a memory address. `Node*` means "pointer to a Node", `->` reads a field through a pointer, and `nullptr` means "points to nothing", which marks the end of the list ([learncpp 12.7](https://www.learncpp.com/cpp-tutorial/introduction-to-pointers/)).
+A node remembers "where the next one is" with a **pointer**, exactly like the chain at the end of the **Pointers & References** lesson: `Node*` is a pointer to a node, `->` reads a field through it, and `nullptr` marks the end. One new thing here: `new Node{ … }` creates a node that keeps existing after the line that made it, until you give it back with `delete`.
 
 ### Build it yourself
 

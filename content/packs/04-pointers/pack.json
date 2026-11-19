@@ -1,0 +1,204 @@
+{
+  "name": "Pointers & References",
+  "problems": [
+    {
+      "title": "Linked List Cycle (LeetCode 141)",
+      "description": "Does following next pointers ever loop back? Move one pointer one step and another two steps at a time: if they ever meet, there's a cycle.",
+      "href": "https://leetcode.com/problems/linked-list-cycle/"
+    },
+    {
+      "title": "Remove Nth Node From End of List (LeetCode 19)",
+      "description": "Remove the n-th node counting from the end. Start a second pointer n steps behind the first, and watch out when the node to remove is the head.",
+      "href": "https://leetcode.com/problems/remove-nth-node-from-end-of-list/"
+    },
+    {
+      "title": "Swap Nodes in Pairs (LeetCode 24)",
+      "description": "Swap every two neighbouring nodes by rewiring their next pointers, without changing the values. Draw the arrows before and after on paper.",
+      "href": "https://leetcode.com/problems/swap-nodes-in-pairs/"
+    },
+    {
+      "title": "Odd Even Linked List (LeetCode 328)",
+      "description": "Put the nodes in odd positions first, then the even ones, by keeping two chains and joining them at the end.",
+      "href": "https://leetcode.com/problems/odd-even-linked-list/"
+    },
+    {
+      "title": "Add Two Numbers (LeetCode 2)",
+      "description": "Two numbers are stored digit by digit in linked lists, last digit first. Walk both lists together, add with a carry, and build the answer as a new list.",
+      "href": "https://leetcode.com/problems/add-two-numbers/"
+    }
+  ],
+  "exercises": [
+    {
+      "title": "Pointer (HackerRank)",
+      "description": "Write a function that takes two pointers and changes both values: one becomes the sum, the other the absolute difference. Practises * and &.",
+      "href": "https://www.hackerrank.com/challenges/c-tutorial-pointer/problem"
+    },
+    {
+      "title": "Arrays Introduction (HackerRank)",
+      "description": "Read numbers into an array and print them in reverse order. Try it once with indices and once by walking a pointer backwards.",
+      "href": "https://www.hackerrank.com/challenges/arrays-introduction/problem"
+    },
+    {
+      "title": "Reverse String (LeetCode 344)",
+      "description": "Reverse the characters of a vector in place: it's passed by reference, so you change the caller's vector. Swap from both ends towards the middle.",
+      "href": "https://leetcode.com/problems/reverse-string/"
+    },
+    {
+      "title": "Print the Elements of a Linked List (HackerRank)",
+      "description": "Follow the next pointers from the head and print every value, stopping at nullptr.",
+      "href": "https://www.hackerrank.com/challenges/print-the-elements-of-a-linked-list/problem"
+    },
+    {
+      "title": "Middle of the Linked List (LeetCode 876)",
+      "description": "Find the middle node. Count the nodes and walk half way, or move one pointer twice as fast as another.",
+      "href": "https://leetcode.com/problems/middle-of-the-linked-list/"
+    },
+    {
+      "title": "Merge Two Sorted Lists (LeetCode 21)",
+      "description": "Join two sorted linked lists into one sorted list by relinking their nodes, always taking the smaller head next.",
+      "href": "https://leetcode.com/problems/merge-two-sorted-lists/"
+    }
+  ],
+  "challenges": [
+    {
+      "title": "Pointers & References: Basics",
+      "description": "Addresses, *, & and references: change values through pointers, walk an array, and change a vector passed by reference. Do them in order.",
+      "problems": [],
+      "exercises": ["Pointer (HackerRank)", "Arrays Introduction (HackerRank)", "Reverse String (LeetCode 344)"]
+    },
+    {
+      "title": "Pointers & References: Linked Lists",
+      "description": "Follow and rewire next pointers. Start with the three exercises (print, middle, merge), then the LeetCode problems from easiest to hardest: Linked List Cycle, Remove Nth Node From End, Swap Nodes in Pairs, Odd Even Linked List, Add Two Numbers. Draw the arrows on paper first.",
+      "problems": [
+        "Linked List Cycle (LeetCode 141)",
+        "Remove Nth Node From End of List (LeetCode 19)",
+        "Swap Nodes in Pairs (LeetCode 24)",
+        "Odd Even Linked List (LeetCode 328)",
+        "Add Two Numbers (LeetCode 2)"
+      ],
+      "exercises": [
+        "Print the Elements of a Linked List (HackerRank)",
+        "Middle of the Linked List (LeetCode 876)",
+        "Merge Two Sorted Lists (LeetCode 21)"
+      ]
+    }
+  ],
+  "quizzes": [
+    {
+      "title": "Pointers & References",
+      "description": "Five questions on addresses, pointers, references and passing values to functions. Answers are revealed after you submit.",
+      "questions": [
+        {
+          "question": "After int x{ 5 }; and int* p{ &x };, what is *p?",
+          "answers": ["The address of x", "5", "A copy of p", "nullptr"],
+          "correctIndex": 1
+        },
+        {
+          "question": "In int* p{ &x };, what does the & do?",
+          "answers": [
+            "It gives the address of x",
+            "It makes a copy of x",
+            "It makes p a reference",
+            "It adds x to p"
+          ],
+          "correctIndex": 0
+        },
+        {
+          "question": "void addOne(int n) { n = n + 1; } is called as addOne(x) with x equal to 5. What is x afterwards?",
+          "answers": ["6", "0", "5", "It doesn't compile"],
+          "correctIndex": 2
+        },
+        {
+          "question": "Why do functions often take const std::vector<int>& v instead of std::vector<int> v?",
+          "answers": [
+            "Vectors can't be passed by value",
+            "It makes the vector sorted",
+            "It lets the function add elements",
+            "It avoids copying the whole vector, and promises not to change it"
+          ],
+          "correctIndex": 3
+        },
+        {
+          "question": "What happens if you use *p when p is nullptr?",
+          "answers": [
+            "It gives 0",
+            "The program usually crashes: there's nothing at that address",
+            "p is set to a new variable automatically",
+            "The compiler always catches it"
+          ],
+          "correctIndex": 1
+        }
+      ]
+    }
+  ],
+  "lessons": [
+    {
+      "title": "Pointers & References",
+      "description": "How memory works, explained with houses and house numbers (about 35 minutes, after Data Types in C++): addresses, pointers and nullptr, references, passing values to functions by value, by reference and by pointer, arrays and pointers, chains of pointers, and the classic pointer bugs. Every example is a complete program you can copy and run.\n\nAfter the lesson, try the \"Pointers & References: Basics\" and \"Pointers & References: Linked Lists\" challenges under Practice and the \"Pointers & References\" quiz.",
+      "bodyFile": "lesson.md",
+      "links": [
+        {
+          "title": "Introduction to pointers",
+          "description": "learncpp 12.7: addresses, the & and * operators, and pointer variables.",
+          "href": "https://www.learncpp.com/cpp-tutorial/introduction-to-pointers/"
+        },
+        {
+          "title": "Null pointers",
+          "description": "learncpp 12.8: nullptr and checking pointers before using them.",
+          "href": "https://www.learncpp.com/cpp-tutorial/null-pointers/"
+        },
+        {
+          "title": "Lvalue references",
+          "description": "learncpp 12.3: references as another name for a variable.",
+          "href": "https://www.learncpp.com/cpp-tutorial/lvalue-references/"
+        },
+        {
+          "title": "Pass by lvalue reference",
+          "description": "learncpp 12.5: letting a function change the caller's variable.",
+          "href": "https://www.learncpp.com/cpp-tutorial/pass-by-lvalue-reference/"
+        },
+        {
+          "title": "Pass by const lvalue reference",
+          "description": "learncpp 12.6: passing big values without copying them.",
+          "href": "https://www.learncpp.com/cpp-tutorial/pass-by-const-lvalue-reference/"
+        },
+        {
+          "title": "Pass by address",
+          "description": "learncpp 12.10: passing pointers to functions, and when to prefer references.",
+          "href": "https://www.learncpp.com/cpp-tutorial/pass-by-address/"
+        },
+        {
+          "title": "C-style array decay",
+          "description": "learncpp 17.8: why an array's name acts like a pointer to its first element.",
+          "href": "https://www.learncpp.com/cpp-tutorial/c-style-array-decay/"
+        },
+        {
+          "title": "Pointer arithmetic and subscripting",
+          "description": "learncpp 17.9: p + 1, p[i] and walking an array with a pointer.",
+          "href": "https://www.learncpp.com/cpp-tutorial/pointer-arithmetic-and-subscripting/"
+        },
+        {
+          "title": "Return by reference and return by address",
+          "description": "learncpp 12.12: dangling pointers and references, and how to avoid them.",
+          "href": "https://www.learncpp.com/cpp-tutorial/return-by-reference-and-return-by-address/"
+        },
+        {
+          "title": "C++ visualizer (Python Tutor)",
+          "description": "Run C++ step by step and see every pointer drawn as an arrow.",
+          "href": "https://pythontutor.com/cpp.html"
+        },
+        {
+          "title": "Pointer declaration (reference)",
+          "description": "cppreference: the exact rules for pointers.",
+          "href": "https://en.cppreference.com/w/cpp/language/pointer"
+        },
+        {
+          "title": "Reference declaration (reference)",
+          "description": "cppreference: the exact rules for references.",
+          "href": "https://en.cppreference.com/w/cpp/language/reference"
+        }
+      ]
+    }
+  ],
+  "extras": []
+}

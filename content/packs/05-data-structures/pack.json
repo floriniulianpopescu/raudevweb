@@ -151,7 +151,7 @@
   "lessons": [
     {
       "title": "Data Structures",
-      "description": "How to organize data so the jobs you need are fast (about 40 minutes, after Introduction to Algorithms): vectors, stacks, queues, linked lists, sets, maps and priority queues, explained with everyday examples. Build a stack and a linked list yourself, then use the C++ standard library versions.\n\nAfter the lesson, practise by topic (\"Stacks & Queues\", \"Sets, Maps & Heaps\") or by skill (\"Build Your Own\", \"Pick the Right One\") under Practice, and take the \"Data Structures\" quiz.",
+      "description": "How to organize data so the jobs you need are fast (about 40 minutes, after Pointers & References): vectors, stacks, queues, linked lists, sets, maps and priority queues, explained with everyday examples. Build a stack and a linked list yourself, then use the C++ standard library versions.\n\nAfter the lesson, practise by topic (\"Stacks & Queues\", \"Sets, Maps & Heaps\") or by skill (\"Build Your Own\", \"Pick the Right One\") under Practice, and take the \"Data Structures\" quiz.",
       "bodyFile": "lesson.md",
       "links": [
         {

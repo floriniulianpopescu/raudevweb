@@ -8,7 +8,8 @@ loaded into any site (local, production) with one command.
 | [`01-intro-to-cpp`](packs/01-intro-to-cpp/) | Introduction to C++: lesson, extra (C++ Toolbox), 6 exercises, 5 problems, 2 challenges, quiz |
 | [`02-data-types`](packs/02-data-types/) | Data Types in C++: lesson, 6 exercises, 5 problems, 2 challenges, quiz |
 | [`03-intro-to-algorithms`](packs/03-intro-to-algorithms/) | Introduction to Algorithms: lesson, 6 exercises, 5 problems, 2 challenges, quiz |
-| [`04-data-structures`](packs/04-data-structures/) | Data Structures: lesson, 6 exercises, 5 problems, 4 challenges (items shared between a topic and a skill path), quiz |
+| [`04-pointers`](packs/04-pointers/) | Pointers & References: lesson, 6 exercises (HackerRank, LeetCode), 5 LeetCode linked-list problems, 2 challenges, quiz |
+| [`05-data-structures`](packs/05-data-structures/) | Data Structures: lesson, 6 exercises, 5 problems, 4 challenges (items shared between a topic and a skill path), quiz |
 
 ## Importing
 

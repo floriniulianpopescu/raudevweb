@@ -161,7 +161,7 @@ int main()
 }
 ```
 
-(`const std::vector<int>& v` means "use the caller's vector without copying it, and don't change it".)
+(`const std::vector<int>& v` means "use the caller's vector without copying it, and don't change it". The **Pointers & References** lesson explains this properly.)
 
 ### Binary search: halve the list each time
 
@@ -414,4 +414,4 @@ The [Competitive Programmer's Handbook](https://cses.fi/book/book.pdf) (chapters
 
 1. Read the sources below for more detail and examples.
 2. Solve the **Algorithms: Searching** challenge, then **Algorithms: Sorting & Recursion**, under Practice.
-3. Check yourself with the **Introduction to Algorithms** quiz, then continue with **Data Structures**.
+3. Check yourself with the **Introduction to Algorithms** quiz, then continue with **Pointers & References**.

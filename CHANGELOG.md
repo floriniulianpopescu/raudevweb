@@ -8,7 +8,7 @@ rename **Unreleased** to that date and start a new empty one.
 
 ## Unreleased
 
-Branches `feat/completion-xp`, then `content/intro-algorithms`, `content/data-types`, `content/data-structures` and `content/beginner-friendly` stacked on it, not yet merged into `main`.
+Branches `feat/completion-xp`, then `content/intro-algorithms`, `content/data-types`, `content/data-structures`, `content/beginner-friendly` and `content/pointers` stacked on it, not yet merged into `main`.
 
 ### Added
 - **Content packs** in `content/packs` and `bun run content:import`, which loads them into any site through the
@@ -25,6 +25,12 @@ Branches `feat/completion-xp`, then `content/intro-algorithms`, `content/data-ty
   exercises (HackerRank, CSES, LeetCode); 5 Codeforces problems rated 900–1200; four challenges sharing the same
   items, by topic ("Stacks & Queues", "Sets, Maps & Heaps") and by skill ("Build Your Own", "Pick the Right One");
   a quiz.
+- **Pointers & References** pack, placed before Data Structures (now `05`): beginner-friendly lesson on memory and
+  addresses, pointers and `nullptr`, references, passing by value / reference / pointer (and why `const
+  std::vector<int>&`), arrays and pointers, chains of pointers and the classic pointer bugs; 6 exercises (HackerRank,
+  LeetCode); 5 LeetCode linked-list problems (Codeforces rarely needs pointers); challenges "Pointers & References:
+  Basics" and "Pointers & References: Linked Lists"; a quiz. The Data Structures and Algorithms lessons now refer
+  to it.
 - **Beginner-friendly lessons.** All four lessons were rewritten for beginners: "Before you start" and "In this
   lesson you'll learn" at the top, everyday analogies, step-by-step traces, every code example a complete program
   you can copy and run, "Try it" exercises, a Going further section for the harder details, and a Summary and
