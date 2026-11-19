@@ -36,7 +36,8 @@ function HomePage() {
 						</div>
 						<ThemeToggle />
 					</header>
-					<main className="flex-1 p-6">
+					{/* Not <main>: SidebarInset already renders the page's <main> landmark */}
+					<div className="flex-1 p-6">
 						<Routes>
 							<Route index element={<AppMainPage />} />
 							<Route path="challenges" element={<AppChallengesPage />} />
@@ -54,7 +55,7 @@ function HomePage() {
 							<Route path="about" element={<AppAboutPage />} />
 							<Route path="*" element={<NotFoundView backTo="/home" backLabel="Back to Home" />} />
 						</Routes>
-					</main>
+					</div>
 				</SidebarInset>
 			</SidebarProvider>
 		</>
