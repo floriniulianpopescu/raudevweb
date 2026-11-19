@@ -1,4 +1,5 @@
 import { authClient } from "@/lib/auth-client";
+import { authErrorMessage, NETWORK_ERROR } from "@/lib/errors";
 
 /**
  * Where the confirmation link sends the user after the backend has checked it.
@@ -8,12 +9,13 @@ export const verifyCallbackURL = () => `${window.location.origin}/verify-email`;
 
 /** Email a new confirmation link. Same answer whether or not the account exists. */
 export async function resendVerificationEmail(email: string) {
-	const { error } = await authClient.sendVerificationEmail({ email, callbackURL: verifyCallbackURL() });
-	if (error) {
-		throw new Error(
-			error.status === 429
-				? "Too many requests. Please wait a minute and try again."
-				: error.message || "Couldn't send the email. Please try again.",
-		);
+	let result;
+	try {
+		result = await authClient.sendVerificationEmail({ email, callbackURL: verifyCallbackURL() });
+	} catch {
+		throw new Error(NETWORK_ERROR); // Better Auth throws when the server can't be reached
+	}
+	if (result.error) {
+		throw new Error(authErrorMessage(result.error, "Couldn't send the email. Please try again."));
 	}
 }

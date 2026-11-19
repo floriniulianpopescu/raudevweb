@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate, useSearchParams } from "react-router-do
 
 import AuthLayout from "@/components/auth-layout";
 import { CheckInbox } from "@/components/check-inbox";
+import { authErrorMessage, NETWORK_ERROR } from "@/lib/errors";
 import { redirectAfterLogin } from "@/lib/redirect";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -26,31 +27,37 @@ export default function LoginPage() {
 		e.preventDefault();
 		setError(null);
 
-		await authClient.signIn.email(
-			{
-				email: email.trim(),
-				password,
-				// No callbackURL here: Better Auth would redirect to it after every successful login.
-				// The backend points confirmation links to /verify-email by itself.
-			},
-			{
-				onRequest: () => {
-					setLoading(true);
+		try {
+			await authClient.signIn.email(
+				{
+					email: email.trim(),
+					password,
+					// No callbackURL here: Better Auth would redirect to it after every successful login.
+					// The backend points confirmation links to /verify-email by itself.
 				},
-				onSuccess: () => {
-					setLoading(false);
-					navigate(redirectAfterLogin(location), { replace: true });
+				{
+					onRequest: () => {
+						setLoading(true);
+					},
+					onSuccess: () => {
+						setLoading(false);
+						navigate(redirectAfterLogin(location), { replace: true });
+					},
+					onError: (ctx) => {
+						setLoading(false);
+						if (ctx.error.code === "EMAIL_NOT_VERIFIED") {
+							setUnverifiedEmail(email.trim());
+							return;
+						}
+						setError(authErrorMessage(ctx.error, "Invalid email or password."));
+					},
 				},
-				onError: (ctx) => {
-					setLoading(false);
-					if (ctx.error.code === "EMAIL_NOT_VERIFIED") {
-						setUnverifiedEmail(email.trim());
-						return;
-					}
-					setError(ctx.error.message || "Invalid email or password.");
-				},
-			},
-		);
+			);
+		} catch {
+			// Better Auth throws (instead of calling onError) when the server can't be reached
+			setLoading(false);
+			setError(NETWORK_ERROR);
+		}
 	}
 
 	return (
