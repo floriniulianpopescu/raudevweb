@@ -301,7 +301,7 @@ function BodyField({ value, onChange }: { value: string; onChange: (v: string) =
 			)}
 			<p className="text-xs text-muted-foreground">
 				Optional. Supports headings, lists, links, tables, <code>```cpp</code> code blocks and callouts (
-				<code>&gt; [!NOTE]</code>, <code>[!TIP]</code>, <code>[!WARNING]</code>). HTML and images aren't shown.
+				<code>&gt; [!NOTE]</code>, <code>[!TIP]</code>, <code>[!WARNING]</code>, <code>[!TRY]</code> for a "Try it" exercise). HTML and images aren't shown.
 			</p>
 		</div>
 	);

@@ -5,13 +5,14 @@ import {
 	LightbulbIcon,
 	MessageSquareWarningIcon,
 	OctagonAlertIcon,
+	PencilLineIcon,
 	TriangleAlertIcon,
 	type LucideIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { CodeBlock } from "./code-block";
 
-// --- GitHub-style callouts: "> [!TIP]" ----------------------------------------
+// --- GitHub-style callouts: "> [!TIP]", plus our own "> [!TRY]" for exercises in lessons ---
 
 type HastNode = {
 	type: string;
@@ -21,7 +22,7 @@ type HastNode = {
 	children?: HastNode[];
 };
 
-const CALLOUT = /^\[!(note|tip|important|warning|caution)\][ \t]*\n?/i;
+const CALLOUT = /^\[!(note|tip|important|warning|caution|try)\][ \t]*\n?/i;
 
 /** Turns a blockquote starting with [!TIP] (etc.) into <blockquote data-callout="tip">. */
 function rehypeCallouts() {
@@ -48,6 +49,7 @@ const CALLOUTS: Record<string, { label: string; icon: LucideIcon; className: str
 	tip: { label: "Tip", icon: LightbulbIcon, className: "border-green-600/50 bg-green-600/5 [&_.callout-title]:text-green-700 dark:[&_.callout-title]:text-green-400" },
 	important: { label: "Important", icon: MessageSquareWarningIcon, className: "border-violet-500/50 bg-violet-500/5 [&_.callout-title]:text-violet-600 dark:[&_.callout-title]:text-violet-400" },
 	warning: { label: "Warning", icon: TriangleAlertIcon, className: "border-amber-500/60 bg-amber-500/5 [&_.callout-title]:text-amber-700 dark:[&_.callout-title]:text-amber-400" },
+	try: { label: "Try it", icon: PencilLineIcon, className: "border-primary/50 bg-primary/5 [&_.callout-title]:text-primary dark:[&_.callout-title]:text-sidebar-primary" },
 	caution: { label: "Caution", icon: OctagonAlertIcon, className: "border-destructive/50 bg-destructive/5 [&_.callout-title]:text-destructive" },
 };
 

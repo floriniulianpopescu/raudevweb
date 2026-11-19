@@ -38,7 +38,8 @@ Six content types, all defined by `CONTENT_TYPES` / `ContentSchemas` (shared) an
 
 - Optional, up to 50,000 characters (`RESOURCE_BODY_MAX`). Shown between the description and the **Sources**.
 - Supports GitHub-flavoured Markdown (headings, lists, links, tables, footnotes, task lists) and callouts:
-  `> [!NOTE]`, `[!TIP]`, `[!IMPORTANT]`, `[!WARNING]`, `[!CAUTION]`.
+  `> [!NOTE]`, `[!TIP]`, `[!IMPORTANT]`, `[!WARNING]`, `[!CAUTION]`, plus our own `> [!TRY]` ("Try it" box for a
+  small exercise inside a lesson).
 - Fenced code blocks get syntax highlighting (Shiki, light and dark themes), a language label ("C++") and a
   Copy button. Unknown languages render as plain text.
 - Safety: raw HTML in the source is ignored, `javascript:` links are neutralised, images render as links
