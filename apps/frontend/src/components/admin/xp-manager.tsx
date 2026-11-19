@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useSelection } from "@/hooks/use-selection";
 import { adminApi } from "@/lib/admin-api";
+import { friendlyError } from "@/lib/errors";
 import { matchesSearch } from "@/lib/search";
 import { cn } from "@/lib/utils";
 import { Checkbox, SelectionBar } from "./selection-bar";
@@ -27,7 +28,7 @@ export function XpManager({ onChanged }: { onChanged?: () => void } = {}) {
 			setUsers(await adminApi<UserXp[]>("users"));
 			setError(null);
 		} catch (e) {
-			setError((e as Error).message);
+			setError(friendlyError(e, "Couldn't load the users. Please try again."));
 		}
 	}, []);
 
@@ -63,7 +64,7 @@ export function XpManager({ onChanged }: { onChanged?: () => void } = {}) {
 			setBulkAmount("");
 			onChanged?.();
 		} catch (e) {
-			setError((e as Error).message);
+			setError(friendlyError(e, "Couldn't update XP. Please try again."));
 		} finally {
 			setBulkBusy(false);
 		}
@@ -91,7 +92,7 @@ export function XpManager({ onChanged }: { onChanged?: () => void } = {}) {
 			setError(null);
 			onChanged?.();
 		} catch (e) {
-			setError((e as Error).message);
+			setError(friendlyError(e, "Couldn't update XP. Please try again."));
 		} finally {
 			setBusy(null);
 		}

@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { adminApi } from "@/lib/admin-api";
+import { friendlyError } from "@/lib/errors";
 
 function Field({ label, hint, children }: { label: string; hint?: string; children: (id: string) => ReactNode }) {
 	const id = useId();
@@ -39,7 +40,7 @@ export function ScheduleManager({ onChanged }: { onChanged?: () => void }) {
 	useEffect(() => {
 		adminApi<SessionSchedule>("schedule")
 			.then((s) => setDraft(toDraft(s)))
-			.catch((e: Error) => setError(e.message));
+			.catch((e) => setError(friendlyError(e, "Couldn't load the schedule. Please try again.")));
 	}, []);
 
 	if (!draft) {
@@ -65,7 +66,7 @@ export function ScheduleManager({ onChanged }: { onChanged?: () => void }) {
 			setSaved("Saved");
 			onChanged?.();
 		} catch (e) {
-			setError((e as Error).message);
+			setError(friendlyError(e, "Couldn't save the schedule. Check the fields and try again."));
 		} finally {
 			setSaving(false);
 		}

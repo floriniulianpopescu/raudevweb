@@ -4,6 +4,7 @@ import { Trash2Icon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useSelection } from "@/hooks/use-selection";
 import { adminApi } from "@/lib/admin-api";
+import { friendlyError } from "@/lib/errors";
 import { matchesSearch } from "@/lib/search";
 import { cn } from "@/lib/utils";
 import { ConfirmDialog } from "./confirm-dialog";
@@ -56,7 +57,7 @@ export function CrudManager<Draft>({
 			setItems(await adminApi<Item[]>(endpoint));
 			setError(null);
 		} catch (e) {
-			setError((e as Error).message);
+			setError(friendlyError(e, "Couldn't load the items. Please try again."));
 		}
 	}, [endpoint]);
 
@@ -92,7 +93,7 @@ export function CrudManager<Draft>({
 			await load();
 			onChanged?.();
 		} catch (e) {
-			setError((e as Error).message);
+			setError(friendlyError(e, "Couldn't save. Check the fields and try again."));
 		}
 	}
 
@@ -114,7 +115,7 @@ export function CrudManager<Draft>({
 			await load();
 			onChanged?.();
 		} catch (e) {
-			setError((e as Error).message);
+			setError(friendlyError(e, "Couldn't delete. Refresh the list and try again."));
 		} finally {
 			setDeleting(false);
 		}
