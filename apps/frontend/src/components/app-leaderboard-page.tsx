@@ -4,6 +4,7 @@ import { MedalIcon, TrophyIcon } from "lucide-react";
 import type { LeaderboardEntry, LeaderboardResponse } from "@raudevweb/shared";
 import { AdminPanelFrame } from "@/components/admin/admin-panel-frame";
 import { XpManager } from "@/components/admin/xp-manager";
+import { LoadError } from "@/components/load-error";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { apiGet } from "@/lib/admin-api";
@@ -81,6 +82,12 @@ export function AppLeaderboardPage() {
 		load();
 	}, [load]);
 
+	const retry = () => {
+		setData(null);
+		setError(null);
+		load();
+	};
+
 	const me = data?.me ?? null;
 	const meInList = !!me && !!data?.entries.some((e) => e.id === me.id);
 
@@ -104,7 +111,7 @@ export function AppLeaderboardPage() {
 
 			<div className="mt-6 overflow-hidden rounded-2xl border bg-card shadow-sm">
 				{error ? (
-					<p className="p-4 text-sm text-destructive">{error}</p>
+					<LoadError className="p-4" onRetry={retry} />
 				) : !data ? (
 					<div className="space-y-2 p-4">
 						{Array.from({ length: 5 }, (_, i) => (

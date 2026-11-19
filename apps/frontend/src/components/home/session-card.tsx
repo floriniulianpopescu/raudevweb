@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { CalendarDaysIcon, ClockIcon, MapPinIcon } from "lucide-react";
 import type { SessionSchedule } from "@raudevweb/shared";
+import { LoadError } from "@/components/load-error";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { apiGet } from "@/lib/admin-api";
@@ -27,16 +28,36 @@ function useNow(intervalMs = 60_000) {
 /** /home: current week + this week's physical session. */
 export function SessionCard() {
 	const [schedule, setSchedule] = useState<SessionSchedule | null>(null);
-	const [error, setError] = useState<string | null>(null);
+	const [error, setError] = useState<Error | null>(null);
 	const now = useNow();
 
-	useEffect(() => {
-		apiGet<SessionSchedule>("schedule")
-			.then(setSchedule)
-			.catch((e: Error) => setError(e.message));
-	}, []);
+	const load = useCallback(
+		() =>
+			apiGet<SessionSchedule>("schedule")
+				.then((s) => {
+					setSchedule(s);
+					setError(null);
+				})
+				.catch((e: Error) => setError(e)),
+		[],
+	);
 
-	if (error) return <p className="mt-6 text-sm text-destructive">{error}</p>;
+	useEffect(() => {
+		load();
+	}, [load]);
+
+	const retry = () => {
+		setError(null);
+		load();
+	};
+
+	if (error) {
+		return (
+			<section className="mt-6 rounded-2xl border bg-card p-5 text-card-foreground shadow-sm">
+				<LoadError onRetry={retry} />
+			</section>
+		);
+	}
 	if (!schedule) return <Skeleton className="mt-6 h-36 rounded-2xl" />;
 
 	const week = weekInfo(now, schedule.semesterStart);
