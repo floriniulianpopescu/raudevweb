@@ -154,14 +154,20 @@ export function ProgressSummary({ type, itemIds }: { type: CompletableType; item
 	);
 }
 
-/** Read-only "Done" badge (challenge pages show progress but ticking happens on the lists). */
-export function DoneBadge({ type, id }: { type: CompletableType; id: string }) {
+/** "3 / 7 done · 50 XP earned" across a challenge's problems and exercises. */
+export function ChallengeProgress({ problemIds, exerciseIds }: { problemIds: string[]; exerciseIds: string[] }) {
 	const { data: progress } = useProgress();
-	if (!progress?.[type].ids.includes(id)) return null;
+	const total = problemIds.length + exerciseIds.length;
+	if (!progress || total === 0) return null;
+	const doneProblems = problemIds.filter((id) => progress.problems.ids.includes(id)).length;
+	const doneExercises = exerciseIds.filter((id) => progress.exercises.ids.includes(id)).length;
+	const xp = doneProblems * COMPLETION_XP.problems + doneExercises * COMPLETION_XP.exercises;
 	return (
-		<span className="inline-flex items-center gap-1 rounded-full bg-green-600/15 px-2 py-0.5 text-xs font-medium text-green-700 dark:text-green-400">
-			<CheckIcon className="size-3" strokeWidth={3} />
-			Done
-		</span>
+		<p className="text-sm text-muted-foreground">
+			<span className="font-semibold text-foreground tabular-nums">
+				{doneProblems + doneExercises} / {total}
+			</span>{" "}
+			done · <span className="font-semibold text-foreground tabular-nums">{xp}</span> XP earned
+		</p>
 	);
 }

@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import type { ChallengeItem, CompletableType, LinkItem } from "@raudevweb/shared";
 import { ContentCard } from "./content-card";
 import { CardGrid, DetailLayout, useContent } from "./content-list";
-import { DoneBadge } from "./done-check";
+import { ChallengeProgress, DoneCheck } from "./done-check";
 
 function LinkSection({ type, title, items }: { type: CompletableType; title: string; items: LinkItem[] }) {
 	if (items.length === 0) return null;
@@ -18,7 +18,7 @@ function LinkSection({ type, title, items }: { type: CompletableType; title: str
 						title={i.title}
 						description={i.description}
 						href={i.href}
-						badge={<DoneBadge type={type} id={i.id} />}
+						footer={<DoneCheck type={type} id={i.id} title={i.title} />}
 					/>
 				))}
 			</CardGrid>
@@ -35,6 +35,10 @@ export function ChallengePage() {
 		<DetailLayout type="challenges" content={content}>
 			{(c) => (
 				<>
+					<ChallengeProgress
+						problemIds={c.problems.map((p) => p.id)}
+						exerciseIds={c.exercises.map((e) => e.id)}
+					/>
 					<LinkSection type="problems" title="Problems" items={c.problems} />
 					<LinkSection type="exercises" title="Exercises" items={c.exercises} />
 				</>
