@@ -30,6 +30,13 @@ export const queryKeys = {
  */
 export function useCachedQuery<T>(queryKey: QueryKey, fetcher: () => Promise<T>) {
 	const { data, error } = useQuery({ queryKey, queryFn: fetcher });
-	const retry = () => queryClient.resetQueries({ queryKey });
-	return { data: data ?? null, error: data === undefined ? error : null, retry };
+	return { data: data ?? null, error: data === undefined ? error : null, retry: retryFailed };
+}
+
+/**
+ * Retry every request that failed, not just the one whose button was clicked: errors usually
+ * share a cause (the connection dropped), so one Retry should fix every card on the page.
+ */
+function retryFailed() {
+	return queryClient.resetQueries({ predicate: (q) => q.state.status === "error" });
 }
