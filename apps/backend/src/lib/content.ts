@@ -39,13 +39,24 @@ const kindOf = (type: "lessons" | "extras") => (type === "lessons" ? "lesson" : 
 
 // --- read ------------------------------------------------------------------
 
+/** Admin lists also show how many users ticked each problem/exercise as done. */
+const withCompletedCount = <T extends { _count: { completions: number } }>({ _count, ...item }: T) => ({
+  ...item,
+  completedCount: _count.completions,
+});
+const adminLinkSelect = { ...linkSelect, _count: { select: { completions: true } } } as const;
+
 export async function listContent(type: ContentType, admin = false, limit?: number) {
   const newest = { orderBy: { createdAt: "desc" }, take: limit } as const;
   switch (type) {
     case "problems":
-      return prisma.problem.findMany({ select: linkSelect, ...newest });
+      return admin
+        ? (await prisma.problem.findMany({ select: adminLinkSelect, ...newest })).map(withCompletedCount)
+        : prisma.problem.findMany({ select: linkSelect, ...newest });
     case "exercises":
-      return prisma.exercise.findMany({ select: linkSelect, ...newest });
+      return admin
+        ? (await prisma.exercise.findMany({ select: adminLinkSelect, ...newest })).map(withCompletedCount)
+        : prisma.exercise.findMany({ select: linkSelect, ...newest });
     case "challenges":
       return admin
         ? prisma.challenge.findMany({ include: challengeInclude, ...newest })

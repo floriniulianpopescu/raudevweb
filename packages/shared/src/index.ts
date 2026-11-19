@@ -157,7 +157,20 @@ export type ResourceInput = z.infer<typeof ResourceSchema>;
 
 // --- API response shapes ---------------------------------------------------
 
-export type LinkItem = { id: string; title: string; description: string; href: string };
+export type LinkItem = {
+  id: string;
+  title: string;
+  description: string;
+  href: string;
+  /** Admin lists of problems/exercises only: how many users ticked it as done. */
+  completedCount?: number;
+};
+
+/** GET /api/progress — what the signed-in user has ticked as done, and the XP that earned. */
+export type Progress = Record<"problems" | "exercises", { ids: string[]; xp: number }>;
+
+/** PUT/DELETE /api/progress/:type/:id — `xpChange` is 0 if it was already done/undone. */
+export type CompletionResult = { done: boolean; xpChange: number; xp: number };
 
 export type ChallengeItem = {
   id: string;
@@ -266,7 +279,7 @@ export type BulkResult = { count: number };
 // Physical session schedule (shown on /home, edited by admins)
 // ---------------------------------------------------------------------------
 
-export { WEEKDAYS } from "./constants";
+export { COMPLETION_XP, WEEKDAYS, type CompletableType } from "./constants";
 
 const time = z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/, "Use HH:MM (24h)");
 
