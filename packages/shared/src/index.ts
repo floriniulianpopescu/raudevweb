@@ -266,7 +266,7 @@ export type BulkResult = { count: number };
 // Physical session schedule (shown on /home, edited by admins)
 // ---------------------------------------------------------------------------
 
-export const WEEKDAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"] as const;
+export { WEEKDAYS } from "./constants";
 
 const time = z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/, "Use HH:MM (24h)");
 

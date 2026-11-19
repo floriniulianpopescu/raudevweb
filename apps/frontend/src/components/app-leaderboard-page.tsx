@@ -2,8 +2,7 @@ import { PageTitle } from "@/components/page-title";
 import { useCallback, useEffect, useState } from "react";
 import { MedalIcon, TrophyIcon } from "lucide-react";
 import type { LeaderboardEntry, LeaderboardResponse } from "@raudevweb/shared";
-import { AdminPanelFrame } from "@/components/admin/admin-panel-frame";
-import { XpManager } from "@/components/admin/xp-manager";
+import { LeaderboardXpPanel } from "@/components/admin/lazy";
 import { LoadError } from "@/components/load-error";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -97,9 +96,7 @@ export function AppLeaderboardPage() {
 			<h1 className="text-2xl font-bold">Leaderboard</h1>
 			<p className="text-muted-foreground mt-2">See how you rank against others.</p>
 
-			<AdminPanelFrame title="Admin dashboard · Leaderboard XP">
-				<XpManager onChanged={load} />
-			</AdminPanelFrame>
+			<LeaderboardXpPanel onChanged={load} />
 
 			{me && (
 				<p className="mt-4 text-sm">

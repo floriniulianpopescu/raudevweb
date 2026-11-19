@@ -11,7 +11,8 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { WEEKDAYS, type SessionSchedule } from "@raudevweb/shared";
+import type { SessionSchedule } from "@raudevweb/shared";
+import { WEEKDAYS } from "@raudevweb/shared/constants";
 import { apiGet } from "@/lib/admin-api";
 import { formatDay, sessionInfo } from "@/lib/schedule";
 

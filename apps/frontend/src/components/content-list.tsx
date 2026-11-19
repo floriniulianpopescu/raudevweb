@@ -4,7 +4,7 @@ import type { ContentSummary, ContentType } from "@raudevweb/shared";
 import { contentApi, isNotFound } from "@/lib/admin-api";
 import { CONTENT } from "@/lib/content";
 import { matchesSearch } from "@/lib/search";
-import { AdminContentPanel } from "./admin/admin-content-panel";
+import { AdminContentPanel } from "./admin/lazy";
 import { ContentCard } from "./content-card";
 import { LoadError } from "./load-error";
 import { NotFoundView } from "./not-found";

@@ -2,7 +2,7 @@ import { PageTitle } from "@/components/page-title";
 import { useState } from "react";
 import { BookOpenIcon, ListChecksIcon, PuzzleIcon, TrophyIcon } from "lucide-react";
 import type { ContentType } from "@raudevweb/shared";
-import { AdminDashboard } from "@/components/admin/admin-dashboard";
+import { AdminDashboard } from "@/components/admin/lazy";
 import { LatestCard } from "@/components/home/latest-card";
 import { SessionCard } from "@/components/home/session-card";
 import { authClient } from "@/lib/auth-client";
