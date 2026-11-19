@@ -21,6 +21,7 @@ import { AppAboutPage } from "@/components/app-about-page";
 import { ChallengePage } from "@/components/challenge-page";
 import { QuizPage } from "@/components/quiz-page";
 import { ResourcePage } from "@/components/resource-page";
+import { NotFoundView } from "@/components/not-found";
 
 function HomePage() {
 	return (
@@ -51,6 +52,7 @@ function HomePage() {
 							<Route path="leaderboard" element={<AppLeaderboardPage />} />
 							<Route path="settings" element={<AppSettingsPage />} />
 							<Route path="about" element={<AppAboutPage />} />
+							<Route path="*" element={<NotFoundView backTo="/home" backLabel="Back to Home" />} />
 						</Routes>
 					</main>
 				</SidebarInset>

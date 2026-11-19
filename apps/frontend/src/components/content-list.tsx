@@ -1,18 +1,24 @@
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 import type { ContentSummary, ContentType } from "@raudevweb/shared";
-import { contentApi } from "@/lib/admin-api";
+import { contentApi, isNotFound } from "@/lib/admin-api";
 import { CONTENT } from "@/lib/content";
 import { matchesSearch } from "@/lib/search";
 import { AdminContentPanel } from "./admin/admin-content-panel";
 import { ContentCard } from "./content-card";
+import { LoadError } from "./load-error";
+import { NotFoundView } from "./not-found";
 import { SearchInput } from "./search-input";
 import { Skeleton } from "./ui/skeleton";
 
-/** Fetch something from /api/content/<path>. `reload()` refetches without a loading flash. */
+/**
+ * Fetch something from /api/content/<path>.
+ * `reload()` refetches without a loading flash; `retry()` shows the loading state again (after an error).
+ * `notFound` is true when the API answered 404.
+ */
 export function useContent<T>(path: string) {
 	const [data, setData] = useState<T | null>(null);
-	const [error, setError] = useState<string | null>(null);
+	const [error, setError] = useState<Error | null>(null);
 
 	const fetchData = useCallback(
 		() =>
@@ -21,9 +27,15 @@ export function useContent<T>(path: string) {
 					setData(d);
 					setError(null);
 				})
-				.catch((e: Error) => setError(e.message)),
+				.catch((e: Error) => setError(e)),
 		[path],
 	);
+
+	const retry = useCallback(() => {
+		setData(null);
+		setError(null);
+		fetchData();
+	}, [fetchData]);
 
 	useEffect(() => {
 		setData(null);
@@ -31,7 +43,7 @@ export function useContent<T>(path: string) {
 		fetchData();
 	}, [fetchData]);
 
-	return { data, error, reload: fetchData };
+	return { data, error, notFound: isNotFound(error), reload: fetchData, retry };
 }
 
 /** Problems/exercises → external href; everything else → in-site page via <Link>. */
@@ -66,7 +78,7 @@ export function ContentList({
 	/** Optional element shown right below the search bar */
 	notice?: ReactNode;
 }) {
-	const { data: items, error, reload } = useContent<ContentSummary[]>(type);
+	const { data: items, error, reload, retry } = useContent<ContentSummary[]>(type);
 	const [query, setQuery] = useState("");
 	const label = CONTENT[type].label;
 
@@ -93,7 +105,7 @@ export function ContentList({
 
 			<div className="mt-6">
 				{error ? (
-					<p className="text-sm text-destructive">{error}</p>
+					<LoadError onRetry={retry} />
 				) : items === null || visible === null ? (
 					<CardGridSkeleton />
 				) : items.length === 0 ? (
@@ -119,26 +131,30 @@ export function ContentList({
 	);
 }
 
-/** Shared frame for in-site detail pages: back link, loading/error, title + description. */
+/**
+ * Shared frame for in-site detail pages: back link, loading/error, title + description.
+ * Pass the result of useContent(); a 404 shows the "Page not found" view.
+ */
 export function DetailLayout<T extends { title: string; description: string }>({
 	type,
-	data,
-	error,
+	content: { data, error, notFound, retry },
 	children,
 }: {
 	type: ContentType;
-	data: T | null;
-	error: string | null;
+	content: Pick<ReturnType<typeof useContent<T>>, "data" | "error" | "notFound" | "retry">;
 	children: (data: T) => ReactNode;
 }) {
 	const cfg = CONTENT[type];
+	if (notFound) {
+		return <NotFoundView backTo={`/home/${cfg.route}`} backLabel={`Back to ${cfg.label}`} />;
+	}
 	return (
 		<div>
 			<Link to={`/home/${cfg.route}`} className="text-sm text-muted-foreground hover:underline">
 				← Back to {cfg.label}
 			</Link>
 			{error ? (
-				<p className="mt-4 text-sm text-destructive">{error}</p>
+				<LoadError className="mt-4" onRetry={retry} />
 			) : !data ? (
 				<Skeleton className="mt-4 h-24" />
 			) : (

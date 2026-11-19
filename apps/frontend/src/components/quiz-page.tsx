@@ -10,10 +10,10 @@ import { DetailLayout, useContent } from "./content-list";
 /** /home/quizzes/:id */
 export function QuizPage() {
 	const { id } = useParams();
-	const { data, error } = useContent<QuizItem>(`quizzes/${id}`);
+	const content = useContent<QuizItem>(`quizzes/${id}`);
 
 	return (
-		<DetailLayout type="quizzes" data={data} error={error}>
+		<DetailLayout type="quizzes" content={content}>
 			{(quiz) => <QuizRunner key={quiz.id} quiz={quiz} />}
 		</DetailLayout>
 	);

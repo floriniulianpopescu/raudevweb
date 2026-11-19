@@ -1,4 +1,5 @@
 import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
+import { NotFoundPage } from "@/components/not-found.tsx";
 import { GuestRoute, ProtectedRoute } from "@/components/route-guards.tsx";
 import { ThemeToggle } from "@/components/theme-toggle.tsx";
 import FirstPage from "./FirstPage.tsx";
@@ -67,6 +68,7 @@ function App() {
 				<Route path="/reset" element={<ResetPage />} />
 				{/* Confirmation-email landing page; not guest-only since the link logs the user in */}
 				<Route path="/verify-email" element={<VerifyEmailPage />} />
+				<Route path="*" element={<NotFoundPage />} />
 			</Routes>
 		</BrowserRouter>
 	);

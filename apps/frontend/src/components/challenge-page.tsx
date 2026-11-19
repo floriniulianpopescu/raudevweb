@@ -22,10 +22,10 @@ function LinkSection({ title, items }: { title: string; items: LinkItem[] }) {
 /** /home/challenges/:id — a challenge with its problems and exercises. */
 export function ChallengePage() {
 	const { id } = useParams();
-	const { data, error } = useContent<ChallengeItem>(`challenges/${id}`);
+	const content = useContent<ChallengeItem>(`challenges/${id}`);
 
 	return (
-		<DetailLayout type="challenges" data={data} error={error}>
+		<DetailLayout type="challenges" content={content}>
 			{(c) => (
 				<>
 					<LinkSection title="Problems" items={c.problems} />

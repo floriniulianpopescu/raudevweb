@@ -6,10 +6,10 @@ import { DetailLayout, useContent } from "./content-list";
 /** /home/lessons/:id and /home/extras/:id — title, description and a bibliography. */
 export function ResourcePage({ type }: { type: "lessons" | "extras" }) {
 	const { id } = useParams();
-	const { data, error } = useContent<ResourceItem>(`${type}/${id}`);
+	const content = useContent<ResourceItem>(`${type}/${id}`);
 
 	return (
-		<DetailLayout type={type} data={data} error={error}>
+		<DetailLayout type={type} content={content}>
 			{(r) => (
 				<section>
 					<h2 className="mb-3 text-lg font-semibold">Bibliography</h2>

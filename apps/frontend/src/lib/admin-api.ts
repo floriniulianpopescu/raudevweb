@@ -1,12 +1,24 @@
 export const API_URL = (import.meta.env.VITE_API_URL || "http://localhost:3000").replace(/\/+$/, "");
 
+/** A non-2xx API response. `message` is the response body, as before; `status` lets callers spot e.g. 404. */
+export class ApiError extends Error {
+	readonly status: number;
+	constructor(status: number, message: string) {
+		super(message);
+		this.name = "ApiError";
+		this.status = status;
+	}
+}
+
+export const isNotFound = (e: unknown) => e instanceof ApiError && e.status === 404;
+
 async function request<T>(url: string, init?: RequestInit): Promise<T> {
 	const res = await fetch(url, {
 		credentials: "include",
 		headers: { "Content-Type": "application/json" },
 		...init,
 	});
-	if (!res.ok) throw new Error((await res.text()) || res.statusText);
+	if (!res.ok) throw new ApiError(res.status, (await res.text()) || res.statusText);
 	return (res.status === 204 ? undefined : await res.json()) as T;
 }
 
