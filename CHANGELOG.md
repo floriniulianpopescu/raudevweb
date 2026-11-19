@@ -8,9 +8,14 @@ rename **Unreleased** to that date and start a new empty one.
 
 ## Unreleased
 
-Branch `feat/completion-xp`, not yet merged into `main`.
+Branches `feat/completion-xp` and `content/intro-algorithms` (on top of it), not yet merged into `main`.
 
 ### Added
+- **Content packs** in `content/packs` and `bun run content:import`, which loads them into any site through the
+  admin API (validates first, skips titles that already exist, `--dry-run`). Packs: **Introduction to C++** (the
+  existing lesson, extra, 11 practice items, 2 challenges and quiz) and the new **Introduction to Algorithms**
+  (lesson on Big-O, searching, sorting and recursion; 6 exercises from CSES, HackerRank and LeetCode; 5 Codeforces
+  problems rated 800–1100; challenges "Algorithms: Searching" and "Algorithms: Sorting & Recursion"; a quiz).
 - **Done checks with automatic XP.** Every problem and exercise can be ticked as done on the Problems/Exercises
   lists, challenge pages and the home "Latest" cards: problems give 20 XP, exercises 10. Unticking takes the XP
   back. Progress lines ("7 / 20 done · 140 XP earned") on lists and challenges; admins see "N completed" per item.
@@ -50,6 +55,8 @@ Branch `feat/completion-xp`, not yet merged into `main`.
   current production schema with data: no data-loss prompts, all rows kept.
 - **Cloudflare Pages**: set `VITE_SITE_URL` to the site's public URL, and check that the build command runs
   `bun run build` in `apps/frontend` (it includes the prerender step).
+- **Content**: production doesn't have the lessons and practice yet. After deploying, load them with
+  `bun run content:import` (see `content/README.md`); dry-run first.
 - New frontend dependencies: `@tanstack/react-query`, `react-markdown`, `remark-gfm`, `shiki` (lockfile updated).
 
 ## 2026-11-08

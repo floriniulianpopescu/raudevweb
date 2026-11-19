@@ -27,6 +27,7 @@ apps/
     src/lib/              auth (Better Auth config), prisma client, email, content + progress data access
     src/middlewares/      requireAuth, requireRole
     src/routes/           one file per area: content, progress, leaderboard, schedule, xp (admin users), user
+    src/scripts/          command-line tools: import-content.ts (`bun run content:import`)
     docker-compose.yml    local PostgreSQL ("rau-postgres", port 5432)
   frontend/               React 19 + Vite + Tailwind 4 + base-ui (shadcn style)
     index.html            meta/Open Graph tags, no-flash theme script, prerender marker
@@ -41,6 +42,7 @@ apps/
 packages/
   shared/src/index.ts     zod schemas + API types (pulls in zod)
   shared/src/constants.ts zod-free constants (importable from the landing page without zod)
+content/packs/            ready-made site content (lessons, practice, quizzes) loaded with `bun run content:import`
 deploy.sh                 backend deploy script (run on the VPS)
 ```
 

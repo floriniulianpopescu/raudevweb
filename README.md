@@ -11,7 +11,8 @@ Bun monorepo:
 | `packages/shared` | Shared types and zod schemas (`@raudevweb/shared`) | — |
 
 **Developer docs:** [docs/](docs/README.md) covers architecture, features, the API, the data model, how-to recipes
-and deployment. Changes are tracked in [CHANGELOG.md](CHANGELOG.md).
+and deployment. Changes are tracked in [CHANGELOG.md](CHANGELOG.md). Ready-made site content lives in
+[content/](content/README.md).
 
 ## Prerequisites
 
@@ -89,6 +90,7 @@ Log out and back in afterwards.
 | `bun run db:push` | `apps/backend` | Apply `prisma/schema.prisma` to the database |
 | `bun run db:generate` | `apps/backend` | Regenerate the Prisma client |
 | `bun run db:studio` | `apps/backend` | Browse the database in Prisma Studio |
+| `bun run content:import` | root | Load the content packs (lessons, practice, quizzes) into a site; see [content/README.md](content/README.md) |
 | `bun run test:auth` | `apps/backend` | Auth smoke test (sign-up, session, protected route). Currently out of date, see [known issues](docs/development.md#known-issues) |
 | `bun run lint` | `apps/frontend` | Lint with oxlint |
 | `bun run build` | `apps/frontend` | Production build; also prerenders the landing page into `dist/index.html` |

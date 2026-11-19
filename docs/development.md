@@ -80,12 +80,20 @@ Setup is in the [root README](../README.md); the big picture is in [architecture
   entry to `tables` in `apps/backend/src/lib/progress.ts`, extend `Progress` (shared) and `getProgress`, then
   place `<DoneCheck type="…" id title />` where the items are listed.
 
+### Add site content (lessons, practice, quizzes)
+
+Write it as a **content pack** in `content/packs/` and load it with `bun run content:import`, instead of only typing
+it into the admin panel: it's reviewed in a PR and can be loaded into production and fresh dev databases. Format,
+options and a checklist: [content/README.md](../content/README.md).
+
 ### Write content for lessons
 
 - Use `##` for sections (the page title is the only `#`), fenced blocks with a language (```` ```cpp ````),
   tables, and callouts (`> [!TIP]` on its own line, then the text on the following `>` lines).
 - Link sources inline with normal Markdown links and also list them under Sources.
 - Raw HTML is ignored and images show as links.
+- Compile and run every snippet before publishing (the C++ snippets in the packs are all checked with
+  `g++ -std=c++20 -Wall`).
 
 ## Verify a change before pushing
 

@@ -10,6 +10,7 @@ How the site works today and how to change it safely. Start with the [root READM
 | [Data model](data-model.md) | read or change the database schema |
 | [Development guide](development.md) | add a page, endpoint or content type; follow the project conventions; test a change |
 | [Deployment](deployment.md) | ship to production and know what each release needs |
+| [Content packs](../content/README.md) | add lessons, practice and quizzes as files and load them into a site |
 | [Changelog](../CHANGELOG.md) | see what changed and when |
 
 ## Keeping these docs current

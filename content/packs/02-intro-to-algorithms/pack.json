@@ -1,0 +1,197 @@
+{
+  "name": "Introduction to Algorithms",
+  "problems": [
+    {
+      "title": "Fence (Codeforces 363B)",
+      "description": "Find the k neighbouring planks with the smallest total height among up to 150,000. Summing every block from scratch is O(n·k) and too slow; keep a running sum for O(n). Difficulty 1100.",
+      "href": "https://codeforces.com/problemset/problem/363/B"
+    },
+    {
+      "title": "Interesting drink (Codeforces 706B)",
+      "description": "Every day, count the shops whose price fits the day's budget. Sort the prices once, then answer each day with binary search (std::upper_bound). Difficulty 1100.",
+      "href": "https://codeforces.com/problemset/problem/706/B"
+    },
+    {
+      "title": "Helpful Maths (Codeforces 339A)",
+      "description": "Rewrite a sum like 3+2+1 so the numbers are in non-decreasing order. Practises sorting the parts of a string. Difficulty 800.",
+      "href": "https://codeforces.com/problemset/problem/339/A"
+    },
+    {
+      "title": "Gravity Flip (Codeforces 405A)",
+      "description": "Columns of cubes fall to the right when gravity switches. Notice that the result is just the column heights sorted. Difficulty 900.",
+      "href": "https://codeforces.com/problemset/problem/405/A"
+    },
+    {
+      "title": "Twins (Codeforces 160A)",
+      "description": "Take the fewest coins so your total is strictly more than what's left. Sort in descending order and take the biggest first. Difficulty 900.",
+      "href": "https://codeforces.com/problemset/problem/160/A"
+    }
+  ],
+  "exercises": [
+    {
+      "title": "Weird Algorithm (CSES)",
+      "description": "Follow a simple rule (even: halve it, odd: 3n+1) until n reaches 1, printing every value. An algorithm written as exact steps; the values outgrow int, so use long long.",
+      "href": "https://cses.fi/problemset/task/1068"
+    },
+    {
+      "title": "Intro to Tutorial Challenges (HackerRank)",
+      "description": "Find the position of a value in a sorted array. Solve it with linear search, then try binary search.",
+      "href": "https://www.hackerrank.com/challenges/tutorial-intro/problem"
+    },
+    {
+      "title": "Binary Search (LeetCode 704)",
+      "description": "Write binary search yourself on a sorted array; the solution must be O(log n). Test it with 1 and 2 elements.",
+      "href": "https://leetcode.com/problems/binary-search/"
+    },
+    {
+      "title": "Insertion Sort - Part 1 (HackerRank)",
+      "description": "Insert the last element into the already-sorted part, printing the array after every shift. See how a simple O(n²) sort moves elements.",
+      "href": "https://www.hackerrank.com/challenges/insertionsort1/problem"
+    },
+    {
+      "title": "Distinct Numbers (CSES)",
+      "description": "Count the distinct values among up to 200,000 numbers. Sort first, then count where neighbours differ: O(n log n).",
+      "href": "https://cses.fi/problemset/task/1621"
+    },
+    {
+      "title": "Fibonacci Number (LeetCode 509)",
+      "description": "Compute the n-th Fibonacci number recursively with a base case, then rewrite it with a loop and compare.",
+      "href": "https://leetcode.com/problems/fibonacci-number/"
+    }
+  ],
+  "challenges": [
+    {
+      "title": "Algorithms: Searching",
+      "description": "Measure, then search. Do the three exercises in order (an algorithm as exact steps, linear search, binary search), then the two Codeforces problems: Fence is about complexity, Interesting drink about binary search.",
+      "problems": ["Fence (Codeforces 363B)", "Interesting drink (Codeforces 706B)"],
+      "exercises": [
+        "Weird Algorithm (CSES)",
+        "Intro to Tutorial Challenges (HackerRank)",
+        "Binary Search (LeetCode 704)"
+      ]
+    },
+    {
+      "title": "Algorithms: Sorting & Recursion",
+      "description": "Start with the exercises (insertion sort, sort-then-count, recursive Fibonacci), then the Codeforces problems, roughly from easiest to hardest: Helpful Maths, Gravity Flip, Twins. In each one, sorting is the key idea.",
+      "problems": ["Helpful Maths (Codeforces 339A)", "Gravity Flip (Codeforces 405A)", "Twins (Codeforces 160A)"],
+      "exercises": [
+        "Insertion Sort - Part 1 (HackerRank)",
+        "Distinct Numbers (CSES)",
+        "Fibonacci Number (LeetCode 509)"
+      ]
+    }
+  ],
+  "quizzes": [
+    {
+      "title": "Introduction to Algorithms",
+      "description": "Five questions on complexity, searching, sorting and recursion. Answers are revealed after you submit.",
+      "questions": [
+        {
+          "question": "n can be up to 200,000 and the time limit is 1 second. Which approach is too slow?",
+          "answers": [
+            "Sorting the array with std::sort",
+            "Two nested loops that compare every pair of elements",
+            "A single loop over the array",
+            "Sorting once, then a binary search for each element"
+          ],
+          "correctIndex": 1
+        },
+        {
+          "question": "What must be true before you can use binary search on an array?",
+          "answers": [
+            "The array has no duplicate values",
+            "The array has fewer than 1,000 elements",
+            "The array is sorted",
+            "The array's size is a power of two"
+          ],
+          "correctIndex": 2
+        },
+        {
+          "question": "At most how many steps does binary search need to find a value among 1,000,000 sorted numbers?",
+          "answers": ["About 20", "About 1,000", "About 500,000", "1,000,000"],
+          "correctIndex": 0
+        },
+        {
+          "question": "What is the time complexity of std::sort on n elements?",
+          "answers": ["O(n)", "O(log n)", "O(n²)", "O(n log n)"],
+          "correctIndex": 3
+        },
+        {
+          "question": "What does every recursive function need so that it stops?",
+          "answers": [
+            "A loop around the recursive call",
+            "A base case that returns without calling itself",
+            "A global counter",
+            "A void return type"
+          ],
+          "correctIndex": 1
+        }
+      ]
+    }
+  ],
+  "lessons": [
+    {
+      "title": "Introduction to Algorithms",
+      "description": "What an algorithm is and how to tell a fast one from a slow one: Big-O complexity and reading constraints, linear vs binary search, selection sort vs std::sort, and a first look at recursion.\n\nRead the lesson and the links. Then try the \"Algorithms: Searching\" and \"Algorithms: Sorting & Recursion\" challenges under Practice and the \"Introduction to Algorithms\" quiz.",
+      "bodyFile": "lesson.md",
+      "links": [
+        {
+          "title": "What is an algorithm?",
+          "description": "Khan Academy: the idea of an algorithm and what makes one good.",
+          "href": "https://www.khanacademy.org/computing/computer-science/algorithms/intro-to-algorithms/a/what-is-an-algorithm"
+        },
+        {
+          "title": "Asymptotic notation",
+          "description": "Khan Academy: why we describe running time with Big-O.",
+          "href": "https://www.khanacademy.org/computing/computer-science/algorithms/asymptotic-notation/a/asymptotic-notation"
+        },
+        {
+          "title": "Time Complexity",
+          "description": "USACO Guide: counting operations and the input-size table used in contests.",
+          "href": "https://usaco.guide/bronze/time-comp"
+        },
+        {
+          "title": "Binary search",
+          "description": "Khan Academy: binary search explained step by step, with an interactive game.",
+          "href": "https://www.khanacademy.org/computing/computer-science/algorithms/binary-search/a/binary-search"
+        },
+        {
+          "title": "Binary search (CP-Algorithms)",
+          "description": "CP-Algorithms: binary search in depth, including searching on the answer. For going further.",
+          "href": "https://cp-algorithms.com/num_methods/binary_search.html"
+        },
+        {
+          "title": "Sorting an array using selection sort",
+          "description": "learncpp: selection sort in C++, and std::sort.",
+          "href": "https://www.learncpp.com/cpp-tutorial/sorting-an-array-using-selection-sort/"
+        },
+        {
+          "title": "Recursion",
+          "description": "learncpp: recursive functions, base cases and when to use them.",
+          "href": "https://www.learncpp.com/cpp-tutorial/recursion/"
+        },
+        {
+          "title": "Sorting visualisations",
+          "description": "VisuAlgo: watch selection, insertion, merge and other sorts run step by step.",
+          "href": "https://visualgo.net/en/sorting"
+        },
+        {
+          "title": "std::sort (reference)",
+          "description": "cppreference: the exact rules and complexity of std::sort.",
+          "href": "https://en.cppreference.com/w/cpp/algorithm/sort"
+        },
+        {
+          "title": "std::lower_bound (reference)",
+          "description": "cppreference: the library's binary search for sorted ranges (see also upper_bound).",
+          "href": "https://en.cppreference.com/w/cpp/algorithm/lower_bound"
+        },
+        {
+          "title": "Competitive Programmer's Handbook",
+          "description": "CSES (PDF): chapters 2 and 3 cover time complexity, sorting and binary search.",
+          "href": "https://cses.fi/book/book.pdf"
+        }
+      ]
+    }
+  ],
+  "extras": []
+}

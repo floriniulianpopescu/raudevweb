@@ -30,6 +30,18 @@ Production has two independent parts. Both deploy from `main`.
 - Environment: `apps/backend/.env` on the VPS. Same variables as in dev (see the root README), with production
   values: `CORS_ORIGIN` = the site URL, `BETTER_AUTH_URL` = the API URL, a real `RESEND_API_KEY` and `EMAIL_FROM`.
 
+## Loading content
+
+Content (lessons, practice, quizzes) lives in the database, not in the code, so a deploy doesn't add it. Load the
+packs from `content/packs` into production with an admin account (dry run first):
+
+```sh
+CONTENT_ADMIN_EMAIL=… CONTENT_ADMIN_PASSWORD='…' bun run content:import -- --api <production API URL> --dry-run
+CONTENT_ADMIN_EMAIL=… CONTENT_ADMIN_PASSWORD='…' bun run content:import -- --api <production API URL>
+```
+
+It only adds items whose titles aren't on the site yet. Details: [content/README.md](../content/README.md).
+
 ## Release checklist
 
 1. Everything in [Verify a change before pushing](development.md#verify-a-change-before-pushing) passes.
