@@ -1,9 +1,10 @@
 import { useParams } from "react-router-dom";
-import type { ChallengeItem, LinkItem } from "@raudevweb/shared";
+import type { ChallengeItem, CompletableType, LinkItem } from "@raudevweb/shared";
 import { ContentCard } from "./content-card";
 import { CardGrid, DetailLayout, useContent } from "./content-list";
+import { DoneBadge } from "./done-check";
 
-function LinkSection({ title, items }: { title: string; items: LinkItem[] }) {
+function LinkSection({ type, title, items }: { type: CompletableType; title: string; items: LinkItem[] }) {
 	if (items.length === 0) return null;
 	return (
 		<section>
@@ -12,7 +13,13 @@ function LinkSection({ title, items }: { title: string; items: LinkItem[] }) {
 			</h2>
 			<CardGrid>
 				{items.map((i) => (
-					<ContentCard key={i.id} title={i.title} description={i.description} href={i.href} />
+					<ContentCard
+						key={i.id}
+						title={i.title}
+						description={i.description}
+						href={i.href}
+						badge={<DoneBadge type={type} id={i.id} />}
+					/>
 				))}
 			</CardGrid>
 		</section>
@@ -28,8 +35,8 @@ export function ChallengePage() {
 		<DetailLayout type="challenges" content={content}>
 			{(c) => (
 				<>
-					<LinkSection title="Problems" items={c.problems} />
-					<LinkSection title="Exercises" items={c.exercises} />
+					<LinkSection type="problems" title="Problems" items={c.problems} />
+					<LinkSection type="exercises" title="Exercises" items={c.exercises} />
 				</>
 			)}
 		</DetailLayout>

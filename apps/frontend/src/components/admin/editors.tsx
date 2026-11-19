@@ -74,7 +74,7 @@ type LinkDraft = Basic & { href: string };
 const linkEditor: Editor<LinkDraft> = {
 	empty: () => ({ title: "", description: "", href: "" }),
 	fromItem: (i: LinkItem) => ({ title: i.title, description: i.description, href: i.href }),
-	summary: (i: LinkItem) => i.href,
+	summary: (i: LinkItem) => (i.completedCount === undefined ? i.href : `${i.completedCount} completed · ${i.href}`),
 	Form: ({ value, onChange }) => (
 		<>
 			<BasicFields value={value} onChange={onChange} />

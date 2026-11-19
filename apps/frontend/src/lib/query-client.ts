@@ -21,6 +21,7 @@ export const queryKeys = {
 	content: (path?: string) => (path === undefined ? ["content"] : ["content", path]),
 	leaderboard: ["leaderboard"],
 	schedule: ["schedule"],
+	progress: ["progress"],
 } as const;
 
 /**

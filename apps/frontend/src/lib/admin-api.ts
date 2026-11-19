@@ -32,6 +32,11 @@ export function apiGet<T>(path: string): Promise<T> {
 	return request<T>(`${API_URL}/api/${path}`);
 }
 
+/** Send a write (PUT/DELETE/…) to any signed-in endpoint under /api/<path> */
+export function apiSend<T>(path: string, method: string): Promise<T> {
+	return request<T>(`${API_URL}/api/${path}`, { method });
+}
+
 /** Read-only content endpoints for any signed-in user: /api/content/<path> */
 export function contentApi<T>(path: string): Promise<T> {
 	return request<T>(`${API_URL}/api/content/${path}`);

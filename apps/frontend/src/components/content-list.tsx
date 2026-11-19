@@ -3,10 +3,12 @@ import { Link } from "react-router-dom";
 import type { ContentSummary, ContentType } from "@raudevweb/shared";
 import { contentApi, isNotFound } from "@/lib/admin-api";
 import { CONTENT } from "@/lib/content";
+import { isCompletable } from "@/lib/progress";
 import { queryKeys, useCachedQuery } from "@/lib/query-client";
 import { matchesSearch } from "@/lib/search";
 import { AdminContentPanel } from "./admin/lazy";
 import { ContentCard } from "./content-card";
+import { DoneCheck, ProgressSummary } from "./done-check";
 import { LoadError } from "./load-error";
 import { NotFoundView } from "./not-found";
 import { PageTitle } from "./page-title";
@@ -70,6 +72,7 @@ export function ContentList({
 			<PageTitle title={label} />
 			<h1 className="text-2xl font-bold">{label}</h1>
 			{intro && <p className="text-muted-foreground mt-2">{intro}</p>}
+			{isCompletable(type) && items && <ProgressSummary type={type} itemIds={items.map((i) => i.id)} />}
 
 			<AdminContentPanel type={type} />
 
@@ -101,6 +104,9 @@ export function ContentList({
 								title={item.title}
 								description={item.description}
 								{...cardTarget(type, item)}
+								footer={
+									isCompletable(type) && <DoneCheck type={type} id={item.id} title={item.title} />
+								}
 							/>
 						))}
 					</CardGrid>

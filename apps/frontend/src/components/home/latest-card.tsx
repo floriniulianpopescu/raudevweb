@@ -5,8 +5,10 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useContent } from "@/components/content-list";
 import { LoadError } from "@/components/load-error";
 import { CONTENT } from "@/lib/content";
+import { isCompletable } from "@/lib/progress";
+import { DoneCheck } from "@/components/done-check";
 
-const LINK_CLASS = "flex items-center justify-between gap-2 rounded-lg px-2 py-1.5 text-sm hover:bg-muted";
+const LINK_CLASS = "flex min-w-0 flex-1 items-center justify-between gap-2 rounded-lg px-2 py-1.5 text-sm hover:bg-muted";
 
 /** /home: "Latest <type>" card with the newest few items and a "View all" link. */
 export function LatestCard({ type, icon: Icon, limit = 3 }: { type: ContentType; icon: LucideIcon; limit?: number }) {
@@ -34,7 +36,8 @@ export function LatestCard({ type, icon: Icon, limit = 3 }: { type: ContentType;
 				) : (
 					<ul>
 						{data.map((item) => (
-							<li key={item.id}>
+							<li key={item.id} className="relative flex items-center gap-1">
+								{isCompletable(type) && <DoneCheck type={type} id={item.id} title={item.title} compact />}
 								{cfg.external && item.href ? (
 									<a href={item.href} target="_blank" rel="noopener noreferrer" className={LINK_CLASS}>
 										<span className="truncate">{item.title}</span>
