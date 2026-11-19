@@ -1,0 +1,3 @@
+User-agent: *
+# Signed-in area: needs an account, nothing for crawlers
+Disallow: /home

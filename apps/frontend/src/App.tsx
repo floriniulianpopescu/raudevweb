@@ -1,9 +1,10 @@
-import { Suspense } from "react";
+import { Suspense, useLayoutEffect } from "react";
 import { createBrowserRouter, Route, RouterProvider, Routes, ScrollRestoration, useLocation } from "react-router-dom";
 import { RouteError } from "@/components/route-error.tsx";
 import { GuestRoute, ProtectedRoute } from "@/components/route-guards.tsx";
 import { ThemeToggle } from "@/components/theme-toggle.tsx";
 import { lazyPage } from "@/lib/lazy-page.ts";
+import { removePrerender } from "@/lib/prerender.ts";
 import FirstPage from "./FirstPage.tsx";
 
 // The landing page ships in the main bundle; every other page is downloaded when first opened
@@ -26,6 +27,12 @@ function GuestThemeToggle() {
 
 /** Every page. Kept as one <Routes> tree (HomePage nests its own) inside a single data-router route. */
 function AppRoutes() {
+	const { pathname } = useLocation();
+	// The static landing page in index.html is only for "/" (e.g. a signed-in user is sent on to /home)
+	useLayoutEffect(() => {
+		if (pathname !== "/") removePrerender();
+	}, [pathname]);
+
 	return (
 		<>
 			{/* New pages start at the top; Back/Forward return to where you were */}

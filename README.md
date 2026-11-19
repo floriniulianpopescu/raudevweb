@@ -54,7 +54,12 @@ Backend (`apps/backend/.env`):
 | `RESEND_API_KEY` | *(empty)* | **Leave empty in dev.** Emails are then printed to the backend console instead of being sent |
 | `EMAIL_FROM` | `RAUDEV <onboarding@resend.dev>` | Only used when `RESEND_API_KEY` is set |
 
-Frontend: `VITE_API_URL` defaults to `http://localhost:3000`, so no `.env` is needed in dev.
+Frontend (build-time, so no `.env` is needed in dev):
+
+| Variable | Default | Purpose |
+|---|---|---|
+| `VITE_API_URL` | `http://localhost:3000` | Backend URL |
+| `VITE_SITE_URL` | — | Public site URL, e.g. `https://example.com`. Makes the link-preview image URL absolute and adds `og:url`; set it in production |
 
 ### Signing up locally
 
@@ -83,6 +88,7 @@ Log out and back in afterwards.
 | `bun run db:studio` | `apps/backend` | Browse the database in Prisma Studio |
 | `bun run test:auth` | `apps/backend` | Auth smoke test (sign-up, session, protected route) |
 | `bun run lint` | `apps/frontend` | Lint with oxlint |
+| `bun run build` | `apps/frontend` | Production build; also prerenders the landing page into `dist/index.html` |
 | `docker compose down` | root | Stop PostgreSQL (data is kept in the `postgres_data` volume) |
 
 After pulling changes that touch `prisma/schema.prisma`, run `bun install` and `bun run db:push` again.
@@ -90,5 +96,5 @@ If `db:push` warns about data loss, read what it wants to drop before passing `-
 
 ## Deployment
 
-- **Frontend:** Cloudflare Pages rebuilds on every push to `main`.
+- **Frontend:** Cloudflare Pages rebuilds on every push to `main`. Set `VITE_SITE_URL` in the Pages build settings so link previews work.
 - **Backend:** run `deploy.sh` on the VPS. It pulls `main`, installs dependencies, updates the DB schema and restarts the API.

@@ -1,7 +1,9 @@
 import { RotateCwIcon } from "lucide-react";
+import { useLayoutEffect } from "react";
 import { useRouteError } from "react-router-dom";
 import { PageTitle } from "@/components/page-title";
 import { Button } from "@/components/ui/button";
+import { removePrerender } from "@/lib/prerender";
 
 /**
  * Shown instead of a blank screen when a page crashes while rendering, or when
@@ -9,6 +11,7 @@ import { Button } from "@/components/ui/button";
  */
 export function RouteError() {
 	const error = useRouteError();
+	useLayoutEffect(removePrerender, []);
 	if (import.meta.env.DEV) console.error(error);
 
 	return (

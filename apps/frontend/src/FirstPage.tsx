@@ -9,10 +9,12 @@ import {
 	Mic,
 	Users,
 } from "lucide-react";
+import { useLayoutEffect } from "react";
 import { Link } from "react-router-dom";
 import type { SessionSchedule } from "@raudevweb/shared";
 import { WEEKDAYS } from "@raudevweb/shared/constants";
 import { apiGet } from "@/lib/admin-api";
+import { removePrerender } from "@/lib/prerender";
 import { queryKeys, useCachedQuery } from "@/lib/query-client";
 import { formatDay, sessionInfo } from "@/lib/schedule";
 
@@ -99,6 +101,8 @@ function useSchedule() {
 
 export default function FirstPage() {
 	const schedule = useSchedule();
+	// Swap the static copy from index.html for this live page before the browser paints
+	useLayoutEffect(removePrerender, []);
 	const details = schedule ? meetingDetails(schedule) : FALLBACK_MEETING_DETAILS;
 
 	return (
