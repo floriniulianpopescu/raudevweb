@@ -59,25 +59,32 @@ const textOf = (node: HastNode | undefined): string =>
 
 const block = "mt-4 first:mt-0";
 
+/** react-markdown passes its syntax-tree `node` to every component; keep it off the DOM. */
+function withoutNode<P extends { node?: unknown }>(props: P): Omit<P, "node"> {
+	const { node, ...rest } = props;
+	void node;
+	return rest;
+}
+
 const components: Components = {
 	// The page title is the only <h1>, so Markdown headings start at <h2>
-	h1: ({ node: _, ...p }) => <h2 className="mt-10 mb-3 scroll-mt-20 text-xl font-bold first:mt-0" {...p} />,
-	h2: ({ node: _, ...p }) => <h2 className="mt-10 mb-3 scroll-mt-20 text-xl font-bold first:mt-0" {...p} />,
-	h3: ({ node: _, ...p }) => <h3 className="mt-8 mb-2 text-lg font-semibold first:mt-0" {...p} />,
-	h4: ({ node: _, ...p }) => <h4 className="mt-6 mb-2 font-semibold first:mt-0" {...p} />,
-	h5: ({ node: _, ...p }) => <h4 className="mt-6 mb-2 font-semibold first:mt-0" {...p} />,
-	h6: ({ node: _, ...p }) => <h4 className="mt-6 mb-2 font-semibold first:mt-0" {...p} />,
-	p: ({ node: _, ...p }) => <p className={cn(block, "leading-7")} {...p} />,
-	ul: ({ node: _, className, ...p }) => (
+	h1: (p) => <h2 className="mt-10 mb-3 scroll-mt-20 text-xl font-bold first:mt-0" {...withoutNode(p)} />,
+	h2: (p) => <h2 className="mt-10 mb-3 scroll-mt-20 text-xl font-bold first:mt-0" {...withoutNode(p)} />,
+	h3: (p) => <h3 className="mt-8 mb-2 text-lg font-semibold first:mt-0" {...withoutNode(p)} />,
+	h4: (p) => <h4 className="mt-6 mb-2 font-semibold first:mt-0" {...withoutNode(p)} />,
+	h5: (p) => <h4 className="mt-6 mb-2 font-semibold first:mt-0" {...withoutNode(p)} />,
+	h6: (p) => <h4 className="mt-6 mb-2 font-semibold first:mt-0" {...withoutNode(p)} />,
+	p: (p) => <p className={cn(block, "leading-7")} {...withoutNode(p)} />,
+	ul: ({ className, ...p }) => (
 		<ul
 			className={cn(block, "list-disc space-y-1 pl-6 leading-7", className === "contains-task-list" && "list-none pl-1")}
-			{...p}
+			{...withoutNode(p)}
 		/>
 	),
-	ol: ({ node: _, ...p }) => <ol className={cn(block, "list-decimal space-y-1 pl-6 leading-7")} {...p} />,
-	li: ({ node: _, ...p }) => <li className="pl-1 [&>ol]:mt-1 [&>p]:mt-1 [&>ul]:mt-1" {...p} />,
+	ol: (p) => <ol className={cn(block, "list-decimal space-y-1 pl-6 leading-7")} {...withoutNode(p)} />,
+	li: (p) => <li className="pl-1 [&>ol]:mt-1 [&>p]:mt-1 [&>ul]:mt-1" {...withoutNode(p)} />,
 	hr: () => <hr className="my-8 border-border" />,
-	a: ({ node: _, href, ...p }) => {
+	a: ({ href, ...p }) => {
 		const external = !!href && /^https?:\/\//.test(href);
 		return (
 			<a
@@ -85,7 +92,7 @@ const components: Components = {
 				// --primary is a dark teal in dark mode; the sidebar's teal stays readable on dark backgrounds
 				className="font-medium text-primary underline underline-offset-4 hover:no-underline dark:text-sidebar-primary"
 				{...(external && { target: "_blank", rel: "noreferrer" })}
-				{...p}
+				{...withoutNode(p)}
 			/>
 		);
 	},
@@ -101,8 +108,8 @@ const components: Components = {
 				{alt || src}
 			</a>
 		) : null,
-	code: ({ node: _, className, ...p }) => (
-		<code className={cn("rounded-md bg-muted px-1.5 py-0.5 font-mono text-[0.875em]", className)} {...p} />
+	code: ({ className, ...p }) => (
+		<code className={cn("rounded-md bg-muted px-1.5 py-0.5 font-mono text-[0.875em]", className)} {...withoutNode(p)} />
 	),
 	pre: ({ node }) => {
 		const code = (node as HastNode | undefined)?.children?.find((c) => c.tagName === "code");
@@ -110,7 +117,7 @@ const components: Components = {
 		const lang = classes.find((c) => c.startsWith("language-"))?.slice("language-".length) ?? "";
 		return <CodeBlock code={textOf(code).replace(/\n$/, "")} lang={lang} />;
 	},
-	blockquote: ({ node: _, children, ...p }) => {
+	blockquote: ({ children, ...p }) => {
 		const kind = (p as Record<string, unknown>)["data-callout"] as string | undefined;
 		const callout = kind ? CALLOUTS[kind] : undefined;
 		if (!callout) {
@@ -128,17 +135,17 @@ const components: Components = {
 			</aside>
 		);
 	},
-	table: ({ node: _, ...p }) => (
+	table: (p) => (
 		<div className={cn(block, "overflow-x-auto rounded-xl border")}>
-			<table className="w-full text-sm" {...p} />
+			<table className="w-full text-sm" {...withoutNode(p)} />
 		</div>
 	),
-	thead: ({ node: _, ...p }) => <thead className="bg-muted/60" {...p} />,
-	tr: ({ node: _, ...p }) => <tr className="border-b last:border-0" {...p} />,
-	th: ({ node: _, style, ...p }) => (
-		<th className="px-3 py-2 text-left font-semibold" style={style} {...p} />
+	thead: (p) => <thead className="bg-muted/60" {...withoutNode(p)} />,
+	tr: (p) => <tr className="border-b last:border-0" {...withoutNode(p)} />,
+	th: ({ style, ...p }) => (
+		<th className="px-3 py-2 text-left font-semibold" style={style} {...withoutNode(p)} />
 	),
-	td: ({ node: _, style, ...p }) => <td className="px-3 py-2 align-top" style={style} {...p} />,
+	td: ({ style, ...p }) => <td className="px-3 py-2 align-top" style={style} {...withoutNode(p)} />,
 };
 
 /**

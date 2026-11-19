@@ -22,7 +22,7 @@ const GROUPS: { title: string; tabs: Tab[] }[] = [
 const tabLabel = (tab: Tab) => (tab === "xp" ? "XP" : tab === "schedule" ? "Session schedule" : CONTENT[tab].label);
 
 /** /home: one admin panel with every content type + XP, same look as the per-page panels. */
-export function AdminDashboard({ onScheduleChanged }: { onScheduleChanged?: () => void }) {
+export function AdminDashboard() {
 	const [active, setActive] = useState<Tab>("challenges");
 
 	return (
@@ -49,7 +49,7 @@ export function AdminDashboard({ onScheduleChanged }: { onScheduleChanged?: () =
 			</nav>
 
 			{active === "schedule" ? (
-				<ScheduleManager onChanged={onScheduleChanged} />
+				<ScheduleManager />
 			) : active === "xp" ? (
 				<XpManager />
 			) : (

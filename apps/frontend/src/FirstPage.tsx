@@ -9,11 +9,11 @@ import {
 	Mic,
 	Users,
 } from "lucide-react";
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import type { SessionSchedule } from "@raudevweb/shared";
 import { WEEKDAYS } from "@raudevweb/shared/constants";
 import { apiGet } from "@/lib/admin-api";
+import { queryKeys, useCachedQuery } from "@/lib/query-client";
 import { formatDay, sessionInfo } from "@/lib/schedule";
 
 import { Badge } from "@/components/ui/badge";
@@ -92,14 +92,9 @@ function meetingDetails(s: SessionSchedule, now = new Date()) {
 	];
 }
 
+/** This week's session, or null (→ the fallback details) while loading or if it fails. */
 function useSchedule() {
-	const [schedule, setSchedule] = useState<SessionSchedule | null>(null);
-	useEffect(() => {
-		apiGet<SessionSchedule>("schedule").then(setSchedule, () => {
-			/* keep the fallback */
-		});
-	}, []);
-	return schedule;
+	return useCachedQuery(queryKeys.schedule, () => apiGet<SessionSchedule>("schedule")).data;
 }
 
 export default function FirstPage() {

@@ -1,10 +1,11 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { CalendarDaysIcon, ClockIcon, MapPinIcon } from "lucide-react";
 import type { SessionSchedule } from "@raudevweb/shared";
 import { LoadError } from "@/components/load-error";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { apiGet } from "@/lib/admin-api";
+import { queryKeys, useCachedQuery } from "@/lib/query-client";
 import { formatDay, formatShort, sessionInfo, weekInfo, type SessionStatus } from "@/lib/schedule";
 import { cn } from "@/lib/utils";
 
@@ -27,29 +28,11 @@ function useNow(intervalMs = 60_000) {
 
 /** /home: current week + this week's physical session. */
 export function SessionCard() {
-	const [schedule, setSchedule] = useState<SessionSchedule | null>(null);
-	const [error, setError] = useState<Error | null>(null);
-	const now = useNow();
-
-	const load = useCallback(
-		() =>
-			apiGet<SessionSchedule>("schedule")
-				.then((s) => {
-					setSchedule(s);
-					setError(null);
-				})
-				.catch((e: Error) => setError(e)),
-		[],
+	// Refreshed automatically when an admin saves the schedule (ScheduleManager invalidates it)
+	const { data: schedule, error, retry } = useCachedQuery(queryKeys.schedule, () =>
+		apiGet<SessionSchedule>("schedule"),
 	);
-
-	useEffect(() => {
-		load();
-	}, [load]);
-
-	const retry = () => {
-		setError(null);
-		load();
-	};
+	const now = useNow();
 
 	if (error) {
 		return (

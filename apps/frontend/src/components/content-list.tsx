@@ -1,8 +1,9 @@
-import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
+import { useMemo, useState, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 import type { ContentSummary, ContentType } from "@raudevweb/shared";
 import { contentApi, isNotFound } from "@/lib/admin-api";
 import { CONTENT } from "@/lib/content";
+import { queryKeys, useCachedQuery } from "@/lib/query-client";
 import { matchesSearch } from "@/lib/search";
 import { AdminContentPanel } from "./admin/lazy";
 import { ContentCard } from "./content-card";
@@ -13,38 +14,14 @@ import { SearchInput } from "./search-input";
 import { Skeleton } from "./ui/skeleton";
 
 /**
- * Fetch something from /api/content/<path>.
- * `reload()` refetches without a loading flash; `retry()` shows the loading state again (after an error).
- * `notFound` is true when the API answered 404.
+ * Fetch something from /api/content/<path>, through the shared cache: a page seen before
+ * shows instantly and refreshes in the background.
+ * `error` is only set when there's nothing to show (a failed background refresh keeps the cached data).
+ * `retry()` shows the loading state again and refetches. `notFound` is true when the API answered 404.
  */
 export function useContent<T>(path: string) {
-	const [data, setData] = useState<T | null>(null);
-	const [error, setError] = useState<Error | null>(null);
-
-	const fetchData = useCallback(
-		() =>
-			contentApi<T>(path)
-				.then((d) => {
-					setData(d);
-					setError(null);
-				})
-				.catch((e: Error) => setError(e)),
-		[path],
-	);
-
-	const retry = useCallback(() => {
-		setData(null);
-		setError(null);
-		fetchData();
-	}, [fetchData]);
-
-	useEffect(() => {
-		setData(null);
-		setError(null);
-		fetchData();
-	}, [fetchData]);
-
-	return { data, error, notFound: isNotFound(error), reload: fetchData, retry };
+	const query = useCachedQuery(queryKeys.content(path), () => contentApi<T>(path));
+	return { ...query, notFound: isNotFound(query.error) };
 }
 
 /** Problems/exercises → external href; everything else → in-site page via <Link>. */
@@ -79,7 +56,7 @@ export function ContentList({
 	/** Optional element shown right below the search bar */
 	notice?: ReactNode;
 }) {
-	const { data: items, error, reload, retry } = useContent<ContentSummary[]>(type);
+	const { data: items, error, retry } = useContent<ContentSummary[]>(type);
 	const [query, setQuery] = useState("");
 	const label = CONTENT[type].label;
 
@@ -94,7 +71,7 @@ export function ContentList({
 			<h1 className="text-2xl font-bold">{label}</h1>
 			{intro && <p className="text-muted-foreground mt-2">{intro}</p>}
 
-			<AdminContentPanel type={type} onChanged={reload} />
+			<AdminContentPanel type={type} />
 
 			<SearchInput
 				className="mt-6 max-w-md"

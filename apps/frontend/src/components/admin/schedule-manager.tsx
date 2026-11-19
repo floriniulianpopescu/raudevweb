@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { adminApi } from "@/lib/admin-api";
 import { friendlyError } from "@/lib/errors";
+import { queryClient, queryKeys } from "@/lib/query-client";
 
 function Field({ label, hint, children }: { label: string; hint?: string; children: (id: string) => ReactNode }) {
 	const id = useId();
@@ -31,7 +32,7 @@ const toDraft = (s: SessionSchedule): SessionScheduleInput => ({
 });
 
 /** Admin editor for the weekly physical session shown on /home. */
-export function ScheduleManager({ onChanged }: { onChanged?: () => void }) {
+export function ScheduleManager() {
 	const [draft, setDraft] = useState<SessionScheduleInput | null>(null);
 	const [saved, setSaved] = useState<string | null>(null);
 	const [error, setError] = useState<string | null>(null);
@@ -64,7 +65,7 @@ export function ScheduleManager({ onChanged }: { onChanged?: () => void }) {
 			setDraft(toDraft(res));
 			setError(null);
 			setSaved("Saved");
-			onChanged?.();
+			queryClient.invalidateQueries({ queryKey: queryKeys.schedule });
 		} catch (e) {
 			setError(friendlyError(e, "Couldn't save the schedule. Check the fields and try again."));
 		} finally {

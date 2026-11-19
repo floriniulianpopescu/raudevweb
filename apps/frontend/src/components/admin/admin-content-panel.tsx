@@ -5,7 +5,7 @@ import { CrudManager } from "./crud-manager";
 import { EDITORS } from "./editors";
 
 /** Admin-only CRUD panel for one content type, shown at the top of that type's page. */
-export function AdminContentPanel({ type, onChanged }: { type: ContentType; onChanged?: () => void }) {
+export function AdminContentPanel({ type }: { type: ContentType }) {
 	const label = CONTENT[type].label;
 	return (
 		<AdminPanelFrame title={`Admin dashboard · ${label}`}>
@@ -15,7 +15,6 @@ export function AdminContentPanel({ type, onChanged }: { type: ContentType; onCh
 				label={label}
 				schema={ContentSchemas[type]}
 				editor={EDITORS[type]}
-				onChanged={onChanged}
 			/>
 		</AdminPanelFrame>
 	);

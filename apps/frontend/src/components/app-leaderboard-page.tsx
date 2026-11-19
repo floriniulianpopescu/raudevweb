@@ -1,5 +1,4 @@
 import { PageTitle } from "@/components/page-title";
-import { useCallback, useEffect, useState } from "react";
 import { MedalIcon, TrophyIcon } from "lucide-react";
 import type { LeaderboardEntry, LeaderboardResponse } from "@raudevweb/shared";
 import { LeaderboardXpPanel } from "@/components/admin/lazy";
@@ -7,6 +6,7 @@ import { LoadError } from "@/components/load-error";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { apiGet } from "@/lib/admin-api";
+import { queryKeys, useCachedQuery } from "@/lib/query-client";
 import { cn } from "@/lib/utils";
 
 const PODIUM_STYLES: Record<number, string> = {
@@ -62,30 +62,10 @@ function Row({ entry, isMe }: { entry: LeaderboardEntry; isMe: boolean }) {
 }
 
 export function AppLeaderboardPage() {
-	const [data, setData] = useState<LeaderboardResponse | null>(null);
-	const [error, setError] = useState<string | null>(null);
-
-	// Also used to refresh the board after an admin changes someone's XP
-	const load = useCallback(
-		() =>
-			apiGet<LeaderboardResponse>("leaderboard")
-				.then((d) => {
-					setData(d);
-					setError(null);
-				})
-				.catch((e: Error) => setError(e.message)),
-		[],
+	// Refreshed automatically when an admin changes someone's XP (XpManager invalidates it)
+	const { data, error, retry } = useCachedQuery(queryKeys.leaderboard, () =>
+		apiGet<LeaderboardResponse>("leaderboard"),
 	);
-
-	useEffect(() => {
-		load();
-	}, [load]);
-
-	const retry = () => {
-		setData(null);
-		setError(null);
-		load();
-	};
 
 	const me = data?.me ?? null;
 	const meInList = !!me && !!data?.entries.some((e) => e.id === me.id);
@@ -96,7 +76,7 @@ export function AppLeaderboardPage() {
 			<h1 className="text-2xl font-bold">Leaderboard</h1>
 			<p className="text-muted-foreground mt-2">See how you rank against others.</p>
 
-			<LeaderboardXpPanel onChanged={load} />
+			<LeaderboardXpPanel />
 
 			{me && (
 				<p className="mt-4 text-sm">
