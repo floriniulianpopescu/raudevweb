@@ -6,7 +6,8 @@ loaded into any site (local, production) with one command.
 | Pack | Contents |
 |---|---|
 | [`01-intro-to-cpp`](packs/01-intro-to-cpp/) | Introduction to C++: lesson, extra (C++ Toolbox), 6 exercises, 5 problems, 2 challenges, quiz |
-| [`02-intro-to-algorithms`](packs/02-intro-to-algorithms/) | Introduction to Algorithms: lesson, 6 exercises, 5 problems, 2 challenges, quiz |
+| [`02-data-types`](packs/02-data-types/) | Data Types in C++: lesson, 6 exercises, 5 problems, 2 challenges, quiz |
+| [`03-intro-to-algorithms`](packs/03-intro-to-algorithms/) | Introduction to Algorithms: lesson, 6 exercises, 5 problems, 2 challenges, quiz |
 
 ## Importing
 
@@ -20,7 +21,7 @@ CONTENT_ADMIN_EMAIL=you@example.com CONTENT_ADMIN_PASSWORD='…' \
 CONTENT_ADMIN_EMAIL=you@example.com CONTENT_ADMIN_PASSWORD='…' \
   bun run content:import -- --api https://api.example.com                # import every pack
 
-bun run content:import -- --api http://localhost:3000 content/packs/02-intro-to-algorithms   # just one pack
+bun run content:import -- --api http://localhost:3000 content/packs/02-data-types   # just one pack
 ```
 
 - `--api` defaults to `$CONTENT_API_URL`, then `http://localhost:3000`.

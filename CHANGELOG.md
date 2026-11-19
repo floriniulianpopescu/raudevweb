@@ -8,7 +8,7 @@ rename **Unreleased** to that date and start a new empty one.
 
 ## Unreleased
 
-Branches `feat/completion-xp` and `content/intro-algorithms` (on top of it), not yet merged into `main`.
+Branches `feat/completion-xp`, then `content/intro-algorithms` and `content/data-types` stacked on it, not yet merged into `main`.
 
 ### Added
 - **Content packs** in `content/packs` and `bun run content:import`, which loads them into any site through the
@@ -16,6 +16,10 @@ Branches `feat/completion-xp` and `content/intro-algorithms` (on top of it), not
   existing lesson, extra, 11 practice items, 2 challenges and quiz) and the new **Introduction to Algorithms**
   (lesson on Big-O, searching, sorting and recursion; 6 exercises from CSES, HackerRank and LeetCode; 5 Codeforces
   problems rated 800–1100; challenges "Algorithms: Searching" and "Algorithms: Sorting & Recursion"; a quiz).
+- **Data Types in C++** pack, placed between the C++ and Algorithms packs: lesson on integer ranges and overflow,
+  `long long` and unsigned, integer division, floating-point precision, chars and ASCII, conversions, `auto` and
+  `std::string`; 6 exercises (HackerRank, CSES, LeetCode); 5 Codeforces problems rated 800–1000 where the right
+  type is the trap; challenges "Data Types: Numbers" and "Data Types: Characters & Strings"; a quiz.
 - **Done checks with automatic XP.** Every problem and exercise can be ticked as done on the Problems/Exercises
   lists, challenge pages and the home "Latest" cards: problems give 20 XP, exercises 10. Unticking takes the XP
   back. Progress lines ("7 / 20 done · 140 XP earned") on lists and challenges; admins see "N completed" per item.
