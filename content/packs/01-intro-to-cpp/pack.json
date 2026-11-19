@@ -149,7 +149,7 @@
   "lessons": [
     {
       "title": "Introduction to C++",
-      "description": "What C++ is and how a C++ program is put together: the main() function, statements, variables and fundamental data types, reading and writing with std::cin and std::cout, making decisions with if, repeating with while and for loops, and splitting code into functions.\n\nRead the links in order. Then try the \"Intro to C++\" challenges under Practice and the \"Introduction to C++\" quiz.",
+      "description": "Your first steps in C++, no programming experience needed (about 30 minutes). Write and run your first program, store values in variables, read input, make decisions with if, repeat with loops and split code into functions. Every example is a complete program you can copy and run.\n\nAfter the lesson, try the \"Intro to C++\" challenges under Practice and the \"Introduction to C++\" quiz.",
       "bodyFile": "lesson.md",
       "links": [
         {

@@ -114,7 +114,7 @@
   "lessons": [
     {
       "title": "Data Types in C++",
-      "description": "Choosing the right type, and the bugs the wrong one causes: integer ranges and overflow, long long and unsigned, integer division, floating-point precision, char and ASCII maths, conversions, auto and std::string.\n\nRead the lesson and the links. Then try the \"Data Types: Numbers\" and \"Data Types: Characters & Strings\" challenges under Practice and the \"Data Types in C++\" quiz.",
+      "description": "Pick the right type for every value, and avoid the bugs the wrong one causes (about 30 minutes, after Introduction to C++): whole numbers and overflow, dividing numbers, decimals, characters and text. Every example is a complete program you can copy and run.\n\nAfter the lesson, try the \"Data Types: Numbers\" and \"Data Types: Characters & Strings\" challenges under Practice and the \"Data Types in C++\" quiz.",
       "bodyFile": "lesson.md",
       "links": [
         {

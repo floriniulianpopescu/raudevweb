@@ -71,11 +71,14 @@ All sections are optional. Titles must be unique within a type. The limits are t
 ## Adding a pack
 
 1. Create `content/packs/NN-name/` with `pack.json` (and `lesson.md`).
-2. Check every external link opens and every problem's difficulty matches its description.
-3. Compile and run every C++ snippet in the lesson.
-4. Try it on your local site: `bun run content:import -- --dry-run content/packs/NN-name`, then without `--dry-run`, and
+2. Write the lesson following the beginner-friendly shape in
+   [Write content for lessons](../docs/development.md#write-content-for-lessons).
+3. Check every external link opens and every problem's difficulty matches its description.
+4. Compile and run every C++ block in the lesson (each one is a complete program).
+5. Try it on your local site: `bun run content:import -- --dry-run content/packs/NN-name`, then without `--dry-run`, and
    look at the pages (light and dark mode).
-5. Add it to the table above and to the changelog.
+6. Add it to the table above and to the changelog.
 
 Changing a pack after it has been imported doesn't update existing sites (existing titles are skipped): edit those
-items in the admin panel too, or rename the item so it's imported as new.
+items in the admin panel too (for a lesson, paste the new `lesson.md` into its Body field), or rename the item so
+it's imported as new.

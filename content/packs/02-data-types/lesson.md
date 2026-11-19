@@ -1,160 +1,184 @@
-## Why types matter
+**Before you start:** you should know how to write a small program with variables, `if` and loops (the **Introduction to C++** lesson).
 
-Every variable lives in memory as a row of **bits** (0s and 1s); 8 bits make a **byte**. The **type** decides how many bytes a variable gets and how those bits are read: as a whole number, a decimal number, a letter or true/false.
+**In this lesson you'll learn to:**
 
-With `n` bits you can store 2ⁿ different values. An `int` usually has 32 bits, so it can hold 2³² ≈ 4.3 billion values, split between negatives and positives. That is why an `int` stops at about **2.1 billion**: not a lot when you add up a million numbers.
+- pick the right type for a value, and know why it matters;
+- avoid the three classic number bugs: overflow, integer division and decimal rounding;
+- work with characters and text.
+
+Every example is a complete program: copy it into an online compiler such as [OnlineGDB](https://www.onlinegdb.com/online_c++_compiler) and run it.
+
+## The quick answer
+
+If you remember one thing from this lesson, make it this table. The rest of the lesson explains why.
+
+| You need | Use | Example |
+| -------- | --- | ------- |
+| a count, an index, a small whole number | `int` | `int students{ 30 };` |
+| a big whole number (above 2 billion), a big sum or product | `long long` | `long long total{ 0 };` |
+| a number with a decimal point | `double` | `double price{ 9.99 };` |
+| one character | `char` | `char grade{ 'A' };` |
+| yes / no | `bool` | `bool found{ false };` |
+| text | `std::string` | `std::string name{ "Ana" };` |
+
+Choosing the wrong type rarely gives a compile error. Instead the program gives **wrong answers** that look fine on small tests, which is why it's one of the most common reasons for a "Wrong answer" in contests ([USACO Guide](https://usaco.guide/general/data-types)).
+
+## Whole numbers: int and long long
+
+A variable takes up a fixed amount of memory, so it can only hold numbers up to a certain size. Think of a car's odometer with a fixed number of digits: after 999999 km it rolls over to 000000.
+
+- An `int` goes up to about **2.1 billion** (2,147,483,647).
+- A `long long` goes up to about **9.2 billion billion** (9.2·10¹⁸).
+
+```cpp
+#include <iostream>
+#include <limits>
+
+int main()
+{
+    std::cout << std::numeric_limits<int>::max() << '\n';         // 2147483647
+    std::cout << std::numeric_limits<long long>::max() << '\n';   // 9223372036854775807
+    return 0;
+}
+```
+
+### Overflow
+
+When a result is too big for its type, it **overflows**: like the odometer, the number "wraps around", and you get a wrong, often negative, value ([learncpp 4.4](https://www.learncpp.com/cpp-tutorial/signed-integers/)).
 
 ```cpp
 #include <iostream>
 
 int main()
 {
-    std::cout << sizeof(int) << '\n';        // 4 (bytes) on most computers
-    std::cout << sizeof(long long) << '\n';  // 8
-    std::cout << sizeof(char) << '\n';       // always 1
+    int a{ 50000 };
+    int square = a * a;                 // 2,500,000,000 is too big for an int
+    std::cout << square << '\n';        // prints a wrong number, usually -1794967296
+
+    long long b{ 50000 };
+    long long ok = b * b;               // long long has room for it
+    std::cout << ok << '\n';            // 2500000000
     return 0;
 }
 ```
 
-Choosing the wrong type rarely gives a compile error. It gives **wrong answers** that look fine on small tests, which is why it's one of the most common reasons for a "Wrong answer" verdict ([USACO Guide](https://usaco.guide/general/data-types)).
-
-## Integers
-
-| Type | Size (typical) | Range (typical) | Use it for |
-| ---- | -------------- | --------------- | ---------- |
-| `short` | 2 bytes | −32,768 to 32,767 | rarely needed |
-| `int` | 4 bytes | about ±2.1·10⁹ | counts, indices, most values |
-| `long long` | 8 bytes | about ±9.2·10¹⁸ | sums, products, anything above 2·10⁹ |
-
-`long` is 4 bytes on Windows but 8 on Linux, so don't rely on it: use `long long` when you need 64 bits ([learncpp 4.4](https://www.learncpp.com/cpp-tutorial/signed-integers/)). The exact sizes are listed on [cppreference](https://en.cppreference.com/w/cpp/language/types); `<cstdint>` also has fixed-size types such as `std::int64_t` ([learncpp 4.6](https://www.learncpp.com/cpp-tutorial/fixed-width-integers-and-size-t/)).
-
-### Overflow
-
-When a result doesn't fit in its type, it **overflows**. For signed types like `int`, that's *undefined behaviour*: in practice you usually get a nonsense value, often negative.
-
-```cpp
-int a{ 50000 };
-int square = a * a;              // 2,500,000,000 doesn't fit: typically prints -1794967296
-
-long long b{ 50000 };
-long long ok = b * b;            // 2500000000
-```
-
 > [!WARNING]
-> `long long x = a * a;` is **still wrong** when `a` is an `int`: the multiplication happens in `int` first and only the (already broken) result is stored in `x`. Make one operand `long long` *before* multiplying: `1LL * a * a` or `static_cast<long long>(a) * a`.
+> `long long x = a * a;` is **still wrong** when `a` is an `int`. The multiplication happens first, in `int`, and only the broken result is stored in `x`. Make the calculation itself use `long long`: `long long x = 1LL * a * a;` (`1LL` is the number 1 as a `long long`).
 
 > [!TIP]
-> Read the limits. If values go up to 10⁹ and you **add** many of them, or **multiply** two of them, use `long long`. When the answer can exceed 10¹⁸, even `long long` isn't enough: the problem usually asks for it modulo some number.
+> Look at the limits in the problem. If values go up to 10⁹ (a billion) and you **add up** many of them, or **multiply** two of them, use `long long`.
 
-### Unsigned integers
+> [!TRY]
+> Add up all the numbers from 1 to 100,000 with a loop, once with an `int` total and once with a `long long` total. Which one is right? (The correct answer is 5000050000.)
 
-`unsigned int` can't be negative: it trades the negative half for a bigger positive range. Going below zero doesn't stop at 0, it **wraps around** to a huge number ([learncpp 4.5](https://www.learncpp.com/cpp-tutorial/unsigned-integers-and-why-to-avoid-them/)):
+## Dividing numbers
 
-```cpp
-std::vector<int> v;                       // empty
-std::cout << v.size() - 1 << '\n';        // not -1: 18446744073709551615
+Dividing two whole numbers gives a whole number. It's like sharing 7 sweets between 2 children: each gets **3**, and **1** is left over.
 
-// Safe: turn the size into an int first
-int n = static_cast<int>(v.size());
-for (int i = 0; i < n - 1; ++i) { /* … */ }
-```
-
-`.size()` returns an unsigned type, which is where this bites. Keep counters and indices as `int` (or `long long`).
-
-## Division and remainder
-
-Dividing two integers gives an integer: the fraction is **cut off**, towards zero.
+- `/` gives how many each gets: `7 / 2` is `3` (the decimals are dropped, not rounded).
+- `%` gives what's left over, called the **remainder**: `7 % 2` is `1`.
 
 ```cpp
-std::cout << 7 / 2 << '\n';     // 3
-std::cout << -7 / 2 << '\n';    // -3
-std::cout << 7 % 3 << '\n';     // 1   (remainder)
-std::cout << -7 % 3 << '\n';    // -1  (takes the sign of the left side)
+#include <iostream>
 
-std::cout << 7 / 2.0 << '\n';                     // 3.5: one side is a double
-std::cout << static_cast<double>(7) / 2 << '\n';  // 3.5
+int main()
+{
+    std::cout << 7 / 2 << '\n';      // 3
+    std::cout << 7 % 2 << '\n';      // 1
+    std::cout << 10 % 5 << '\n';     // 0: 10 divides evenly by 5
+
+    std::cout << 7 / 2.0 << '\n';    // 3.5: one side has a decimal point, so the result does too
+    return 0;
+}
 ```
 
-To **round up** a division of positive integers, don't use floating point: `(a + b - 1) / b`. For example, 10 tiles of size 3 need `(10 + 3 - 1) / 3 = 4` tiles.
+`%` is very useful: `n % 2 == 0` means `n` is even, and `n % 10` is the last digit of `n`.
 
-## Floating point
+To **round up** instead, for example "how many boxes of 3 do I need for 10 items?", use `(a + b - 1) / b`: `(10 + 3 - 1) / 3` is `4`. It avoids decimals entirely.
 
-`double` stores numbers with a fractional part, with about **15–16 significant digits**. `float` has only about 7, so prefer `double` ([learncpp 4.8](https://www.learncpp.com/cpp-tutorial/floating-point-numbers/)).
+> [!TRY]
+> Read a number and print its last digit and the number without its last digit (for 1234: `4` and `123`).
 
-Most decimal fractions, like 0.1, can't be stored exactly in binary, so tiny rounding errors appear ([The Floating-Point Guide](https://floating-point-gui.de/)):
+## Decimal numbers: double
+
+A `double` holds numbers with a decimal point, with about 15 to 16 significant digits ([learncpp 4.8](https://www.learncpp.com/cpp-tutorial/floating-point-numbers/)). There is also `float`, but it's much less precise, so use `double`.
+
+Computers store numbers in binary (base 2), and most decimal fractions, like 0.1, can't be written exactly in binary, the same way 1/3 can't be written exactly in decimal (0.3333…). So tiny rounding errors creep in ([The Floating-Point Guide](https://floating-point-gui.de/)):
 
 ```cpp
 #include <cmath>
 #include <iomanip>
 #include <iostream>
 
-double x = 0.1 + 0.2;
-std::cout << std::setprecision(17) << x << '\n';    // 0.30000000000000004
-std::cout << (x == 0.3) << '\n';                    // 0 (false!)
-std::cout << (std::abs(x - 0.3) < 1e-9) << '\n';    // 1: compare with a tolerance
+int main()
+{
+    double x = 0.1 + 0.2;
+    std::cout << (x == 0.3) << '\n';                      // 0, meaning false!
+    std::cout << std::setprecision(17) << x << '\n';      // 0.30000000000000004
 
-std::cout << std::fixed << std::setprecision(2) << 3.14159 << '\n';   // 3.14
+    // Compare by checking that the difference is tiny instead
+    std::cout << (std::abs(x - 0.3) < 1e-9) << '\n';      // 1, meaning true
+
+    // Printing with exactly 2 digits after the point
+    std::cout << std::fixed << std::setprecision(2) << 3.14159 << '\n';   // 3.14
+    return 0;
+}
 ```
 
 > [!WARNING]
-> Never compare `double`s with `==`. Check whether they are *close enough* (`std::abs(a - b) < 1e-9`). And don't use floating point for exact things like money or counting: store cents in a `long long` instead.
+> Don't compare `double`s with `==`. Check that they're *close enough*: `std::abs(a - b) < 1e-9` (`1e-9` is 0.000000001). And don't use decimals for exact things like money: count cents in a `long long` instead.
 
-## Characters
+## Characters: char
 
-A `char` is a 1-byte integer that stands for a character. The mapping is the **ASCII** table: `'A'` is 65, `'a'` is 97, `'0'` is 48 ([learncpp 4.11](https://www.learncpp.com/cpp-tutorial/chars/), [ASCII chart](https://en.cppreference.com/w/cpp/language/ascii)). The letters and the digits are in order, so you can do maths with them:
+A `char` holds one character, written in **single** quotes: `'a'`, `'7'`, `'?'`. Behind the scenes each character is stored as a number, using a table called **ASCII**: `'A'` is 65, `'a'` is 97, `'0'` is 48 ([learncpp 4.11](https://www.learncpp.com/cpp-tutorial/chars/), [ASCII chart](https://en.cppreference.com/w/cpp/language/ascii)).
 
-```cpp
-char d{ '7' };
-int digit = d - '0';                 // 7: the digit's value
-
-char c{ 'e' };
-int position = c - 'a';              // 4: 'e' is the 5th letter (counting from 0)
-char upper = c - 'a' + 'A';          // 'E'
-
-std::cout << 'a' + 1 << '\n';                       // 98: char + int is an int
-std::cout << static_cast<char>('a' + 1) << '\n';    // b
-```
-
-`<cctype>` has the common checks and conversions: `std::isdigit`, `std::isalpha`, `std::isupper`, `std::islower`, `std::toupper`, `std::tolower`.
-
-## bool
-
-`bool` holds `true` or `false`, and prints as `1` or `0` (`std::boolalpha` prints the words). Numbers convert to `bool` too: `0` is `false`, anything else is `true`.
+Letters and digits are numbered in order, so you can do maths with them:
 
 ```cpp
-bool even = (10 % 2 == 0);
-std::cout << even << '\n';                       // 1
-std::cout << std::boolalpha << even << '\n';     // true
+#include <iostream>
+
+int main()
+{
+    char d{ '7' };
+    int digit = d - '0';                      // '7' - '0' = 55 - 48 = 7
+    std::cout << digit << '\n';               // 7
+
+    char c{ 'e' };
+    std::cout << c - 'a' << '\n';             // 4: e is 4 letters after a
+
+    char upper = c - 'a' + 'A';               // the same position, but in capitals
+    std::cout << upper << '\n';               // E
+
+    std::cout << 'a' + 1 << '\n';                       // 98: char + number gives a number
+    std::cout << static_cast<char>('a' + 1) << '\n';    // b: turn it back into a char
+    return 0;
+}
 ```
 
-## Converting between types
+The `<cctype>` header has ready-made helpers: `std::isdigit(c)`, `std::isalpha(c)`, `std::isupper(c)`, `std::islower(c)`, `std::toupper(c)` and `std::tolower(c)`.
 
-C++ converts between number types automatically, but some conversions lose information ([learncpp 10.6](https://www.learncpp.com/cpp-tutorial/explicit-type-conversion-casting-and-static-cast/)):
+> [!TRY]
+> Read a word and print it in capital letters, using the `c - 'a' + 'A'` trick on each lowercase letter.
+
+## true or false: bool
+
+A `bool` holds `true` or `false`. When printed, it shows `1` or `0` (`std::boolalpha` prints the words instead).
 
 ```cpp
-double price{ 3.99 };
-int whole = static_cast<int>(price);     // 3: the fraction is cut off, not rounded
-long long rounded = std::llround(price); // 4: rounds to the nearest (from <cmath>)
+#include <iostream>
 
-int x{ 3.5 };                            // compile error: brace initialization blocks losing data
+int main()
+{
+    bool even = (10 % 2 == 0);
+    std::cout << even << '\n';                       // 1
+    std::cout << std::boolalpha << even << '\n';     // true
+    return 0;
+}
 ```
 
-Use `static_cast<Type>(value)` to convert on purpose; it's easy to search for and shows the reader you meant it.
+## Text: std::string
 
-### auto and const
-
-`auto` lets the compiler pick the type from the value ([learncpp 10.8](https://www.learncpp.com/cpp-tutorial/type-deduction-for-objects-using-the-auto-keyword/)). Watch the literal: `5` is an `int`, `5LL` a `long long`, `5.0` a `double`.
-
-```cpp
-auto count = 5;          // int
-auto big = 5LL;          // long long
-auto ratio = 5.0;        // double
-const int maxN = 200000; // const: can't be changed later
-```
-
-## Strings
-
-`std::string` (from `<string>`) holds text of any length ([learncpp 5.7](https://www.learncpp.com/cpp-tutorial/introduction-to-stdstring/)). Each character is a `char`, so everything above applies.
+A `std::string` holds text of any length, written in **double** quotes ([learncpp 5.7](https://www.learncpp.com/cpp-tutorial/introduction-to-stdstring/)). Each character in it is a `char`, so everything above applies.
 
 ```cpp
 #include <iostream>
@@ -163,37 +187,98 @@ const int maxN = 200000; // const: can't be changed later
 int main()
 {
     std::string s{ "Hello" };
-    s += ", world";                          // append
-    std::cout << s.size() << '\n';           // 12
-    std::cout << s[0] << '\n';               // H
-    std::cout << s.substr(7, 5) << '\n';     // world
+    s += ", world";                          // add text to the end
+    std::cout << s << '\n';                  // Hello, world
+    std::cout << s.size() << '\n';           // 12 characters
+    std::cout << s[0] << '\n';               // H: positions start at 0
+    std::cout << s.substr(7, 5) << '\n';     // world: 5 characters starting at position 7
 
     int n = std::stoi("123");                // text → number
     std::string t = std::to_string(456);     // number → text
-
-    std::string word;
-    std::cin >> word;                        // reads one word
-    std::string line;
-    std::getline(std::cin >> std::ws, line); // reads a whole line (skipping leftover spaces)
+    std::cout << n + 1 << ' ' << t + "!" << '\n';   // 124 456!
     return 0;
 }
 ```
 
-`==` and `<` work on strings: `<` compares them alphabetically (by ASCII code, so `"Z" < "a"`).
+- `std::cin >> word;` reads **one word** (it stops at a space).
+- `std::getline(std::cin, line);` reads a **whole line**, spaces included.
 
-## Choosing a type
+> [!WARNING]
+> After reading a number with `std::cin >>`, the Enter key is still waiting in the input, and the next `getline` reads an empty line. Write `std::getline(std::cin >> std::ws, line);` instead: `std::ws` skips that leftover Enter and any spaces.
 
-| You need | Use |
-| -------- | --- |
-| a count, an index, small whole numbers | `int` |
-| big sums, products, values above 2·10⁹ | `long long` |
-| numbers with a fractional part | `double` |
-| one character | `char` |
-| yes / no | `bool` |
-| text | `std::string` |
+## Converting between types
+
+C++ converts between number types automatically, but some conversions lose information. To convert on purpose, use `static_cast<type>(value)` ([learncpp 10.6](https://www.learncpp.com/cpp-tutorial/explicit-type-conversion-casting-and-static-cast/)):
+
+```cpp
+#include <cmath>
+#include <iostream>
+
+int main()
+{
+    double price{ 3.99 };
+    int whole = static_cast<int>(price);       // 3: the decimals are cut off, not rounded
+    long long rounded = std::llround(price);   // 4: rounded to the nearest whole number
+    std::cout << whole << ' ' << rounded << '\n';
+
+    int a{ 7 };
+    int b{ 2 };
+    std::cout << static_cast<double>(a) / b << '\n';   // 3.5: convert before dividing
+
+    // int x{ 3.99 };   // remove the // and the compiler refuses: braces don't allow losing data
+    return 0;
+}
+```
+
+## Going further
+
+These details matter less often, but explain some surprises you'll meet.
+
+**Why "about 2 billion"?** Memory is made of **bits** (0 or 1); 8 bits make a **byte**. An `int` usually has 32 bits, and 32 bits can form 2³² ≈ 4.3 billion patterns, split between negative and positive numbers. A `long long` has 64 bits. `sizeof(int)` tells you the size in bytes ([cppreference](https://en.cppreference.com/w/cpp/language/types)).
+
+**Unsigned numbers.** `unsigned int` can't be negative. Going below zero doesn't stop at 0: it wraps around to a huge number. The `.size()` of a string or vector is unsigned, so on an empty vector `v.size() - 1` is not -1 but 18446744073709551615 ([learncpp 4.5](https://www.learncpp.com/cpp-tutorial/unsigned-integers-and-why-to-avoid-them/)). Convert it first: `int n = static_cast<int>(v.size());`.
+
+**auto.** `auto` lets the compiler work out the type from the value ([learncpp 10.8](https://www.learncpp.com/cpp-tutorial/type-deduction-for-objects-using-the-auto-keyword/)): `auto x = 5;` is an `int`, `auto y = 5LL;` a `long long`, `auto z = 5.0;` a `double`.
+
+```cpp
+#include <iostream>
+#include <vector>
+
+int main()
+{
+    std::cout << sizeof(int) << ' ' << sizeof(long long) << '\n';   // 4 8 on most computers
+
+    std::vector<int> v;                                  // empty
+    std::cout << v.size() - 1 << '\n';                   // 18446744073709551615, not -1
+    int n = static_cast<int>(v.size());
+    std::cout << n - 1 << '\n';                          // -1, as expected
+
+    auto big = 5LL;                                      // long long
+    std::cout << big * 1000000000 << '\n';               // 5000000000
+    return 0;
+}
+```
+
+## Summary
+
+- `int` for normal whole numbers, `long long` once values can pass about 2 billion.
+- An overflowing number doesn't stop you: it silently becomes wrong. Watch sums and products.
+- `int / int` drops the decimals, `%` gives the remainder, and `(a + b - 1) / b` rounds up.
+- `double`s are slightly imprecise: compare them with a tolerance, never `==`.
+- A `char` is a small number from the ASCII table, so `c - '0'` and `c - 'a'` work.
+- `std::string` holds text; `getline` reads a whole line.
+
+## Words to know
+
+- **Type**: what kind of value a variable holds, and how much memory it takes.
+- **Overflow**: a result too big for its type, which turns into a wrong value.
+- **Remainder**: what's left over after whole-number division (`%`).
+- **Floating point**: the way `double` stores decimal numbers, approximately.
+- **ASCII**: the table that gives every character a number.
+- **Cast**: converting a value to another type on purpose (`static_cast`).
 
 ## Next steps
 
 1. Read the sources below for more detail and examples.
 2. Solve the **Data Types: Numbers** challenge, then **Data Types: Characters & Strings**, under Practice.
-3. Check yourself with the **Data Types in C++** quiz.
+3. Check yourself with the **Data Types in C++** quiz, then continue with **Introduction to Algorithms**.

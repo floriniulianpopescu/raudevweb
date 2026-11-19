@@ -132,7 +132,7 @@
   "lessons": [
     {
       "title": "Introduction to Algorithms",
-      "description": "What an algorithm is and how to tell a fast one from a slow one: Big-O complexity and reading constraints, linear vs binary search, selection sort vs std::sort, and a first look at recursion.\n\nRead the lesson and the links. Then try the \"Algorithms: Searching\" and \"Algorithms: Sorting & Recursion\" challenges under Practice and the \"Introduction to Algorithms\" quiz.",
+      "description": "What an algorithm is, and how to tell a fast one from a slow one (about 35 minutes, after Data Types in C++): Big-O explained with everyday examples, linear and binary search, sorting, and functions that call themselves (recursion). Every example is a complete program you can copy and run.\n\nAfter the lesson, try the \"Algorithms: Searching\" and \"Algorithms: Sorting & Recursion\" challenges under Practice and the \"Introduction to Algorithms\" quiz.",
       "bodyFile": "lesson.md",
       "links": [
         {

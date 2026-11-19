@@ -8,7 +8,7 @@ rename **Unreleased** to that date and start a new empty one.
 
 ## Unreleased
 
-Branches `feat/completion-xp`, then `content/intro-algorithms`, `content/data-types` and `content/data-structures` stacked on it, not yet merged into `main`.
+Branches `feat/completion-xp`, then `content/intro-algorithms`, `content/data-types`, `content/data-structures` and `content/beginner-friendly` stacked on it, not yet merged into `main`.
 
 ### Added
 - **Content packs** in `content/packs` and `bun run content:import`, which loads them into any site through the
@@ -25,6 +25,11 @@ Branches `feat/completion-xp`, then `content/intro-algorithms`, `content/data-ty
   exercises (HackerRank, CSES, LeetCode); 5 Codeforces problems rated 900–1200; four challenges sharing the same
   items, by topic ("Stacks & Queues", "Sets, Maps & Heaps") and by skill ("Build Your Own", "Pick the Right One");
   a quiz.
+- **Beginner-friendly lessons.** All four lessons were rewritten for beginners: "Before you start" and "In this
+  lesson you'll learn" at the top, everyday analogies, step-by-step traces, every code example a complete program
+  you can copy and run, "Try it" exercises, a Going further section for the harder details, and a Summary and
+  "Words to know" at the end. The C++ lesson now also covers `const`, comments and `do … while` (asked in its quiz).
+- **"Try it" boxes** in lesson bodies: `> [!TRY]`, next to the existing Note/Tip/Warning callouts.
 - **Done checks with automatic XP.** Every problem and exercise can be ticked as done on the Problems/Exercises
   lists, challenge pages and the home "Latest" cards: problems give 20 XP, exercises 10. Unticking takes the XP
   back. Progress lines ("7 / 20 done · 140 XP earned") on lists and challenges; admins see "N completed" per item.

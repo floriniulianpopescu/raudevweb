@@ -88,12 +88,32 @@ options and a checklist: [content/README.md](../content/README.md).
 
 ### Write content for lessons
 
-- Use `##` for sections (the page title is the only `#`), fenced blocks with a language (```` ```cpp ````),
-  tables, and callouts (`> [!TIP]` on its own line, then the text on the following `>` lines).
+Lessons are written for **beginners**: students who may have just started programming. Follow the same shape as
+the existing packs, so every lesson feels familiar:
+
+1. **Lesson description** (in `pack.json`): what it covers, roughly how long it takes, which lesson comes first.
+2. **Before you start**: what the reader should already know, by lesson name.
+3. **In this lesson you'll learn to:** 3–5 concrete outcomes.
+4. **Sections** (`##`, the page title is the only `#`), each going: the idea in one plain sentence → an
+   everyday analogy (a pile of plates, a guessing game) → a short example → a `> [!TRY]` task.
+5. **Going further**: details most readers can skip (exact bit sizes, worst cases, advanced sources).
+6. **Summary** (5–6 bullets), **Words to know** (each term defined in one line) and **Next steps** (sources,
+   the pack's challenges and quiz, the next lesson).
+
+Writing rules:
+
+- **Every ```` ```cpp ```` block is a complete program** (`#include`s and `main`) that compiles and runs as-is, so
+  the Copy button gives the reader something they can paste into OnlineGDB and run. Show the output in comments
+  (`// prints 5`). Code that *shouldn't* compile goes in a comment (`// int x{ 3.5 };   // the compiler refuses`).
+- Explain every new word the first time it appears, in plain language; bold it.
+- Prefer tables and step-by-step traces (e.g. how `factorial(3)` runs) to long paragraphs.
+- Use callouts on their own line, then the text on the following `>` lines: `> [!TIP]`, `> [!NOTE]`,
+  `> [!WARNING]` (common mistakes), `> [!TRY]` (a small exercise the reader can check by running it).
 - Link sources inline with normal Markdown links and also list them under Sources.
 - Raw HTML is ignored and images show as links.
-- Compile and run every snippet before publishing (the C++ snippets in the packs are all checked with
-  `g++ -std=c++20 -Wall`).
+- Check the lesson still covers every question in the pack's quiz.
+- Before publishing, compile and run every block with `g++ -std=c++20 -Wall -Wextra`: no warnings, and the
+  output must match the comments.
 
 ## Verify a change before pushing
 
