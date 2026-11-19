@@ -8,7 +8,7 @@ rename **Unreleased** to that date and start a new empty one.
 
 ## Unreleased
 
-Branches `feat/completion-xp`, then `content/intro-algorithms` and `content/data-types` stacked on it, not yet merged into `main`.
+Branches `feat/completion-xp`, then `content/intro-algorithms`, `content/data-types` and `content/data-structures` stacked on it, not yet merged into `main`.
 
 ### Added
 - **Content packs** in `content/packs` and `bun run content:import`, which loads them into any site through the
@@ -20,6 +20,11 @@ Branches `feat/completion-xp`, then `content/intro-algorithms` and `content/data
   `long long` and unsigned, integer division, floating-point precision, chars and ASCII, conversions, `auto` and
   `std::string`; 6 exercises (HackerRank, CSES, LeetCode); 5 Codeforces problems rated 800–1000 where the right
   type is the trap; challenges "Data Types: Numbers" and "Data Types: Characters & Strings"; a quiz.
+- **Data Structures** pack, after Algorithms: lesson on vector and pair, stacks and queues, linked lists (a stack and a
+  linked list built by hand), set/map, unordered_set/unordered_map and priority_queue, with a Big-O table; 6
+  exercises (HackerRank, CSES, LeetCode); 5 Codeforces problems rated 900–1200; four challenges sharing the same
+  items, by topic ("Stacks & Queues", "Sets, Maps & Heaps") and by skill ("Build Your Own", "Pick the Right One");
+  a quiz.
 - **Done checks with automatic XP.** Every problem and exercise can be ticked as done on the Problems/Exercises
   lists, challenge pages and the home "Latest" cards: problems give 20 XP, exercises 10. Unticking takes the XP
   back. Progress lines ("7 / 20 done · 140 XP earned") on lists and challenges; admins see "N completed" per item.
