@@ -4,6 +4,8 @@ import { Trash2Icon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useSelection } from "@/hooks/use-selection";
 import { adminApi } from "@/lib/admin-api";
+import { friendlyError } from "@/lib/errors";
+import { queryClient, queryKeys } from "@/lib/query-client";
 import { matchesSearch } from "@/lib/search";
 import { cn } from "@/lib/utils";
 import { ConfirmDialog } from "./confirm-dialog";
@@ -24,14 +26,11 @@ export function CrudManager<Draft>({
 	label,
 	schema,
 	editor,
-	onChanged,
 }: {
 	endpoint: string; // e.g. "challenges"
 	label: string; // e.g. "Challenges"
 	schema: Schema;
 	editor: Editor<Draft>;
-	/** Called after a successful create/update/delete (e.g. to refresh a public list). */
-	onChanged?: () => void;
 }) {
 	const [items, setItems] = useState<Item[]>([]);
 	const [editing, setEditing] = useState<Item | "new" | null>(null);
@@ -56,7 +55,7 @@ export function CrudManager<Draft>({
 			setItems(await adminApi<Item[]>(endpoint));
 			setError(null);
 		} catch (e) {
-			setError((e as Error).message);
+			setError(friendlyError(e, "Couldn't load the items. Please try again."));
 		}
 	}, [endpoint]);
 
@@ -90,9 +89,10 @@ export function CrudManager<Draft>({
 			}
 			setEditing(null);
 			await load();
-			onChanged?.();
+			// Every cached list/detail/"latest" card may show this item
+			queryClient.invalidateQueries({ queryKey: queryKeys.content() });
 		} catch (e) {
-			setError((e as Error).message);
+			setError(friendlyError(e, "Couldn't save. Check the fields and try again."));
 		}
 	}
 
@@ -112,9 +112,10 @@ export function CrudManager<Draft>({
 			// Close the editor if the item being edited was deleted
 			if (editing && editing !== "new" && ids.includes(editing.id)) setEditing(null);
 			await load();
-			onChanged?.();
+			// Every cached list/detail/"latest" card may show this item
+			queryClient.invalidateQueries({ queryKey: queryKeys.content() });
 		} catch (e) {
-			setError((e as Error).message);
+			setError(friendlyError(e, "Couldn't delete. Refresh the list and try again."));
 		} finally {
 			setDeleting(false);
 		}

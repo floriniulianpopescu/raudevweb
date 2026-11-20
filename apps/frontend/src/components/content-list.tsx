@@ -1,37 +1,29 @@
-import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
+import { useMemo, useState, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 import type { ContentSummary, ContentType } from "@raudevweb/shared";
-import { contentApi } from "@/lib/admin-api";
+import { contentApi, isNotFound } from "@/lib/admin-api";
 import { CONTENT } from "@/lib/content";
+import { isCompletable } from "@/lib/progress";
+import { queryKeys, useCachedQuery } from "@/lib/query-client";
 import { matchesSearch } from "@/lib/search";
-import { AdminContentPanel } from "./admin/admin-content-panel";
+import { AdminContentPanel } from "./admin/lazy";
 import { ContentCard } from "./content-card";
+import { DoneCheck, ProgressSummary } from "./done-check";
+import { LoadError } from "./load-error";
+import { NotFoundView } from "./not-found";
+import { PageTitle } from "./page-title";
 import { SearchInput } from "./search-input";
 import { Skeleton } from "./ui/skeleton";
 
-/** Fetch something from /api/content/<path>. `reload()` refetches without a loading flash. */
+/**
+ * Fetch something from /api/content/<path>, through the shared cache: a page seen before
+ * shows instantly and refreshes in the background.
+ * `error` is only set when there's nothing to show (a failed background refresh keeps the cached data).
+ * `retry()` shows the loading state again and refetches. `notFound` is true when the API answered 404.
+ */
 export function useContent<T>(path: string) {
-	const [data, setData] = useState<T | null>(null);
-	const [error, setError] = useState<string | null>(null);
-
-	const fetchData = useCallback(
-		() =>
-			contentApi<T>(path)
-				.then((d) => {
-					setData(d);
-					setError(null);
-				})
-				.catch((e: Error) => setError(e.message)),
-		[path],
-	);
-
-	useEffect(() => {
-		setData(null);
-		setError(null);
-		fetchData();
-	}, [fetchData]);
-
-	return { data, error, reload: fetchData };
+	const query = useCachedQuery(queryKeys.content(path), () => contentApi<T>(path));
+	return { ...query, notFound: isNotFound(query.error) };
 }
 
 /** Problems/exercises → external href; everything else → in-site page via <Link>. */
@@ -66,7 +58,7 @@ export function ContentList({
 	/** Optional element shown right below the search bar */
 	notice?: ReactNode;
 }) {
-	const { data: items, error, reload } = useContent<ContentSummary[]>(type);
+	const { data: items, error, retry } = useContent<ContentSummary[]>(type);
 	const [query, setQuery] = useState("");
 	const label = CONTENT[type].label;
 
@@ -77,10 +69,12 @@ export function ContentList({
 
 	return (
 		<div>
+			<PageTitle title={label} />
 			<h1 className="text-2xl font-bold">{label}</h1>
 			{intro && <p className="text-muted-foreground mt-2">{intro}</p>}
+			{isCompletable(type) && items && <ProgressSummary type={type} itemIds={items.map((i) => i.id)} />}
 
-			<AdminContentPanel type={type} onChanged={reload} />
+			<AdminContentPanel type={type} />
 
 			<SearchInput
 				className="mt-6 max-w-md"
@@ -93,7 +87,7 @@ export function ContentList({
 
 			<div className="mt-6">
 				{error ? (
-					<p className="text-sm text-destructive">{error}</p>
+					<LoadError onRetry={retry} />
 				) : items === null || visible === null ? (
 					<CardGridSkeleton />
 				) : items.length === 0 ? (
@@ -110,6 +104,9 @@ export function ContentList({
 								title={item.title}
 								description={item.description}
 								{...cardTarget(type, item)}
+								footer={
+									isCompletable(type) && <DoneCheck type={type} id={item.id} title={item.title} />
+								}
 							/>
 						))}
 					</CardGrid>
@@ -119,26 +116,32 @@ export function ContentList({
 	);
 }
 
-/** Shared frame for in-site detail pages: back link, loading/error, title + description. */
+/**
+ * Shared frame for in-site detail pages: back link, loading/error, title + description.
+ * Pass the result of useContent(); a 404 shows the "Page not found" view.
+ */
 export function DetailLayout<T extends { title: string; description: string }>({
 	type,
-	data,
-	error,
+	content: { data, error, notFound, retry },
 	children,
 }: {
 	type: ContentType;
-	data: T | null;
-	error: string | null;
+	content: Pick<ReturnType<typeof useContent<T>>, "data" | "error" | "notFound" | "retry">;
 	children: (data: T) => ReactNode;
 }) {
 	const cfg = CONTENT[type];
+	if (notFound) {
+		return <NotFoundView backTo={`/home/${cfg.route}`} backLabel={`Back to ${cfg.label}`} />;
+	}
 	return (
 		<div>
+			{/* Section name while loading or on error, then the item's own title */}
+			<PageTitle title={data?.title ?? cfg.label} />
 			<Link to={`/home/${cfg.route}`} className="text-sm text-muted-foreground hover:underline">
 				← Back to {cfg.label}
 			</Link>
 			{error ? (
-				<p className="mt-4 text-sm text-destructive">{error}</p>
+				<LoadError className="mt-4" onRetry={retry} />
 			) : !data ? (
 				<Skeleton className="mt-4 h-24" />
 			) : (

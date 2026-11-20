@@ -3,17 +3,18 @@ import { useParams } from "react-router-dom";
 import { CheckIcon, XIcon } from "lucide-react";
 import type { QuizItem, QuizResult } from "@raudevweb/shared";
 import { Button } from "@/components/ui/button";
-import { API_URL } from "@/lib/admin-api";
+import { API_URL, ApiError } from "@/lib/admin-api";
+import { friendlyError } from "@/lib/errors";
 import { cn } from "@/lib/utils";
 import { DetailLayout, useContent } from "./content-list";
 
 /** /home/quizzes/:id */
 export function QuizPage() {
 	const { id } = useParams();
-	const { data, error } = useContent<QuizItem>(`quizzes/${id}`);
+	const content = useContent<QuizItem>(`quizzes/${id}`);
 
 	return (
-		<DetailLayout type="quizzes" data={data} error={error}>
+		<DetailLayout type="quizzes" content={content}>
 			{(quiz) => <QuizRunner key={quiz.id} quiz={quiz} />}
 		</DetailLayout>
 	);
@@ -38,10 +39,10 @@ export function QuizRunner({ quiz }: { quiz: QuizItem }) {
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({ answers: picked }),
 			});
-			if (!res.ok) throw new Error((await res.text()) || res.statusText);
+			if (!res.ok) throw new ApiError(res.status, (await res.text()) || res.statusText);
 			setResult(await res.json());
 		} catch (e) {
-			setError((e as Error).message);
+			setError(friendlyError(e, "Couldn't submit your answers. Please try again."));
 		} finally {
 			setSubmitting(false);
 		}

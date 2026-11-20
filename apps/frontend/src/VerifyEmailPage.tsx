@@ -30,6 +30,7 @@ export default function VerifyEmailPage() {
 
 	return (
 		<AuthLayout
+			pageTitle="Email confirmed"
 			title="Email confirmed"
 			description="Your RAUDEV account is active."
 			footer={
@@ -80,6 +81,7 @@ function LinkProblem({ message }: { message: string }) {
 
 	return (
 		<AuthLayout
+			pageTitle="Confirm email"
 			title="Link not valid"
 			description={message}
 			footer={

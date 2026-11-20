@@ -2,9 +2,12 @@ import { ArrowLeft } from "lucide-react";
 import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
 
+import { PageTitle } from "@/components/page-title";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface AuthLayoutProps {
+	/** Browser tab title, e.g. "Log in" → "Log in · RAUDEV" */
+	pageTitle: string;
 	title: string;
 	description: string;
 	children: ReactNode;
@@ -12,6 +15,7 @@ interface AuthLayoutProps {
 }
 
 export default function AuthLayout({
+	pageTitle,
 	title,
 	description,
 	children,
@@ -19,6 +23,7 @@ export default function AuthLayout({
 }: AuthLayoutProps) {
 	return (
 		<div className="relative isolate min-h-screen bg-background text-foreground flex flex-col items-center justify-center px-4 py-10 overflow-x-hidden">
+			<PageTitle title={pageTitle} />
 			{/* BACKGROUND GRADIENT */}
 			<div
 				aria-hidden

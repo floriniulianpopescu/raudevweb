@@ -1,3 +1,4 @@
+import { PageTitle } from "@/components/page-title";
 import { useState } from "react";
 import { SignUpInputSchema } from "@raudevweb/shared";
 import { useNavigate } from "react-router-dom";
@@ -6,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { authClient } from "@/lib/auth-client";
+import { authErrorMessage, NETWORK_ERROR } from "@/lib/errors";
 import { sendPasswordResetEmail } from "@/lib/password-reset";
 import {
 	AlertDialog,
@@ -65,11 +67,17 @@ export function AppSettingsPage() {
 		setSavingUsername(true);
 		setUsernameError(null);
 		// Updates the user on the server; useSession() refreshes so the new name shows everywhere
-		const { error } = await authClient.updateUser({ name: parsed.data });
-		setSavingUsername(false);
-		if (error) {
-			setUsernameError(error.message ?? "Couldn't update your username. Please try again.");
+		try {
+			const { error } = await authClient.updateUser({ name: parsed.data });
+			if (error) {
+				setUsernameError(authErrorMessage(error, "Couldn't update your username. Please try again."));
+				return;
+			}
+		} catch {
+			setUsernameError(NETWORK_ERROR); // Better Auth throws when the server can't be reached
 			return;
+		} finally {
+			setSavingUsername(false);
 		}
 		setUsernameOpen(false);
 		setNewUsername("");
@@ -96,11 +104,17 @@ export function AppSettingsPage() {
 		setLoggingOut(true);
 		setLogoutError(null);
 		// Ends the session on the server and clears the session cookie
-		const { error } = await authClient.signOut();
-		setLoggingOut(false);
-		if (error) {
-			setLogoutError(error.message ?? "Couldn't log out. Please try again.");
+		try {
+			const { error } = await authClient.signOut();
+			if (error) {
+				setLogoutError(authErrorMessage(error, "Couldn't log out. Please try again."));
+				return;
+			}
+		} catch {
+			setLogoutError(NETWORK_ERROR); // Better Auth throws when the server can't be reached
 			return;
+		} finally {
+			setLoggingOut(false);
 		}
 		setLogoutOpen(false);
 		navigate("/login", { replace: true });
@@ -108,6 +122,7 @@ export function AppSettingsPage() {
 
 	return (
 		<div className="mx-auto max-w-3xl">
+			<PageTitle title="Settings" />
 			<h1 className="text-2xl font-bold">Settings</h1>
 			<p className="text-muted-foreground mt-2">Manage your account details.</p>
 

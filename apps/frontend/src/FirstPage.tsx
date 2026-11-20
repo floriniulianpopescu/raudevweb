@@ -1,3 +1,4 @@
+import { PageTitle } from "@/components/page-title";
 import {
 	Calendar,
 	Clock,
@@ -8,10 +9,13 @@ import {
 	Mic,
 	Users,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useLayoutEffect } from "react";
 import { Link } from "react-router-dom";
-import { WEEKDAYS, type SessionSchedule } from "@raudevweb/shared";
+import type { SessionSchedule } from "@raudevweb/shared";
+import { WEEKDAYS } from "@raudevweb/shared/constants";
 import { apiGet } from "@/lib/admin-api";
+import { removePrerender } from "@/lib/prerender";
+import { queryKeys, useCachedQuery } from "@/lib/query-client";
 import { formatDay, sessionInfo } from "@/lib/schedule";
 
 import { Badge } from "@/components/ui/badge";
@@ -90,22 +94,20 @@ function meetingDetails(s: SessionSchedule, now = new Date()) {
 	];
 }
 
+/** This week's session, or null (→ the fallback details) while loading or if it fails. */
 function useSchedule() {
-	const [schedule, setSchedule] = useState<SessionSchedule | null>(null);
-	useEffect(() => {
-		apiGet<SessionSchedule>("schedule").then(setSchedule, () => {
-			/* keep the fallback */
-		});
-	}, []);
-	return schedule;
+	return useCachedQuery(queryKeys.schedule, () => apiGet<SessionSchedule>("schedule")).data;
 }
 
 export default function FirstPage() {
 	const schedule = useSchedule();
+	// Swap the static copy from index.html for this live page before the browser paints
+	useLayoutEffect(removePrerender, []);
 	const details = schedule ? meetingDetails(schedule) : FALLBACK_MEETING_DETAILS;
 
 	return (
 		<div className="relative isolate min-h-screen bg-background text-foreground flex flex-col justify-between overflow-x-hidden">
+			<PageTitle />
 			{/* BACKGROUND GRADIENT */}
 			<div
 				aria-hidden

@@ -1,4 +1,5 @@
 import { authClient } from "@/lib/auth-client";
+import { authErrorMessage, NETWORK_ERROR } from "@/lib/errors";
 
 /**
  * Ask the backend to email a password reset link (sent via Resend).
@@ -9,15 +10,16 @@ import { authClient } from "@/lib/auth-client";
  * never reveals which emails are registered.
  */
 export async function sendPasswordResetEmail(email: string) {
-	const { error } = await authClient.requestPasswordReset({
-		email,
-		redirectTo: `${window.location.origin}/reset`,
-	});
-	if (error) {
-		throw new Error(
-			error.status === 429
-				? "Too many requests. Please wait a minute and try again."
-				: error.message || "Couldn't send the email. Please try again.",
-		);
+	let result;
+	try {
+		result = await authClient.requestPasswordReset({
+			email,
+			redirectTo: `${window.location.origin}/reset`,
+		});
+	} catch {
+		throw new Error(NETWORK_ERROR); // Better Auth throws when the server can't be reached
+	}
+	if (result.error) {
+		throw new Error(authErrorMessage(result.error, "Couldn't send the email. Please try again."));
 	}
 }

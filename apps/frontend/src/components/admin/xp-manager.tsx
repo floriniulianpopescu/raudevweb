@@ -7,13 +7,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useSelection } from "@/hooks/use-selection";
 import { adminApi } from "@/lib/admin-api";
+import { friendlyError } from "@/lib/errors";
+import { queryClient, queryKeys } from "@/lib/query-client";
 import { matchesSearch } from "@/lib/search";
 import { cn } from "@/lib/utils";
 import { Checkbox, SelectionBar } from "./selection-bar";
 
 const QUICK_AMOUNTS = [10, 50, 100];
 
-export function XpManager({ onChanged }: { onChanged?: () => void } = {}) {
+export function XpManager() {
 	const [users, setUsers] = useState<UserXp[] | null>(null);
 	const [amounts, setAmounts] = useState<Record<string, string>>({});
 	const [busy, setBusy] = useState<string | null>(null);
@@ -27,7 +29,7 @@ export function XpManager({ onChanged }: { onChanged?: () => void } = {}) {
 			setUsers(await adminApi<UserXp[]>("users"));
 			setError(null);
 		} catch (e) {
-			setError((e as Error).message);
+			setError(friendlyError(e, "Couldn't load the users. Please try again."));
 		}
 	}, []);
 
@@ -61,9 +63,9 @@ export function XpManager({ onChanged }: { onChanged?: () => void } = {}) {
 			await adminApi("users/xp", { method: "POST", body: JSON.stringify(parsed.data) });
 			await load();
 			setBulkAmount("");
-			onChanged?.();
+			queryClient.invalidateQueries({ queryKey: queryKeys.leaderboard });
 		} catch (e) {
-			setError((e as Error).message);
+			setError(friendlyError(e, "Couldn't update XP. Please try again."));
 		} finally {
 			setBulkBusy(false);
 		}
@@ -89,9 +91,9 @@ export function XpManager({ onChanged }: { onChanged?: () => void } = {}) {
 					.sort((a, b) => b.xp - a.xp || a.name.localeCompare(b.name)) ?? null,
 			);
 			setError(null);
-			onChanged?.();
+			queryClient.invalidateQueries({ queryKey: queryKeys.leaderboard });
 		} catch (e) {
-			setError((e as Error).message);
+			setError(friendlyError(e, "Couldn't update XP. Please try again."));
 		} finally {
 			setBusy(null);
 		}

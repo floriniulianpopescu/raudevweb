@@ -1,6 +1,7 @@
 import { useEffect, useId, useState, type ReactNode } from "react";
 import { PlusIcon, Trash2Icon } from "lucide-react";
 import {
+	RESOURCE_BODY_MAX,
 	QUIZ_ANSWER_COUNT,
 	QUIZ_QUESTION_COUNT,
 	type ChallengeItem,
@@ -12,6 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { MarkdownBody } from "@/components/markdown";
 import { adminApi } from "@/lib/admin-api";
 import { cn } from "@/lib/utils";
 
@@ -72,7 +74,7 @@ type LinkDraft = Basic & { href: string };
 const linkEditor: Editor<LinkDraft> = {
 	empty: () => ({ title: "", description: "", href: "" }),
 	fromItem: (i: LinkItem) => ({ title: i.title, description: i.description, href: i.href }),
-	summary: (i: LinkItem) => i.href,
+	summary: (i: LinkItem) => (i.completedCount === undefined ? i.href : `${i.completedCount} completed · ${i.href}`),
 	Form: ({ value, onChange }) => (
 		<>
 			<BasicFields value={value} onChange={onChange} />
@@ -252,21 +254,76 @@ const quizEditor: Editor<QuizDraft> = {
 	),
 };
 
-// --- lessons & extras: { title, description, links[] } ------------------------
+// --- lessons & extras: { title, description, body, links[] } -------------------
+
+/** Markdown body with Write / Preview tabs; the preview renders exactly like the lesson page. */
+function BodyField({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+	const id = useId();
+	const [tab, setTab] = useState<"write" | "preview">("write");
+	const tabClass = (active: boolean) =>
+		cn(
+			"rounded-md px-3 py-1 text-sm font-medium transition-colors",
+			active ? "bg-background shadow-sm" : "text-muted-foreground hover:text-foreground",
+		);
+
+	return (
+		<div className="space-y-1">
+			<div className="flex flex-wrap items-center justify-between gap-2">
+				<label className="text-sm font-medium" htmlFor={id}>
+					Body (Markdown)
+				</label>
+				<div role="tablist" aria-label="Body editor" className="flex gap-1 rounded-lg bg-muted p-1">
+					<button type="button" role="tab" aria-selected={tab === "write"} className={tabClass(tab === "write")} onClick={() => setTab("write")}>
+						Write
+					</button>
+					<button type="button" role="tab" aria-selected={tab === "preview"} className={tabClass(tab === "preview")} onClick={() => setTab("preview")}>
+						Preview
+					</button>
+				</div>
+			</div>
+			{tab === "write" ? (
+				<Textarea
+					id={id}
+					className="min-h-64 font-mono text-sm md:text-sm"
+					placeholder={"## Heading\n\nSome text with `inline code`.\n\n```cpp\nint main() { return 0; }\n```\n\n> [!TIP]\n> A helpful tip."}
+					maxLength={RESOURCE_BODY_MAX}
+					value={value}
+					onChange={(e) => onChange(e.target.value)}
+				/>
+			) : (
+				<div className="min-h-64 rounded-2xl border bg-background p-4">
+					{value.trim() ? (
+						<MarkdownBody>{value}</MarkdownBody>
+					) : (
+						<p className="text-sm text-muted-foreground">Nothing to preview yet.</p>
+					)}
+				</div>
+			)}
+			<p className="text-xs text-muted-foreground">
+				Optional. Supports headings, lists, links, tables, <code>```cpp</code> code blocks and callouts (
+				<code>&gt; [!NOTE]</code>, <code>[!TIP]</code>, <code>[!WARNING]</code>). HTML and images aren't shown.
+			</p>
+		</div>
+	);
+}
 
 type ResourceLinkDraft = { title: string; description: string; href: string };
-type ResourceDraft = Basic & { links: ResourceLinkDraft[] };
+type ResourceDraft = Basic & { body: string; links: ResourceLinkDraft[] };
 
 const emptyLink = (): ResourceLinkDraft => ({ title: "", description: "", href: "" });
 
+const wordCount = (text: string) => text.split(/\s+/).filter(Boolean).length;
+
 const resourceEditor: Editor<ResourceDraft> = {
-	empty: () => ({ title: "", description: "", links: [emptyLink()] }),
+	empty: () => ({ title: "", description: "", body: "", links: [emptyLink()] }),
 	fromItem: (i: ResourceItem) => ({
 		title: i.title,
 		description: i.description,
+		body: i.body ?? "",
 		links: i.links.map(({ title, description, href }) => ({ title, description, href })),
 	}),
-	summary: (i: ResourceItem) => plural(i.links.length, "link"),
+	summary: (i: ResourceItem) =>
+		[i.body?.trim() && plural(wordCount(i.body), "word"), plural(i.links.length, "link")].filter(Boolean).join(" · "),
 	Form: ({ value, onChange }) => {
 		const setLink = (i: number, patch: Partial<ResourceLinkDraft>) =>
 			onChange({ ...value, links: value.links.map((l, j) => (j === i ? { ...l, ...patch } : l)) });
@@ -274,8 +331,9 @@ const resourceEditor: Editor<ResourceDraft> = {
 		return (
 			<>
 				<BasicFields value={value} onChange={onChange} />
+				<BodyField value={value.body} onChange={(body) => onChange({ ...value, body })} />
 				<div className="space-y-2">
-					<p className="text-sm font-medium">Bibliography *</p>
+					<p className="text-sm font-medium">Sources *</p>
 					{value.links.map((link, i) => (
 						<div key={i} className="grid gap-2 rounded-md border bg-background p-3 sm:grid-cols-[1fr_1fr_auto]">
 							<Input placeholder="Title" value={link.title} onChange={(e) => setLink(i, { title: e.target.value })} />

@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { PageTitle } from "@/components/page-title";
 import { BookOpenIcon, ListChecksIcon, PuzzleIcon, TrophyIcon } from "lucide-react";
 import type { ContentType } from "@raudevweb/shared";
-import { AdminDashboard } from "@/components/admin/admin-dashboard";
+import { AdminDashboard } from "@/components/admin/lazy";
 import { LatestCard } from "@/components/home/latest-card";
 import { SessionCard } from "@/components/home/session-card";
 import { authClient } from "@/lib/auth-client";
@@ -16,17 +16,16 @@ const LATEST: { type: ContentType; icon: typeof PuzzleIcon }[] = [
 
 export function AppMainPage() {
 	const { data: session } = authClient.useSession();
-	// Bumped when an admin saves the schedule, to remount SessionCard with fresh data
-	const [scheduleRev, setScheduleRev] = useState(0);
 
 	return (
 		<div>
+			<PageTitle title="Home" />
 			<h1 className="text-2xl font-bold">Hello, {session?.user.name}!</h1>
 			<p className="text-muted-foreground mt-2">Here's what's happening this week.</p>
 
-			<AdminDashboard onScheduleChanged={() => setScheduleRev((r) => r + 1)} />
+			<AdminDashboard />
 
-			<SessionCard key={scheduleRev} />
+			<SessionCard />
 
 			<div className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
 				{LATEST.map(({ type, icon }) => (

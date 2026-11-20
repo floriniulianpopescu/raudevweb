@@ -7,6 +7,7 @@ import { adminContentRouter, contentRouter } from "./routes/content.route";
 import { adminXpRouter } from "./routes/xp.route";
 import { leaderboardRouter } from "./routes/leaderboard.route";
 import { adminScheduleRouter, scheduleRouter } from "./routes/schedule.route";
+import { progressRouter } from "./routes/progress.route";
 
 const app = new Hono();
 
@@ -34,6 +35,7 @@ app.route("/api/user", userRouter);
 app.route("/api/content", contentRouter);
 app.route("/api/leaderboard", leaderboardRouter);
 app.route("/api/schedule", scheduleRouter);
+app.route("/api/progress", progressRouter);
 // Must be mounted before adminContentRouter, whose /:type would otherwise match "users"
 app.route("/api/admin/users", adminXpRouter);
 app.route("/api/admin/schedule", adminScheduleRouter);

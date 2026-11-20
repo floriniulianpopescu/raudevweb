@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { authClient } from "@/lib/auth-client";
 import { verifyCallbackURL } from "@/lib/email-verification";
+import { authErrorMessage, NETWORK_ERROR } from "@/lib/errors";
 
 export default function SignupPage() {
 	const [name, setName] = useState("");
@@ -32,34 +33,38 @@ export default function SignupPage() {
 			return;
 		}
 
-		await authClient.signUp.email(
-			{
-				email: email.trim(),
-				password,
-				name,
-				callbackURL: verifyCallbackURL(),
-			},
-			{
-				onRequest: () => {
-					setLoading(true);
+		try {
+			await authClient.signUp.email(
+				{
+					email: email.trim(),
+					password,
+					name,
+					callbackURL: verifyCallbackURL(),
 				},
-				onSuccess: () => {
-					setLoading(false);
-					setSentTo(email.trim());
+				{
+					onRequest: () => {
+						setLoading(true);
+					},
+					onSuccess: () => {
+						setLoading(false);
+						setSentTo(email.trim());
+					},
+					onError: (ctx) => {
+						setLoading(false);
+						setError(authErrorMessage(ctx.error, "Could not create your account. Please try again."));
+					},
 				},
-				onError: (ctx) => {
-					setLoading(false);
-					setError(
-						ctx.error.message ||
-							"Could not create your account. Please try again.",
-					);
-				},
-			},
-		);
+			);
+		} catch {
+			// Better Auth throws (instead of calling onError) when the server can't be reached
+			setLoading(false);
+			setError(NETWORK_ERROR);
+		}
 	}
 
 	return (
 		<AuthLayout
+			pageTitle="Sign up"
 			title="Create your account"
 			description="Join the RAUDEV student community."
 			footer={

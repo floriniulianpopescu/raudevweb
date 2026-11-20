@@ -127,10 +127,14 @@ export const ResourceLinkSchema = z.object({
   href: externalUrl,
 });
 
-/** Lessons & extras: { title, description, links[] } — a minimal bibliography. */
+/** Longest Markdown body a lesson/extra can have. */
+export const RESOURCE_BODY_MAX = 50_000;
+
+/** Lessons & extras: { title, description, body, links[] } — an optional Markdown article plus its sources. */
 export const ResourceSchema = z.object({
   title,
   description,
+  body: z.string().max(RESOURCE_BODY_MAX, "The body is too long").default(""),
   links: z.array(ResourceLinkSchema).min(1, "Add at least one link").max(50),
 });
 
@@ -153,7 +157,20 @@ export type ResourceInput = z.infer<typeof ResourceSchema>;
 
 // --- API response shapes ---------------------------------------------------
 
-export type LinkItem = { id: string; title: string; description: string; href: string };
+export type LinkItem = {
+  id: string;
+  title: string;
+  description: string;
+  href: string;
+  /** Admin lists of problems/exercises only: how many users ticked it as done. */
+  completedCount?: number;
+};
+
+/** GET /api/progress — what the signed-in user has ticked as done, and the XP that earned. */
+export type Progress = Record<"problems" | "exercises", { ids: string[]; xp: number }>;
+
+/** PUT/DELETE /api/progress/:type/:id — `xpChange` is 0 if it was already done/undone. */
+export type CompletionResult = { done: boolean; xpChange: number; xp: number };
 
 export type ChallengeItem = {
   id: string;
@@ -186,6 +203,8 @@ export type ResourceItem = {
   id: string;
   title: string;
   description: string;
+  /** Markdown article condensing the sources (may be empty). */
+  body: string;
   links: LinkItem[];
 };
 
@@ -260,7 +279,7 @@ export type BulkResult = { count: number };
 // Physical session schedule (shown on /home, edited by admins)
 // ---------------------------------------------------------------------------
 
-export const WEEKDAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"] as const;
+export { COMPLETION_XP, WEEKDAYS, type CompletableType } from "./constants";
 
 const time = z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/, "Use HH:MM (24h)");
 

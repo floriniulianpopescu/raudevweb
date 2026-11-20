@@ -5,6 +5,27 @@
     <link rel="icon" href="/coding.ico" sizes="any" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>RAUDEV</title>
+    <meta
+      name="description"
+      content="RAUDEV is the software engineering and programming student club at the Romanian-American University. Solve coding challenges, practice interviews, learn from industry experts, and grow together."
+    />
+    <meta name="theme-color" content="#14191c" />
+
+    <!-- Link previews (WhatsApp, LinkedIn, Discord, X…). With VITE_SITE_URL set, the build makes
+         og:image absolute and adds og:url + canonical (see siteUrlPlugin in vite.config.ts). -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="RAUDEV" />
+    <meta property="og:title" content="RAUDEV · Software Engineering Club" />
+    <meta
+      property="og:description"
+      content="The software engineering and programming student club at the Romanian-American University. Coding challenges, mock interviews, guest speakers and a student community."
+    />
+    <meta property="og:image" content="/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="RAUDEV, Software Engineering Club at the Romanian-American University" />
+    <meta name="twitter:card" content="summary_large_image" />
+
     <!-- Apply the saved theme before first paint (no light/dark flash). Keep in sync with src/lib/theme.ts -->
     <script>
       (function () {
@@ -14,11 +35,17 @@
           document.documentElement.classList.toggle("dark", dark);
           document.documentElement.style.colorScheme = dark ? "dark" : "light";
         } catch (e) {}
+        // The prerendered landing page (#prerender) is only for "/"; every other URL hides it.
+        if (location.pathname !== "/") document.documentElement.classList.add("not-landing");
       })();
     </script>
+    <style>
+      .not-landing #prerender { display: none; }
+    </style>
   </head>
   <body>
     <div id="root"></div>
+    <!--prerender-->
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
