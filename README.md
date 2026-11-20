@@ -10,6 +10,10 @@ Bun monorepo:
 | `apps/frontend` | React + Vite + Tailwind | http://localhost:5173 |
 | `packages/shared` | Shared types and zod schemas (`@raudevweb/shared`) | — |
 
+**Developer docs:** [docs/](docs/README.md) covers architecture, features, the API, the data model, how-to recipes
+and deployment. Changes are tracked in [CHANGELOG.md](CHANGELOG.md). Ready-made site content lives in
+[content/](content/README.md).
+
 ## Prerequisites
 
 - [Bun](https://bun.sh) 1.x
@@ -22,7 +26,7 @@ Bun monorepo:
 bun install
 
 # 2. Start PostgreSQL (container "rau-postgres" on port 5432)
-docker compose up -d
+docker compose -f apps/backend/docker-compose.yml up -d
 
 # 3. Configure the backend
 cp apps/backend/.env.example apps/backend/.env
@@ -46,7 +50,7 @@ Backend (`apps/backend/.env`):
 
 | Variable | Dev value | Notes |
 |---|---|---|
-| `DATABASE_URL` | `postgresql://postgres:postgres@localhost:5432/rau_db` | Matches `docker-compose.yml` |
+| `DATABASE_URL` | `postgresql://postgres:postgres@localhost:5432/rau_db` | Matches `apps/backend/docker-compose.yml` |
 | `BETTER_AUTH_SECRET` | random, 32+ chars | Signs session cookies |
 | `BETTER_AUTH_URL` | `http://localhost:3000` | The backend's own URL |
 | `CORS_ORIGIN` | `http://localhost:5173` | The frontend's URL (cookies are cross-origin) |
@@ -86,10 +90,11 @@ Log out and back in afterwards.
 | `bun run db:push` | `apps/backend` | Apply `prisma/schema.prisma` to the database |
 | `bun run db:generate` | `apps/backend` | Regenerate the Prisma client |
 | `bun run db:studio` | `apps/backend` | Browse the database in Prisma Studio |
-| `bun run test:auth` | `apps/backend` | Auth smoke test (sign-up, session, protected route) |
+| `bun run content:import` | root | Load the content packs (lessons, practice, quizzes) into a site; see [content/README.md](content/README.md) |
+| `bun run test:auth` | `apps/backend` | Auth smoke test (sign-up, session, protected route). Currently out of date, see [known issues](docs/development.md#known-issues) |
 | `bun run lint` | `apps/frontend` | Lint with oxlint |
 | `bun run build` | `apps/frontend` | Production build; also prerenders the landing page into `dist/index.html` |
-| `docker compose down` | root | Stop PostgreSQL (data is kept in the `postgres_data` volume) |
+| `docker compose down` | `apps/backend` | Stop PostgreSQL (data is kept in the `postgres_data` volume) |
 
 After pulling changes that touch `prisma/schema.prisma`, run `bun install` and `bun run db:push` again.
 If `db:push` warns about data loss, read what it wants to drop before passing `--accept-data-loss`.
@@ -98,3 +103,5 @@ If `db:push` warns about data loss, read what it wants to drop before passing `-
 
 - **Frontend:** Cloudflare Pages rebuilds on every push to `main`. Set `VITE_SITE_URL` in the Pages build settings so link previews work.
 - **Backend:** run `deploy.sh` on the VPS. It pulls `main`, installs dependencies, updates the DB schema and restarts the API.
+
+Details, release checklist and rollback: [docs/deployment.md](docs/deployment.md).

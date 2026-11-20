@@ -1,0 +1,261 @@
+{
+  "name": "Introduction to C++",
+  "problems": [
+    {
+      "title": "Watermelon (Codeforces 4A)",
+      "description": "Can a watermelon of weight w be split into two even, positive parts? A one-line condition using the % operator. Difficulty 800.",
+      "href": "https://codeforces.com/problemset/problem/4/A"
+    },
+    {
+      "title": "Bit++ (Codeforces 282A)",
+      "description": "Apply n statements like X++ or --X to a variable and print its final value. Practises reading strings and a counter. Difficulty 800.",
+      "href": "https://codeforces.com/problemset/problem/282/A"
+    },
+    {
+      "title": "Team (Codeforces 231A)",
+      "description": "Count the problems that at least two of three friends are sure about. Practises loops and summing values. Difficulty 800.",
+      "href": "https://codeforces.com/problemset/problem/231/A"
+    },
+    {
+      "title": "Way Too Long Words (Codeforces 71A)",
+      "description": "Abbreviate words longer than 10 characters, e.g. \"localization\" becomes \"l10n\". Practises std::string, .size() and indexing. Difficulty 800.",
+      "href": "https://codeforces.com/problemset/problem/71/A"
+    },
+    {
+      "title": "Next Round (Codeforces 158A)",
+      "description": "Count the contestants who advance to the next round. Practises arrays (or std::vector) and comparing elements. Difficulty 800.",
+      "href": "https://codeforces.com/problemset/problem/158/A"
+    }
+  ],
+  "exercises": [
+    {
+      "title": "Say \"Hello, World!\" with C++",
+      "description": "Write and run your very first C++ program: include <iostream>, write int main() and print a line with std::cout.",
+      "href": "https://www.hackerrank.com/challenges/cpp-hello-world/problem"
+    },
+    {
+      "title": "Input and Output",
+      "description": "Read three integers with std::cin and print their sum with std::cout. Practises the >> and << operators.",
+      "href": "https://www.hackerrank.com/challenges/cpp-input-and-output/problem"
+    },
+    {
+      "title": "Basic Data Types",
+      "description": "Read and print an int, long, char, float and double. Shows how each fundamental type stores and prints values.",
+      "href": "https://www.hackerrank.com/challenges/c-tutorial-basic-data-types/problem"
+    },
+    {
+      "title": "Conditional Statements",
+      "description": "Print a number's English name for 1–9, or \"Greater than 9\" otherwise. Practises if / else if / else chains.",
+      "href": "https://www.hackerrank.com/challenges/c-tutorial-conditional-if-else/problem"
+    },
+    {
+      "title": "For Loop",
+      "description": "Loop over a range of numbers and print each one in words or as even/odd. Practises the for statement and conditions inside a loop.",
+      "href": "https://www.hackerrank.com/challenges/c-tutorial-for-loop/problem"
+    },
+    {
+      "title": "Functions",
+      "description": "Write a function max_of_four(a, b, c, d) that returns the largest of four integers. Practises declaring, defining and calling functions.",
+      "href": "https://www.hackerrank.com/challenges/c-tutorial-functions/problem"
+    }
+  ],
+  "challenges": [
+    {
+      "title": "Intro to C++: First Steps",
+      "description": "Your first C++ programs, from printing a line to reading input and working with basic types.\n\nFinish the three exercises, then solve Watermelon on Codeforces using what you learned.",
+      "problems": [
+        "Watermelon (Codeforces 4A)"
+      ],
+      "exercises": [
+        "Basic Data Types",
+        "Input and Output",
+        "Say \"Hello, World!\" with C++"
+      ]
+    },
+    {
+      "title": "Intro to C++: Decisions, Loops & Functions",
+      "description": "Put if statements, for loops and functions to work.\n\nStart with the three guided exercises, then try the four Codeforces problems, roughly from easiest to hardest: Bit++, Team, Way Too Long Words, Next Round.",
+      "problems": [
+        "Bit++ (Codeforces 282A)",
+        "Next Round (Codeforces 158A)",
+        "Team (Codeforces 231A)",
+        "Way Too Long Words (Codeforces 71A)"
+      ],
+      "exercises": [
+        "Conditional Statements",
+        "For Loop",
+        "Functions"
+      ]
+    }
+  ],
+  "quizzes": [
+    {
+      "title": "Introduction to C++",
+      "description": "Five quick questions on the basics: program structure, I/O, types, constants and loops.",
+      "questions": [
+        {
+          "question": "Which header do you need to include to use std::cout and std::cin?",
+          "answers": [
+            "<string>",
+            "<iostream>",
+            "<cstdio>",
+            "<console>"
+          ],
+          "correctIndex": 1
+        },
+        {
+          "question": "Every C++ program starts running from which function?",
+          "answers": [
+            "start()",
+            "run()",
+            "main()",
+            "init()"
+          ],
+          "correctIndex": 2
+        },
+        {
+          "question": "After int x = 7 / 2; what value does x hold?",
+          "answers": [
+            "3",
+            "3.5",
+            "4",
+            "It doesn't compile"
+          ],
+          "correctIndex": 0
+        },
+        {
+          "question": "Given const int n = 10; what happens if you later write n = 20;?",
+          "answers": [
+            "n becomes 20",
+            "n stays 10 and the line is ignored",
+            "The program crashes at runtime",
+            "The compiler reports an error"
+          ],
+          "correctIndex": 3
+        },
+        {
+          "question": "Which loop always runs its body at least once?",
+          "answers": [
+            "for",
+            "while",
+            "do ... while",
+            "Range-based for"
+          ],
+          "correctIndex": 2
+        }
+      ]
+    }
+  ],
+  "lessons": [
+    {
+      "title": "Introduction to C++",
+      "description": "Your first steps in C++, no programming experience needed (about 30 minutes). Write and run your first program, store values in variables, read input, make decisions with if, repeat with loops and split code into functions. Every example is a complete program you can copy and run.\n\nAfter the lesson, try the \"Intro to C++\" challenges under Practice and the \"Introduction to C++\" quiz.",
+      "bodyFile": "lesson.md",
+      "links": [
+        {
+          "title": "Introduction to programming languages",
+          "description": "learncpp 0.2: machine code, compiled languages, and where C++ fits.",
+          "href": "https://www.learncpp.com/cpp-tutorial/introduction-to-programming-languages/"
+        },
+        {
+          "title": "Statements and the structure of a program",
+          "description": "learncpp 1.1: statements, functions and the main() entry point.",
+          "href": "https://www.learncpp.com/cpp-tutorial/statements-and-the-structure-of-a-program/"
+        },
+        {
+          "title": "Introduction to objects and variables",
+          "description": "learncpp 1.3: what a variable is and how to define one.",
+          "href": "https://www.learncpp.com/cpp-tutorial/introduction-to-objects-and-variables/"
+        },
+        {
+          "title": "Introduction to iostream: cout, cin, and endl",
+          "description": "learncpp 1.5: printing output and reading user input.",
+          "href": "https://www.learncpp.com/cpp-tutorial/introduction-to-iostream-cout-cin-and-endl/"
+        },
+        {
+          "title": "Introduction to fundamental data types",
+          "description": "learncpp 4.1: int, double, char, bool and friends.",
+          "href": "https://www.learncpp.com/cpp-tutorial/introduction-to-fundamental-data-types/"
+        },
+        {
+          "title": "If statements",
+          "description": "learncpp: making decisions with if / else.",
+          "href": "https://www.learncpp.com/cpp-tutorial/if-statements/"
+        },
+        {
+          "title": "Introduction to loops and while statements",
+          "description": "learncpp: repeating code with while.",
+          "href": "https://www.learncpp.com/cpp-tutorial/introduction-to-loops-and-while-statements/"
+        },
+        {
+          "title": "For statements",
+          "description": "learncpp: counting loops with for.",
+          "href": "https://www.learncpp.com/cpp-tutorial/for-statements/"
+        },
+        {
+          "title": "Introduction to functions",
+          "description": "learncpp 2.1: defining and calling your own functions.",
+          "href": "https://www.learncpp.com/cpp-tutorial/introduction-to-functions/"
+        },
+        {
+          "title": "Main function (reference)",
+          "description": "cppreference: the exact rules for main().",
+          "href": "https://en.cppreference.com/w/cpp/language/main_function"
+        },
+        {
+          "title": "Welcome back to C++ (Modern C++)",
+          "description": "Microsoft Learn: a short tour of modern C++ style.",
+          "href": "https://learn.microsoft.com/en-us/cpp/cpp/welcome-back-to-cpp-modern-cpp"
+        }
+      ]
+    }
+  ],
+  "extras": [
+    {
+      "title": "C++ Toolbox: Compilers, Editors & References",
+      "description": "Tools and references that go with the Introduction to C++ lesson: write and run code in the browser, set up a local editor, and look things up.",
+      "links": [
+        {
+          "title": "OnlineGDB C++ compiler",
+          "description": "Write, run and debug C++ in the browser, no install needed.",
+          "href": "https://www.onlinegdb.com/online_c++_compiler"
+        },
+        {
+          "title": "Compiler Explorer",
+          "description": "Try different compilers and see the assembly your code turns into.",
+          "href": "https://godbolt.org/"
+        },
+        {
+          "title": "C++ Insights",
+          "description": "See what the compiler does behind the scenes with your code.",
+          "href": "https://cppinsights.io/"
+        },
+        {
+          "title": "C++ in Visual Studio Code",
+          "description": "Set up VS Code with a compiler and debugger on your machine.",
+          "href": "https://code.visualstudio.com/docs/languages/cpp"
+        },
+        {
+          "title": "Get Started! (isocpp.org)",
+          "description": "Official list of free compilers and getting-started resources.",
+          "href": "https://isocpp.org/get-started"
+        },
+        {
+          "title": "Fundamental types (cppreference)",
+          "description": "Reference table of built-in types and their sizes.",
+          "href": "https://en.cppreference.com/w/cpp/language/types"
+        },
+        {
+          "title": "std::cout (cppreference)",
+          "description": "Reference for the standard output stream.",
+          "href": "https://en.cppreference.com/w/cpp/io/cout"
+        },
+        {
+          "title": "C++ Core Guidelines",
+          "description": "Best-practice rules for writing modern C++, for later on.",
+          "href": "https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines"
+        }
+      ]
+    }
+  ]
+}

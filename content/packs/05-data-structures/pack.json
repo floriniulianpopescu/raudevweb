@@ -1,0 +1,226 @@
+{
+  "name": "Data Structures",
+  "problems": [
+    {
+      "title": "YetnotherrokenKeoard (Codeforces 1907B)",
+      "description": "A broken keyboard: 'b' deletes the last lowercase letter typed, 'B' the last uppercase one. Keep two stacks of positions to know what to delete. Difficulty 1000.",
+      "href": "https://codeforces.com/problemset/problem/1907/B"
+    },
+    {
+      "title": "Indian Summer (Codeforces 44A)",
+      "description": "Count the different leaves, where a leaf is a (tree species, colour) pair. Put std::pair values in a std::set and read its size. Difficulty 900.",
+      "href": "https://codeforces.com/problemset/problem/44/A"
+    },
+    {
+      "title": "Sereja and Suffixes (Codeforces 368B)",
+      "description": "For many positions l, count the distinct numbers from l to the end. Walk from the back with a set and store each answer. Difficulty 1100.",
+      "href": "https://codeforces.com/problemset/problem/368/B"
+    },
+    {
+      "title": "Powering the Hero (easy version) (Codeforces 1800C1)",
+      "description": "Each hero card takes the strongest bonus card collected so far. Keep the bonuses in a std::priority_queue. Difficulty 1000.",
+      "href": "https://codeforces.com/problemset/problem/1800/C1"
+    },
+    {
+      "title": "Same Differences (Codeforces 1520D)",
+      "description": "Count pairs i < j with a[j] − a[i] = j − i. Rewrite it as a[i] − i = a[j] − j and count equal values with a map; the answer needs long long. Difficulty 1200.",
+      "href": "https://codeforces.com/problemset/problem/1520/D"
+    }
+  ],
+  "exercises": [
+    {
+      "title": "Maximum Element (HackerRank)",
+      "description": "Build a stack that can also report its maximum at any time. Hint: a second stack that remembers the maximum so far.",
+      "href": "https://www.hackerrank.com/challenges/maximum-element/problem"
+    },
+    {
+      "title": "Queue using Two Stacks (HackerRank)",
+      "description": "Build a queue (first in, first out) using only two stacks. A classic interview question.",
+      "href": "https://www.hackerrank.com/challenges/queue-using-two-stacks/problem"
+    },
+    {
+      "title": "Reverse Linked List (LeetCode 206)",
+      "description": "Reverse a singly linked list by redirecting each node's next pointer. Draw the nodes on paper first.",
+      "href": "https://leetcode.com/problems/reverse-linked-list/"
+    },
+    {
+      "title": "Josephus Problem I (CSES)",
+      "description": "Children in a circle; every second one leaves. Simulate it with a std::queue: move a child from the front to the back, then remove the next.",
+      "href": "https://cses.fi/problemset/task/2162"
+    },
+    {
+      "title": "Last Stone Weight (LeetCode 1046)",
+      "description": "Repeatedly smash the two heaviest stones together. A std::priority_queue always hands you the heaviest.",
+      "href": "https://leetcode.com/problems/last-stone-weight/"
+    },
+    {
+      "title": "Sum of Two Values (CSES)",
+      "description": "Find two positions whose values add up to x, among up to 200,000 numbers. Remember each value's position in a map instead of checking every pair.",
+      "href": "https://cses.fi/problemset/task/1640"
+    }
+  ],
+  "challenges": [
+    {
+      "title": "Data Structures: Stacks & Queues",
+      "description": "Last in first out, first in first out, and linked nodes. Build a max-stack and a queue from stacks, reverse a linked list, simulate a circle with a queue, then fix a broken keyboard with stacks.",
+      "problems": ["YetnotherrokenKeoard (Codeforces 1907B)"],
+      "exercises": [
+        "Maximum Element (HackerRank)",
+        "Queue using Two Stacks (HackerRank)",
+        "Reverse Linked List (LeetCode 206)",
+        "Josephus Problem I (CSES)"
+      ]
+    },
+    {
+      "title": "Data Structures: Sets, Maps & Heaps",
+      "description": "Find things fast. Start with Last Stone Weight (priority queue) and Sum of Two Values (map), then the Codeforces problems from easiest to hardest: Indian Summer, Powering the Hero, Sereja and Suffixes, Same Differences.",
+      "problems": [
+        "Indian Summer (Codeforces 44A)",
+        "Powering the Hero (easy version) (Codeforces 1800C1)",
+        "Sereja and Suffixes (Codeforces 368B)",
+        "Same Differences (Codeforces 1520D)"
+      ],
+      "exercises": ["Last Stone Weight (LeetCode 1046)", "Sum of Two Values (CSES)"]
+    },
+    {
+      "title": "Data Structures: Build Your Own",
+      "description": "Implement the structures yourself instead of using the library: a stack that knows its maximum, a queue made of two stacks, and reversing a linked list by moving pointers.",
+      "problems": [],
+      "exercises": [
+        "Maximum Element (HackerRank)",
+        "Queue using Two Stacks (HackerRank)",
+        "Reverse Linked List (LeetCode 206)"
+      ]
+    },
+    {
+      "title": "Data Structures: Pick the Right One",
+      "description": "Each of these becomes easy with the right standard-library container: a queue, a priority queue, a map, a set, a stack. Decide which one before you write any code.",
+      "problems": [
+        "Indian Summer (Codeforces 44A)",
+        "YetnotherrokenKeoard (Codeforces 1907B)",
+        "Powering the Hero (easy version) (Codeforces 1800C1)",
+        "Sereja and Suffixes (Codeforces 368B)",
+        "Same Differences (Codeforces 1520D)"
+      ],
+      "exercises": ["Josephus Problem I (CSES)", "Last Stone Weight (LeetCode 1046)", "Sum of Two Values (CSES)"]
+    }
+  ],
+  "quizzes": [
+    {
+      "title": "Data Structures",
+      "description": "Five questions on stacks, linked lists, maps and priority queues. Answers are revealed after you submit.",
+      "questions": [
+        {
+          "question": "Which structure gives back the most recently added element first?",
+          "answers": ["A queue", "A stack", "A set", "A map"],
+          "correctIndex": 1
+        },
+        {
+          "question": "How long does looking up a key in a std::unordered_map take on average?",
+          "answers": ["O(1)", "O(log n)", "O(n)", "O(n log n)"],
+          "correctIndex": 0
+        },
+        {
+          "question": "With std::map<std::string, int> m, what does reading m[\"plum\"] do when \"plum\" isn't in the map?",
+          "answers": [
+            "It throws an error",
+            "It returns 0 and leaves the map unchanged",
+            "It adds \"plum\" with the value 0",
+            "It doesn't compile"
+          ],
+          "correctIndex": 2
+        },
+        {
+          "question": "Why is adding to the front of a linked list O(1), while it's O(n) for a vector?",
+          "answers": [
+            "Linked lists are always sorted",
+            "Vectors can't grow",
+            "Linked lists use hashing",
+            "Only one new node is created and one pointer changed; a vector has to shift every element"
+          ],
+          "correctIndex": 3
+        },
+        {
+          "question": "You need the largest value of a collection again and again while values are added. Which structure fits best?",
+          "answers": ["std::queue", "std::priority_queue", "std::stack", "std::unordered_set"],
+          "correctIndex": 1
+        }
+      ]
+    }
+  ],
+  "lessons": [
+    {
+      "title": "Data Structures",
+      "description": "How to organize data so the jobs you need are fast (about 40 minutes, after Pointers & References): vectors, stacks, queues, linked lists, sets, maps and priority queues, explained with everyday examples. Build a stack and a linked list yourself, then use the C++ standard library versions.\n\nAfter the lesson, practise by topic (\"Stacks & Queues\", \"Sets, Maps & Heaps\") or by skill (\"Build Your Own\", \"Pick the Right One\") under Practice, and take the \"Data Structures\" quiz.",
+      "bodyFile": "lesson.md",
+      "links": [
+        {
+          "title": "Introduction to Data Structures",
+          "description": "USACO Guide: vectors, pairs and the basic containers used in contests.",
+          "href": "https://usaco.guide/bronze/intro-ds"
+        },
+        {
+          "title": "Introduction to Sets & Maps",
+          "description": "USACO Guide: sets and maps, sorted and unordered, with practice problems.",
+          "href": "https://usaco.guide/bronze/intro-sets"
+        },
+        {
+          "title": "Stacks",
+          "description": "USACO Guide: more stack problems, for going further.",
+          "href": "https://usaco.guide/gold/stacks"
+        },
+        {
+          "title": "std::vector and stack behavior",
+          "description": "learncpp 16.11: using push_back, pop_back and back as a stack.",
+          "href": "https://www.learncpp.com/cpp-tutorial/stdvector-and-stack-behavior/"
+        },
+        {
+          "title": "Introduction to pointers",
+          "description": "learncpp 12.7: what pointers are, needed for linked lists.",
+          "href": "https://www.learncpp.com/cpp-tutorial/introduction-to-pointers/"
+        },
+        {
+          "title": "Linked list, stack, queue, deque",
+          "description": "VisuAlgo: animations of every operation on lists, stacks and queues.",
+          "href": "https://visualgo.net/en/list"
+        },
+        {
+          "title": "Hash table",
+          "description": "VisuAlgo: how hashing places keys in buckets, step by step.",
+          "href": "https://visualgo.net/en/hashtable"
+        },
+        {
+          "title": "Binary heap (priority queue)",
+          "description": "VisuAlgo: watch a heap keep the largest element on top.",
+          "href": "https://visualgo.net/en/heap"
+        },
+        {
+          "title": "Containers library",
+          "description": "cppreference: every standard container and its operations.",
+          "href": "https://en.cppreference.com/w/cpp/container"
+        },
+        {
+          "title": "std::map (reference)",
+          "description": "cppreference: the sorted map, including operator[] and lower_bound.",
+          "href": "https://en.cppreference.com/w/cpp/container/map"
+        },
+        {
+          "title": "std::unordered_map (reference)",
+          "description": "cppreference: the hash map and its average and worst-case costs.",
+          "href": "https://en.cppreference.com/w/cpp/container/unordered_map"
+        },
+        {
+          "title": "std::priority_queue (reference)",
+          "description": "cppreference: the heap-based priority queue and custom ordering.",
+          "href": "https://en.cppreference.com/w/cpp/container/priority_queue"
+        },
+        {
+          "title": "Competitive Programmer's Handbook",
+          "description": "CSES (PDF): chapter 4 covers data structures for competitive programming.",
+          "href": "https://cses.fi/book/book.pdf"
+        }
+      ]
+    }
+  ],
+  "extras": []
+}

@@ -9,7 +9,8 @@
     "dev:backend": "bun --filter backend dev",
     "dev:frontend": "bun --filter frontend dev",
     "dev": "bun --filter \"*\" dev",
-    "typecheck": "bun --filter \"*\" check"
+    "typecheck": "bun --filter \"*\" check",
+    "content:import": "bun apps/backend/src/scripts/import-content.ts"
   },
   "devDependencies": {
     "@types/bun": "latest",

@@ -1,0 +1,184 @@
+{
+  "name": "Data Types in C++",
+  "problems": [
+    {
+      "title": "Theatre Square (Codeforces 1A)",
+      "description": "Cover an n × m square with a × a flagstones. Round up each side with integer division, and note the answer can reach 10¹⁸: it needs long long. Difficulty 1000.",
+      "href": "https://codeforces.com/problemset/problem/1/A"
+    },
+    {
+      "title": "Even Odds (Codeforces 318A)",
+      "description": "Find the k-th number when all odd numbers up to n come before the even ones. n is up to 10¹², so int overflows; a small formula avoids building the list. Difficulty 900.",
+      "href": "https://codeforces.com/problemset/problem/318/A"
+    },
+    {
+      "title": "Drinks (Codeforces 200B)",
+      "description": "Mix equal amounts of drinks and print the orange-juice percentage. Practises double division (not integer division) and printing decimals. Difficulty 800.",
+      "href": "https://codeforces.com/problemset/problem/200/B"
+    },
+    {
+      "title": "Word (Codeforces 59A)",
+      "description": "Turn a word all-uppercase or all-lowercase, whichever needs fewer changes. Practises counting and converting letter case with chars. Difficulty 800.",
+      "href": "https://codeforces.com/problemset/problem/59/A"
+    },
+    {
+      "title": "Petya and Strings (Codeforces 112A)",
+      "description": "Compare two words alphabetically, ignoring upper and lower case. Practises tolower and string comparison. Difficulty 800.",
+      "href": "https://codeforces.com/problemset/problem/112/A"
+    }
+  ],
+  "exercises": [
+    {
+      "title": "A Very Big Sum (HackerRank)",
+      "description": "Add up numbers that are each up to 10¹⁰. The total doesn't fit in int: use long long.",
+      "href": "https://www.hackerrank.com/challenges/a-very-big-sum/problem"
+    },
+    {
+      "title": "Missing Number (CSES)",
+      "description": "All numbers 1…n are given except one; find it. The sum 1 + 2 + … + n can exceed int, so use long long.",
+      "href": "https://cses.fi/problemset/task/1083"
+    },
+    {
+      "title": "Plus One (LeetCode 66)",
+      "description": "Add one to a number given digit by digit. It can have up to 100 digits, more than any integer type holds, so work on the digits and carry.",
+      "href": "https://leetcode.com/problems/plus-one/"
+    },
+    {
+      "title": "CamelCase (HackerRank)",
+      "description": "Count the words in a camelCase string by counting uppercase letters. Practises char checks like std::isupper.",
+      "href": "https://www.hackerrank.com/challenges/camelcase/problem"
+    },
+    {
+      "title": "Repetitions (CSES)",
+      "description": "Find the longest run of the same letter in a DNA string of up to 10⁶ characters. Practises walking through a std::string.",
+      "href": "https://cses.fi/problemset/task/1069"
+    },
+    {
+      "title": "To Lower Case (LeetCode 709)",
+      "description": "Convert a string to lowercase yourself, using char arithmetic ('A' + 32 = 'a') instead of a library call.",
+      "href": "https://leetcode.com/problems/to-lower-case/"
+    }
+  ],
+  "challenges": [
+    {
+      "title": "Data Types: Numbers",
+      "description": "Pick the right number type. Start with the exercises (big sums and digit-by-digit numbers), then the Codeforces problems: Drinks (doubles), Even Odds and Theatre Square (long long and rounding up).",
+      "problems": ["Drinks (Codeforces 200B)", "Even Odds (Codeforces 318A)", "Theatre Square (Codeforces 1A)"],
+      "exercises": ["A Very Big Sum (HackerRank)", "Missing Number (CSES)", "Plus One (LeetCode 66)"]
+    },
+    {
+      "title": "Data Types: Characters & Strings",
+      "description": "Work with chars and text. Do the three exercises first (uppercase checks, runs of letters, char arithmetic), then Word and Petya and Strings on Codeforces.",
+      "problems": ["Word (Codeforces 59A)", "Petya and Strings (Codeforces 112A)"],
+      "exercises": ["CamelCase (HackerRank)", "Repetitions (CSES)", "To Lower Case (LeetCode 709)"]
+    }
+  ],
+  "quizzes": [
+    {
+      "title": "Data Types in C++",
+      "description": "Five questions on integer ranges, division, floating point and chars. Answers are revealed after you submit.",
+      "questions": [
+        {
+          "question": "About how large can a value in a (32-bit) int get?",
+          "answers": ["About 32,000", "About 2.1 billion", "About 9.2 · 10¹⁸", "There is no limit"],
+          "correctIndex": 1
+        },
+        {
+          "question": "With int a = 7 and int b = 2, what is a / b?",
+          "answers": ["3.5", "4", "3", "It doesn't compile"],
+          "correctIndex": 2
+        },
+        {
+          "question": "Why can 0.1 + 0.2 == 0.3 be false for doubles?",
+          "answers": [
+            "Most decimal fractions can't be stored exactly, so tiny rounding errors appear",
+            "== doesn't work on doubles at all",
+            "0.1 + 0.2 is computed with integer division",
+            "doubles only keep two decimal places"
+          ],
+          "correctIndex": 0
+        },
+        {
+          "question": "You read up to 10⁶ numbers, each up to 10⁹, and need their sum. Which type should the sum be?",
+          "answers": ["int", "char", "unsigned int", "long long"],
+          "correctIndex": 3
+        },
+        {
+          "question": "What is the value of '7' - '0' in C++?",
+          "answers": ["55", "7", "'7'", "It doesn't compile"],
+          "correctIndex": 1
+        }
+      ]
+    }
+  ],
+  "lessons": [
+    {
+      "title": "Data Types in C++",
+      "description": "Pick the right type for every value, and avoid the bugs the wrong one causes (about 30 minutes, after Introduction to C++): whole numbers and overflow, dividing numbers, decimals, characters and text. Every example is a complete program you can copy and run.\n\nAfter the lesson, try the \"Data Types: Numbers\" and \"Data Types: Characters & Strings\" challenges under Practice and the \"Data Types in C++\" quiz.",
+      "bodyFile": "lesson.md",
+      "links": [
+        {
+          "title": "Data Types",
+          "description": "USACO Guide: the types you need in competitive programming, and their limits.",
+          "href": "https://usaco.guide/general/data-types"
+        },
+        {
+          "title": "Signed integers",
+          "description": "learncpp 4.4: integer sizes, ranges and overflow.",
+          "href": "https://www.learncpp.com/cpp-tutorial/signed-integers/"
+        },
+        {
+          "title": "Unsigned integers, and why to avoid them",
+          "description": "learncpp 4.5: wrap-around and the bugs it causes.",
+          "href": "https://www.learncpp.com/cpp-tutorial/unsigned-integers-and-why-to-avoid-them/"
+        },
+        {
+          "title": "Fixed-width integers and size_t",
+          "description": "learncpp 4.6: std::int64_t and friends, and the type .size() returns.",
+          "href": "https://www.learncpp.com/cpp-tutorial/fixed-width-integers-and-size-t/"
+        },
+        {
+          "title": "Floating point numbers",
+          "description": "learncpp 4.8: float vs double, precision and rounding errors.",
+          "href": "https://www.learncpp.com/cpp-tutorial/floating-point-numbers/"
+        },
+        {
+          "title": "The Floating-Point Guide",
+          "description": "Why 0.1 + 0.2 isn't 0.3, and how to compare decimals safely.",
+          "href": "https://floating-point-gui.de/"
+        },
+        {
+          "title": "Chars",
+          "description": "learncpp 4.11: the char type and ASCII codes.",
+          "href": "https://www.learncpp.com/cpp-tutorial/chars/"
+        },
+        {
+          "title": "ASCII chart",
+          "description": "cppreference: every ASCII code with its character.",
+          "href": "https://en.cppreference.com/w/cpp/language/ascii"
+        },
+        {
+          "title": "Explicit type conversion and static_cast",
+          "description": "learncpp 10.6: converting between types on purpose.",
+          "href": "https://www.learncpp.com/cpp-tutorial/explicit-type-conversion-casting-and-static-cast/"
+        },
+        {
+          "title": "The auto keyword",
+          "description": "learncpp 10.8: letting the compiler deduce a variable's type.",
+          "href": "https://www.learncpp.com/cpp-tutorial/type-deduction-for-objects-using-the-auto-keyword/"
+        },
+        {
+          "title": "Introduction to std::string",
+          "description": "learncpp 5.7: creating, reading and joining strings.",
+          "href": "https://www.learncpp.com/cpp-tutorial/introduction-to-stdstring/"
+        },
+        {
+          "title": "Fundamental types (reference)",
+          "description": "cppreference: the exact sizes and ranges of every built-in type.",
+          "href": "https://en.cppreference.com/w/cpp/language/types"
+        }
+      ]
+    }
+  ],
+  "extras": []
+}
